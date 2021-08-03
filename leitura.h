@@ -15,8 +15,8 @@ int menu()
     cout << "----" << endl;
     cout << "[1] Fecho transitivo direto de um vertice." << endl;
     cout << "[2] Fecho transitivo indireto de um vertice." << endl;
-    cout << "[3] Caminho Mínimo entre dois vertices - Djkstra" << endl;
-    cout << "[4] Caminho Mínimo entre dois vertices - Floyd" << endl;
+    cout << "[3] Caminho Minimo entre dois vertices - Djkstra" << endl;
+    cout << "[4] Caminho Minimo entre dois vertices - Floyd" << endl;
     cout << "[5] Arvore Geradora Minima de Prim" << endl;
     cout << "[6] Arvore Geradora Minima de Kruskal" << endl;
     cout << "[7] Imprimir caminhamento em Profundidade" << endl;
