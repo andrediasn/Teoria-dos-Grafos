@@ -143,7 +143,7 @@ Arestas* Grafo::existeAresta(int id ,int id_alvo){
 // FUNCAO PARA ACHAR A MENOR ARESTA DENTRE DOIS NOS 
 
 Agm* Grafo::arestaMaisBarata(Vertices* v,Agm* agm){
-    int menor = 9999999999; 
+    int menor = INT32_MAX; 
     
     v->setVisitado(true);
     Arestas* ponteiro = NULL;

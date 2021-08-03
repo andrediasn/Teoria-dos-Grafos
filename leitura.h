@@ -13,17 +13,17 @@ int menu()
 
     cout << "----" << endl;
     cout << "----" << endl;
-    cout << "[1] Fecho transitivo direto de um vértice." << endl;
-    cout << "[2] Fecho transitivo indireto de um vértice." << endl;
-    cout << "[3] Caminho Mínimo entre dois vértices - Djkstra" << endl;
-    cout << "[4] Caminho Mínimo entre dois vértices - Floyd" << endl;
-    cout << "[5] Árvore Geradora Mínima de Prim" << endl;
-    cout << "[6] Árvore Geradora Mínima de Kruskal" << endl;
+    cout << "[1] Fecho transitivo direto de um vertice." << endl;
+    cout << "[2] Fecho transitivo indireto de um vertice." << endl;
+    cout << "[3] Caminho Mínimo entre dois vertices - Djkstra" << endl;
+    cout << "[4] Caminho Mínimo entre dois vertices - Floyd" << endl;
+    cout << "[5] Arvore Geradora Minima de Prim" << endl;
+    cout << "[6] Arvore Geradora Minima de Kruskal" << endl;
     cout << "[7] Imprimir caminhamento em Profundidade" << endl;
-    cout << "[8] Imprimir ordenacao topológica" << endl;
+    cout << "[8] Imprimir ordenacao topologica" << endl;
     cout << "[0] Sair" << endl;
     cout << "----" << endl;
-    cout << "Opção escolhida: " << endl;
+    cout << "Opcao escolhida: " << endl;
     cin >> selecao;
 
     return selecao;
