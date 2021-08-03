@@ -54,7 +54,7 @@ void Grafo::insereAresta(int id, int id_alvo,bool direcionado, float pesoArestas
             cout << "O vertice de origem nao existe no grafo.\n";//printa que nao tem vertice
             return;//e volta
         }else if(!existeVertice(id_alvo)){//se nao existir o vertice alvo
-            cout << "O vertice de destino nao existe no grafo.\n";//printa que nao existe
+            cout << id_alvo <<"  vertice de destino nao existe no grafo.\n";//printa que nao existe
             return;//e volta
         }
         else{//caso tenha os 2
@@ -206,7 +206,7 @@ list<int> Grafo::fechoDireto(int ID)
     }
     else
     {
-        fechoDiretoAux(ID,listaSolucao);//chama a funçao auxiliar para fazer de modo recursivo
+        listaSolucao = fechoDiretoAux(ID,listaSolucao);//chama a funçao auxiliar para fazer de modo recursivo
         for (auto i = nosGrafo.begin(); i != nosGrafo.end(); i++)//for para resetar todos os nos para visitado como false
         {
             Vertices* setadordeVertice = *i;//aloca o conteudo de i em setador de vertice
@@ -217,7 +217,7 @@ list<int> Grafo::fechoDireto(int ID)
     cout<< "Os vertices que sao alcansaveis a partir do informado sao: ( ";
     for ( it = listaSolucao.begin(); it != listaSolucao.end(); it++){
         
-        cout<< *it << ", ";
+        cout<< *it << " ";
     }
     cout<< ")" <<endl;
             
@@ -230,6 +230,7 @@ list<int> Grafo::fechoDiretoAux(int ID, list<int> ListaFechoDireto)//funçao aux
     for (auto i = VerticeAux->ListAdj.begin(); i != VerticeAux->ListAdj.end(); i++)//percorre os ids adjacentes a esse no 
     {
         Vertices* verticeAdj = procurarNo(*i);//variavel com o proximo vertice
+        cout << verticeAdj->getId()<<endl;
         if(verticeAdj->getVisitado()==true)//se o no ja foi visitado
         {
             //nao faz nada
@@ -237,8 +238,8 @@ list<int> Grafo::fechoDiretoAux(int ID, list<int> ListaFechoDireto)//funçao aux
         else//caso nao tenha sido visitado
         {
             verticeAdj->setVisitado(true);//coloque como visitado
-            ListaFechoDireto.push_back(VerticeAux->getId());//adiciona na lista soluçao
-            fechoDiretoAux(verticeAdj->getId(),ListaFechoDireto);//entra novamente na recursao
+            ListaFechoDireto.push_back(verticeAdj->getId());//adiciona na lista soluçao
+            ListaFechoDireto = fechoDiretoAux(verticeAdj->getId(),ListaFechoDireto);//entra novamente na recursao
         }
     }
     return ListaFechoDireto;//volta a lista no final
@@ -247,44 +248,32 @@ list<int> Grafo::fechoDiretoAux(int ID, list<int> ListaFechoDireto)//funçao aux
 
 void Grafo::caminhoEmProfundidade(int id){
     Agm* solucao = new Agm();
-    int ultimo;
-    Vertices* dois = procurarNo(2);
-    cout << "lista 2: ";
-    for(auto i = dois->ListAdj.begin(); i != dois->ListAdj.end(); i++){
-        int aux2 = *i;
-        Vertices* auxauxaux = procurarNo(aux2);
-        cout << auxauxaux->getId() << " , ";
-    }
+    int ultimo = -1;
+    Vertices* dois = procurarNo(id);
     for(auto i = nosGrafo.begin(); i != nosGrafo.end(); i++){
         Vertices* aux = *i;
         aux->setVisitado(false);
     }
-    caminhoEmProfundidadeAux(solucao, id, ultimo);
+    ultimo = caminhoEmProfundidadeAux(solucao, id, ultimo);
 }
-
-void Grafo::caminhoEmProfundidadeAux(Agm* solucao, int id, int ultimo){
+int Grafo::caminhoEmProfundidadeAux(Agm* solucao, int id, int ultimo){
     Vertices* inicial = procurarNo(id);
     solucao->insereVertice(inicial);
     inicial->setVisitado(true);
     int aux;
-    cout << "Id inicial: " << inicial->getId() << endl;
     for (auto i = inicial->ListAdj.begin(); i != inicial->ListAdj.end(); i++) {
         aux = *i;
-        cout << "Aux: " << aux << endl;
-        if(i != inicial->ListAdj.begin()){
-            Arestas* retorno = new Arestas(ultimo, aux);
+        if(i != inicial->ListAdj.begin() && ultimo != -1){
+            Arestas* retorno = new Arestas(ultimo, inicial->getId());
             solucao->insereAresta(retorno);
-            cout << "Inserindo Aresta: (" << ultimo << "," << aux << ")" << endl;
+            cout << "Inserindo Aresta: (" << ultimo << "," << inicial->getId() << ")" << endl;
+            ultimo = -1;
         }
         Vertices* vVisitado = procurarNo(aux);
         if(!vVisitado->getVisitado()){
-            cout << "Entrando no aux: " << aux << endl;
-            caminhoEmProfundidadeAux(solucao, aux, ultimo);
-            cout << "Retornando para: " << inicial->getId() << endl;
+            ultimo = caminhoEmProfundidadeAux(solucao, aux, ultimo);
         }
     }
-    if (inicial->ListAdj.begin() == inicial->ListAdj.end()){
-        ultimo = inicial->getId();
-        cout << "Ultimo: " << ultimo << endl;
-    }
+    ultimo = inicial->getId();
+    return ultimo;
 }

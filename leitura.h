@@ -130,7 +130,7 @@ Grafo* leitura(int argc, char * argv[]){
 
     int ordem;//declara uma variavel ordem 
     arquivo >> ordem;//adiciona a primeira linha do arquivo na ordem (ordem recebe a primeira linha do arquivo)
-    Grafo* grafo = new Grafo(ordem, argv[3], argv[4], argv[5]);//constroi o grafo baseado no que foi passado no executavel
+    Grafo* grafo = new Grafo(ordem, opc_Direc, opc_Peso_Aresta, opc_Peso_Nos);//constroi o grafo baseado no que foi passado no executavel
     int idNo;//variavel para salvar o id do no
     int idNoAlvo;//variavel para salvar o id do no alvo das arestas
     float Peso;// armazena o peso das arestas
