@@ -82,10 +82,11 @@ void selecionar(int selecao, Grafo* graph){
             cin >> idNoBusca;
             if(graph->existeVertice(idNoBusca)){
                 cout << "Realizando busca em Profundidade..." << endl;
-                //graph->buscaEmProfundidade(idNoBusca);
+                graph->caminhoEmProfundidade(idNoBusca);
                 return;
             }
-            cout << "No nao encontrado no grafo" << endl;
+            else
+                cout << "No nao encontrado no grafo" << endl;
             break;
         }
         //Ordenação Topologica; (8)

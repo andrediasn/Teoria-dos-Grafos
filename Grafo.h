@@ -49,8 +49,11 @@ class Grafo{
     list<Vertices*> subconjuntoX();//cria um subconjunto de vertices
     Agm* arvoreGeradoraMinimaPrim(int v);//cria uma arvore geradora minima usando prim
 //     Agm* arvoreGeradoraMinimaKruskal(subconjuntoX());//cria uma arvore geradora minima usando kruskal
-//     Agm* caminhoEmProfundidade(Vertices* ID);//caminha em profundidade pelo grafo
+    void caminhoEmProfundidade(int id);//caminha em profundidade pelo grafo
+    void caminhoEmProfundidadeAux(Agm* solucao, int id, int ultimo);//aux do caminha em profundidade pelo grafo
 //     Agm* ordenacaoTopologica(this.Grafo);//faz a ordenaçao topologica do grafo
+
+
 
 };
 

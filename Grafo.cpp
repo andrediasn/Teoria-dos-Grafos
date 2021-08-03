@@ -243,3 +243,48 @@ list<int> Grafo::fechoDiretoAux(int ID, list<int> ListaFechoDireto)//funçao aux
     }
     return ListaFechoDireto;//volta a lista no final
 }
+
+
+void Grafo::caminhoEmProfundidade(int id){
+    Agm* solucao = new Agm();
+    int ultimo;
+    Vertices* dois = procurarNo(2);
+    cout << "lista 2: ";
+    for(auto i = dois->ListAdj.begin(); i != dois->ListAdj.end(); i++){
+        int aux2 = *i;
+        Vertices* auxauxaux = procurarNo(aux2);
+        cout << auxauxaux->getId() << " , ";
+    }
+    for(auto i = nosGrafo.begin(); i != nosGrafo.end(); i++){
+        Vertices* aux = *i;
+        aux->setVisitado(false);
+    }
+    caminhoEmProfundidadeAux(solucao, id, ultimo);
+}
+
+void Grafo::caminhoEmProfundidadeAux(Agm* solucao, int id, int ultimo){
+    Vertices* inicial = procurarNo(id);
+    solucao->insereVertice(inicial);
+    inicial->setVisitado(true);
+    int aux;
+    cout << "Id inicial: " << inicial->getId() << endl;
+    for (auto i = inicial->ListAdj.begin(); i != inicial->ListAdj.end(); i++) {
+        aux = *i;
+        cout << "Aux: " << aux << endl;
+        if(i != inicial->ListAdj.begin()){
+            Arestas* retorno = new Arestas(ultimo, aux);
+            solucao->insereAresta(retorno);
+            cout << "Inserindo Aresta: (" << ultimo << "," << aux << ")" << endl;
+        }
+        Vertices* vVisitado = procurarNo(aux);
+        if(!vVisitado->getVisitado()){
+            cout << "Entrando no aux: " << aux << endl;
+            caminhoEmProfundidadeAux(solucao, aux, ultimo);
+            cout << "Retornando para: " << inicial->getId() << endl;
+        }
+    }
+    if (inicial->ListAdj.begin() == inicial->ListAdj.end()){
+        ultimo = inicial->getId();
+        cout << "Ultimo: " << ultimo << endl;
+    }
+}
