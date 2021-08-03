@@ -11,6 +11,7 @@ Vertices::Vertices(int id, float peso){ // construtor passando o identificador c
     this->grau_de_saida = 0;// coloca grau de saida como 0
     this->peso = peso;// declara peso , se nao for passado é igual a 0
     this->visitado = false;
+
 }
 
 Arestas* Vertices::insereAresta(int id, int id_alvo, float peso)//insere aresta passando como parametro o identificador, o identificador do vertice alvo e o peso

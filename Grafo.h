@@ -43,7 +43,8 @@ class Grafo{
     
     list<int> fechoDireto(int ID);//funçao para achar o fecho transitivo direto
     list<int> fechoDiretoAux(int ID, list<int> ListaFechoDireto); //auxiliar para recursividade do fecho
-    vector<Vertices*> fechoIndireto(Vertices* ID);//achar o fecho transitivo indireto
+    list<int> fechoIndireto(int ID);//achar o fecho transitivo indireto
+    list<int> fechoIndiretoAux(int ID, list<int> listaFechoIndireto);//achar o fecho transitivo indireto
     Grafo* caminhoMinimoDjkstra(Vertices* ID1, Vertices* ID2);//caminho minimo entre v1 e v2 passados por parametro usando Djkstra
     Grafo* caminhoMinimoFloyd(Vertices* ID1, Vertices* ID2); // caminho minimo entre v1 e v2 passados por parametro usando floyd
     list<Vertices*> subconjuntoX();//cria um subconjunto de vertices

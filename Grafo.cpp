@@ -64,7 +64,6 @@ void Grafo::insereAresta(int id, int id_alvo,bool direcionado, float pesoArestas
                 Vertices* no1 = procurarNo(id);//cria um vertice auxiliar para alterarmos os dados dos vertices
                 Vertices* no2 = procurarNo(id_alvo);//cria um auxiliar para o vertice alvo igual ao primeiro
                 auxAresta = no1->insereAresta(id, id_alvo, pesoArestas);//insere aresta no grafo passando o vertice inicial, final e peso
-                cout << auxAresta->getPeso() <<endl;
                 no1->adicionarGrauSaida();//adiciona 1 ao grau de saida
                 no1->adicionarGrauEntrada();//adiciona grau de entrada, ja que nao é direcionado
                 //como nao é um grafo direcionado temos que fazer o mesmo para o vertice 2 tambem para adicionarmos a adjacencia
@@ -86,6 +85,7 @@ void Grafo::insereAresta(int id, int id_alvo,bool direcionado, float pesoArestas
                 no1->adicionarGrauSaida();//adiciona 1 ao grau de saida
                 no2->adicionarGrauEntrada();//adiciona o grau de entrada
                 arestasGrafo.push_back(auxAresta);//poe ela na lista de arestas do grafo
+                no2->ListAnt.push_back(no1->getId());
             }
             //cout << "Aresta inserida com sucesso!\n";//printa aresta inserida com sucesso
         }
@@ -202,7 +202,7 @@ list<int> Grafo::fechoDireto(int ID)
 {
     list<int> listaSolucao;//cria uma lista de soluçao
     if(this->direcionado == false){
-        cout<< "esse grafo não é direcionado, portanto, nao contei fecho transitivo direto"<< endl;
+        cout<< "Esse grafo nao eh direcionado, portanto, nao contem fecho transitivo direto"<< endl;
     }
     else
     {
@@ -212,16 +212,15 @@ list<int> Grafo::fechoDireto(int ID)
             Vertices* setadordeVertice = *i;//aloca o conteudo de i em setador de vertice
             setadordeVertice->setVisitado(false);//coloca todos os vertices do grafo como nao visitados
         }
-    }
-    list<int>::iterator it;
-    cout<< "Os vertices que sao alcansaveis a partir do informado sao: ( ";
-    for ( it = listaSolucao.begin(); it != listaSolucao.end(); it++){
-        
-        cout<< *it << " ";
-    }
-    cout<< ")" <<endl;
+        list<int>::iterator it;
+        cout<< "Os vertices que sao alcansaveis a partir do informado sao: ( ";
+        for ( it = listaSolucao.begin(); it != listaSolucao.end(); it++){
             
-
+            cout<< *it << " ";
+        }
+        cout<< ")" <<endl;
+    }
+    return listaSolucao;
 }
 
 list<int> Grafo::fechoDiretoAux(int ID, list<int> ListaFechoDireto)//funçao auxiliar recursiva de fecho direto
@@ -230,7 +229,6 @@ list<int> Grafo::fechoDiretoAux(int ID, list<int> ListaFechoDireto)//funçao aux
     for (auto i = VerticeAux->ListAdj.begin(); i != VerticeAux->ListAdj.end(); i++)//percorre os ids adjacentes a esse no 
     {
         Vertices* verticeAdj = procurarNo(*i);//variavel com o proximo vertice
-        cout << verticeAdj->getId()<<endl;
         if(verticeAdj->getVisitado()==true)//se o no ja foi visitado
         {
             //nao faz nada
@@ -245,11 +243,44 @@ list<int> Grafo::fechoDiretoAux(int ID, list<int> ListaFechoDireto)//funçao aux
     return ListaFechoDireto;//volta a lista no final
 }
 
+list<int> Grafo::fechoIndireto(int ID){
+    list<int> solucao;
+    if(this->direcionado == false){
+        cout<< "Esse grafo nao eh direcionado, portanto, nao contem fecho transitivo indireto"<< endl;
+    }
+    else {
+        for(auto i = nosGrafo.begin(); i != nosGrafo.end(); i++){
+            Vertices* aux = *i;
+            aux->setVisitado(false);
+        }
+
+        solucao = fechoIndiretoAux(ID, solucao);
+        cout << "Solucao FI: ( ";
+        for (auto i = solucao.begin(); i!=solucao.end(); i++){
+            cout << *i << " ";
+        }
+        cout << " )" << endl;
+    }
+    return solucao;
+}
+
+list<int> Grafo::fechoIndiretoAux(int ID, list<int> solucao){
+    Vertices* alvo = procurarNo(ID);
+    alvo->setVisitado(true);
+    for(auto i = alvo->ListAnt.begin(); i != alvo->ListAnt.end(); i++){
+        Vertices* verifica = procurarNo(*i);
+        if(!verifica->getVisitado()){
+            solucao.push_back(*i);
+            solucao = fechoIndiretoAux(*i, solucao);
+        }
+    }
+    return solucao;
+}
+
 
 void Grafo::caminhoEmProfundidade(int id){
     Agm* solucao = new Agm();
     int ultimo = -1;
-    Vertices* dois = procurarNo(id);
     for(auto i = nosGrafo.begin(); i != nosGrafo.end(); i++){
         Vertices* aux = *i;
         aux->setVisitado(false);

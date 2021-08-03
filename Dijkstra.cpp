@@ -8,20 +8,21 @@ using namespace std;
 
 
 
-int *Dijkstra::dijkstra(Grafo *grafo, int noI){
+int Dijkstra::dijkstra(Grafo *grafo, int noI){
     int *dist = (int *)malloc(grafo->ordem*sizeof(int)); // aloca espaço pra array de distancias
 
     int noP[grafo->ordem]; // aloca espaço para os predecessores
-    bool open[grafo->ordem]; // aloca espaço para informação de fechamento
-
+    
     for (int i=0; i<grafo->ordem; i++) { // inicializa todos nos com distancia = infinito
         dist[i] = INT_MAX/2; // Maior inteiro/2, pois maior inteiro +1 é negativo
         noP[i] = -1; // sem predecessor
     }
     dist[noI] = 0; // Distancia com ele mesmo
 
-    for (int i=0; i<grafo->ordem; i++)
-        open[i] = true;
+    for(auto i = nosGrafo.begin(); i != nosGrafo.end(); i++){
+        Vertices* aux = *i;
+        aux->setVisitado(false);
+    }
     
     while (verOpen(grafo, open)) {
         int no1 = menorDist(grafo, open, dist);
@@ -49,10 +50,14 @@ void Dijkstra::atualizaDist(Grafo *grafo, int *dist, int *noP, int no1, int no2)
     }
 }
 
-bool Dijkstra::verOpen(Grafo *grafo, bool *open) {
-    for(int i=0; i < grafo->ordem; i++) 
-        if(open[i]) return(true);
-    return(false);
+bool Dijkstra::verOpen(Grafo *grafo) {
+    for(int i=0; i < grafo->ordem; i++) {
+        Vertices* aux = *i;
+        if(aux->getVisitado())
+            return true;
+        else
+            return false;
+    }
 }
 
 int Dijkstra::menorDist(Grafo *grafo, bool *open, int *dist) {

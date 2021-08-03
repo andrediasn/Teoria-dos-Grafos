@@ -19,8 +19,9 @@ private:// atributos privados
     
 
 public: // declaraçoes publicas
-       
-    list<int> ListAdj;//lista de adjacencia de vertice               // TORNAR PRIVATE E FAZER UM GET 
+    
+    list<int> ListAnt; // Lista de predecessores
+    list<int> ListAdj; //lista de adjacencia de vertice               // TORNAR PRIVATE E FAZER UM GET 
 
     // Constructor
     Vertices(int id, float peso=0); // construtor, passando como parametro o identificador do vertice

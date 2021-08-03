@@ -44,6 +44,10 @@ void selecionar(int selecao, Grafo* graph){
         }
         //Fecho transitivo indireto de um vertice (2)
         case 2:{
+            int IdFechoInd;
+            cout << "Informe o id do Vertice inicial que deseja o fecho transitivo indireto: ";
+            cin >> IdFechoInd;
+            list<int> apenasImpressao = graph->fechoIndireto(IdFechoInd);
             break;
         }
 
