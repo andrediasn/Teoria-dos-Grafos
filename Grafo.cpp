@@ -1,6 +1,7 @@
 #include "Grafo.h"
 #include "Vertices.h"
 #include "Agm.h"
+#include "Dijkstra.h"
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -140,8 +141,16 @@ Arestas* Grafo::existeAresta(int id ,int id_alvo){
     cout << "Nao existe essa aresta no grafo." << endl;
     return NULL;
 }
-// FUNCAO PARA ACHAR A MENOR ARESTA DENTRE DOIS NOS 
 
+
+void Grafo::arrumaVisitado(){
+    for(auto i = nosGrafo.begin(); i != nosGrafo.end(); i++){
+        Vertices* aux = *i;
+        aux->setVisitado(false);
+    }
+}
+
+// FUNCAO PARA ACHAR A MENOR ARESTA DENTRE DOIS NOS 
 Agm* Grafo::arestaMaisBarata(Vertices* v,Agm* agm){
     int menor = INT32_MAX; 
     
@@ -307,4 +316,13 @@ int Grafo::caminhoEmProfundidadeAux(Agm* solucao, int id, int ultimo){
     }
     ultimo = inicial->getId();
     return ultimo;
+}
+
+
+Grafo* Grafo::caminhoMinimoDjkstra(int ID1, int ID2){
+    Dijkstra aux;
+    int distancia = aux.dijkstra(*this, ID1, ID2);
+
+    cout << "Distancia do " << ID1 << " ate o " << ID2 << ": " << distancia << endl;
+
 }

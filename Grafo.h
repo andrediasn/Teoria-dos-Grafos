@@ -2,6 +2,7 @@
 #define GRAFO_H_INCLUDED
 #include "Vertices.h"
 #include "Agm.h"
+#include "Dijkstra.h"
 #include <list>
 #include <vector>
 
@@ -33,6 +34,8 @@ class Grafo{
     
     int getOrdem();
 
+    void arrumaVisitado();
+
     Grafo(int ordem, bool direcionado = false, bool pesoArestas= false, bool pesoVertices = false);
     ~Grafo();
    
@@ -45,7 +48,7 @@ class Grafo{
     list<int> fechoDiretoAux(int ID, list<int> ListaFechoDireto); //auxiliar para recursividade do fecho
     list<int> fechoIndireto(int ID);//achar o fecho transitivo indireto
     list<int> fechoIndiretoAux(int ID, list<int> listaFechoIndireto);//achar o fecho transitivo indireto
-    Grafo* caminhoMinimoDjkstra(Vertices* ID1, Vertices* ID2);//caminho minimo entre v1 e v2 passados por parametro usando Djkstra
+    Grafo* caminhoMinimoDjkstra(int ID1, int ID2);//caminho minimo entre v1 e v2 passados por parametro usando Djkstra
     Grafo* caminhoMinimoFloyd(Vertices* ID1, Vertices* ID2); // caminho minimo entre v1 e v2 passados por parametro usando floyd
     list<Vertices*> subconjuntoX();//cria um subconjunto de vertices
     Agm* arvoreGeradoraMinimaPrim(int v);//cria uma arvore geradora minima usando prim

@@ -27,3 +27,14 @@ h) Parâmetro: o próprio grafo acíclico direcionado D;
 Saída: uma ordenação topológica em D ou a informação de que D não é um grafo acíclico direcionado.
 
 i) Conversao para .dot
+
+
+
+
+Duvidas: 
+
+c d) Duvida se vai retornar os vertices de caminho, arvore, ou distancia
+d) se pode usar Matriz,
+h) ordenaçao especifica ou agt escolhe
+
+

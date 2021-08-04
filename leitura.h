@@ -53,6 +53,16 @@ void selecionar(int selecao, Grafo* graph){
 
         //Caminho mínimo entre dois vértices usando Djkstra (3)
         case 3:{
+            int no1, no2;
+            cout << "Informe o id do Vertice inicial: ";
+            cin >> no1;
+            cout << "Informe o id do Vertice alvo: ";
+            cin >> no2;
+            graph->caminhoMinimoDjkstra(no1, no2);
+
+            //Dijkstra aux;
+            //int distancia = aux.dijkstra(*graph, no1, no2);
+            //cout << "Distancia do " << no1 << " ate o " << no2 << ": " << distancia << endl;
 
             break;
         }
