@@ -33,8 +33,6 @@ i) Conversao para .dot
 
 Duvidas: 
 
-c d) Duvida se vai retornar os vertices de caminho, arvore, ou distancia
-d) se pode usar Matriz,
 h) ordenaçao especifica ou agt escolhe
 
 

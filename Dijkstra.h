@@ -4,17 +4,17 @@
 #include "Vertices.h"
 #include <list>
 
-
 class Dijkstra {
+private:
+    list<int> caminho;
+    Vertices* menorDist(Grafo *grafo, int dist[]);
+    void criaCaminho(int no, int ant[], int noI);
+    
 public:
     Dijkstra();
     ~Dijkstra();
     list<int> caminhoMinimo(Grafo *grafo, int noI, int noAlvo);
     
-private:
-    list<int> caminho;
-    Vertices* menorDist(Grafo *grafo, int dist[]);
-    void criaCaminho(int no, int ant[], int noI);
 };
   
 #endif //DIJKSTRA_H_INCLUDED

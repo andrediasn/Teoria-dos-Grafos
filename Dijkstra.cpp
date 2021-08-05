@@ -10,18 +10,6 @@ Dijkstra::Dijkstra(){}
 
 Dijkstra::~Dijkstra(){}
 
-void Dijkstra::criaCaminho(int noA, int ant[], int noI){
-    cout << " No A: " << noA << " Ant: "<< ant[noA] << " Inicial: " << noI <<endl;
-    if(noA != noI){
-        caminho.push_front(noA);
-        int aux = ant[noA];
-        criaCaminho(aux, ant, noI);
-    }
-    else
-        caminho.push_front(noI);
-}
-
-
 list<int> Dijkstra::caminhoMinimo(Grafo *grafo, int noI, int noAlvo){
     grafo->arrumaVisitado();
 
@@ -55,7 +43,7 @@ list<int> Dijkstra::caminhoMinimo(Grafo *grafo, int noI, int noAlvo){
         }
     }
     int d = dist[noAlvo];
-    cout << "Distancia: " << d << endl;
+    cout << "Custo: " << d << endl;
 
 
     criaCaminho(noAlvo, ant, noI);
@@ -78,3 +66,13 @@ Vertices* Dijkstra::menorDist(Grafo *grafo, int dist[]) {
     return id; // retorna o vertice com menor distancia
 }
 
+void Dijkstra::criaCaminho(int noA, int ant[], int noI){
+    //cout << " No A: " << noA << " Ant: "<< ant[noA] << " Inicial: " << noI <<endl;
+    if(noA != noI){
+        caminho.push_front(noA);
+        int aux = ant[noA];
+        criaCaminho(aux, ant, noI);
+    }
+    else
+        caminho.push_front(noI);
+}

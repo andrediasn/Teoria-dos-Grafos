@@ -37,5 +37,5 @@
 *.dat
 
 # VScode Settings
-*.json
-.vscode
+#*.json
+#.vscode
