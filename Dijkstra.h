@@ -1,16 +1,20 @@
-#ifndef GRAFOS2_DIJKSTRA_H
-#define GRAFOS2_DIJKSTRA_H
+#ifndef DIJKSTRA_H_INCLUDED
+#define DIJKSTRA_H_INCLUDED
 #include "Grafo.h"
 #include "Vertices.h"
+#include <list>
 
 
 class Dijkstra {
 public:
-    int dijkstra(Grafo grafo, int noI, int noAlvo);
+    Dijkstra();
+    ~Dijkstra();
+    list<int> caminhoMinimo(Grafo *grafo, int noI, int noAlvo);
     
 private:
-    bool verOpen(Grafo grafo);
-    Vertices* menorDist(Grafo grafo, int dist[]);
+    list<int> caminho;
+    Vertices* menorDist(Grafo *grafo, int dist[]);
+    void criaCaminho(int no, int ant[], int noI);
 };
   
-#endif //GRAFOS2_DIJKSTRA_H*/
+#endif //DIJKSTRA_H_INCLUDED

@@ -185,24 +185,13 @@ Agm* Grafo::arestaMaisBarata(Vertices* v,Agm* agm){
 Agm* Grafo::arvoreGeradoraMinimaPrim(int v){
     // Verificar se o grafo e conexo
     // Se for faca tudo abaixo se nao saia do programa 
-
     Vertices* aux = procurarNo(v);
-    
-
 
     Agm *agm = new Agm();             // Criando o conjunto solucao das arestas com menor peso 
-    
-
     agm = arestaMaisBarata(aux,agm);// Procurar dentre todos os vizinhos do vertice inicial qual tem aresta com menor peso 
      
-
     // Percorrendo a lista de adj ate achar o mais barato
-   for (auto i = nosGrafo.begin(); i != nosGrafo.end(); i++){
-      Vertices* verticeAux = *i;
-      verticeAux->setVisitado(false);
-
-   }
-    cout << "aki 5" <<endl;
+    arrumaVisitado();
     return agm;
 }
 
@@ -216,11 +205,6 @@ list<int> Grafo::fechoDireto(int ID)
     else
     {
         listaSolucao = fechoDiretoAux(ID,listaSolucao);//chama a funçao auxiliar para fazer de modo recursivo
-        for (auto i = nosGrafo.begin(); i != nosGrafo.end(); i++)//for para resetar todos os nos para visitado como false
-        {
-            Vertices* setadordeVertice = *i;//aloca o conteudo de i em setador de vertice
-            setadordeVertice->setVisitado(false);//coloca todos os vertices do grafo como nao visitados
-        }
         list<int>::iterator it;
         cout<< "Os vertices que sao alcansaveis a partir do informado sao: ( ";
         for ( it = listaSolucao.begin(); it != listaSolucao.end(); it++){
@@ -229,6 +213,7 @@ list<int> Grafo::fechoDireto(int ID)
         }
         cout<< ")" <<endl;
     }
+    arrumaVisitado();
     return listaSolucao;
 }
 
@@ -270,6 +255,7 @@ list<int> Grafo::fechoIndireto(int ID){
         }
         cout << " )" << endl;
     }
+    arrumaVisitado();
     return solucao;
 }
 
@@ -321,8 +307,13 @@ int Grafo::caminhoEmProfundidadeAux(Agm* solucao, int id, int ultimo){
 
 Grafo* Grafo::caminhoMinimoDjkstra(int ID1, int ID2){
     Dijkstra aux;
-    int distancia = aux.dijkstra(*this, ID1, ID2);
-
-    cout << "Distancia do " << ID1 << " ate o " << ID2 << ": " << distancia << endl;
-
+    Grafo* teste = this;
+    list<int> caminho = aux.caminhoMinimo(teste, ID1, ID2);
+    if(caminho.size()>0){
+        cout << "Caminho: ";
+        for(auto i = caminho.begin(); i != caminho.end(); i++){
+            cout << *i << " ";
+        }
+        cout << endl;
+    }
 }

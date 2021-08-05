@@ -63,3 +63,11 @@ bool Vertices::getVisitado(){
 void Vertices::setVisitado(bool visitado){
     this->visitado = visitado;
 }
+
+int Vertices::getGrauEntrada(){
+    return this->grau_de_entrada;
+}
+
+int Vertices::getGrauSaida(){
+    return this->grau_de_saida;
+}

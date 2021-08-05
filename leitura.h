@@ -10,7 +10,7 @@ int menu()
 {
 
     int selecao;
-
+    cout << endl;
     cout << "----" << endl;
     cout << "----" << endl;
     cout << "[1] Fecho transitivo direto de um vertice." << endl;

@@ -2,10 +2,10 @@
 #define GRAFO_H_INCLUDED
 #include "Vertices.h"
 #include "Agm.h"
-#include "Dijkstra.h"
 #include <list>
 #include <vector>
 
+class Dijkstra;
 
 class Grafo{
     //atributos

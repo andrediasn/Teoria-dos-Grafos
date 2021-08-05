@@ -6,8 +6,8 @@ ok    a) Parâmetro: um Id de um vértice de um grafo direcionado;
 ok    b)Parâmetro: um Id de um vértice de um grafo direcionado;
     Saída: o fecho transitivo indireto deste vértice.
 
-c) Parâmetro: dois IDs de vértices do grafo;
-Saída: o caminho mínimo entre estes dois vértices usando algoritmo de Djkstra;
+ok    c) Parâmetro: dois IDs de vértices do grafo;
+    Saída: o caminho mínimo entre estes dois vértices usando algoritmo de Djkstra;
 
 d) Parâmetro: dois IDs de vértices do grafo;
 Saída: o caminho mínimo entre estes dois vértices usando algoritmo de Floyd;
