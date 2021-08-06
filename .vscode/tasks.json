@@ -8,10 +8,12 @@
             "label": "C/C++: cpp build active file",
             "command": "g++",
             "args": [
+                "-g",
                 "*.cpp",
                 "*.h",
                 "-o",
-                "main"
+                "main",
+                "-O3"
             ],
             "options": {
                 "cwd": "${workspaceFolder}"
