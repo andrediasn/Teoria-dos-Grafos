@@ -7,15 +7,12 @@
 
 using namespace std;
 Dijkstra::Dijkstra(){}
-
 Dijkstra::~Dijkstra(){}
 
 list<int> Dijkstra::caminhoMinimo(Grafo *grafo, int noI, int noAlvo){
-    grafo->arrumaVisitado();
-
     Vertices* ver =  grafo->procurarNo(noAlvo);
-    if(ver->getGrauEntrada() == 0){
-        cout << endl << "Nao existe caminho do noh " << noI << " ate o noh " << noAlvo << endl;
+    if(ver->getGrauEntrada() == 0){ // Se o alvo n tem entrada
+        cout << endl << "Nao existe caminho entre o noh " << noI << " e o noh " << noAlvo << endl;
         return caminho; 
     }
 
@@ -24,43 +21,41 @@ list<int> Dijkstra::caminhoMinimo(Grafo *grafo, int noI, int noAlvo){
 
     for(auto i = grafo->nosGrafo.begin(); i != grafo->nosGrafo.end(); i++){
         Vertices* aux = *i;
+        abertos.push_back(aux); // inclui todos nós no conjunto aberto
         int id = aux->getId();
-        dist[id] = INT_MAX/2;
+        dist[id] = INT_MAX/2; // inicializa distancia com infinito
         ant[id] = -1; // sem predecessor
     }
-    dist[noI] = 0;
+    dist[noI] = 0; // no inicial, distancia 0
     
     for(int j = 0; j < (grafo->getOrdem())-1; j++) {
-        Vertices* no1 = menorDist(grafo, dist);
-        no1->setVisitado(true);
-        //cout << "Fechei: " << no1->getId() << endl;
-        for (auto i = no1->ListAdj.begin(); i != no1->ListAdj.end(); i++) {
-            Arestas* arestaAux = grafo->existeAresta(no1->getId(), *i);
+        Vertices* no1 = menorDist(dist);  // busca noh aberto com menor distancia salva
+        abertos.remove(no1); // remove nó do conjunto de nós abertos
+        for (auto i = no1->ListAdj.begin(); i != no1->ListAdj.end(); i++) { // Percorre lista de adjacencia
+            Arestas* arestaAux = grafo->existeAresta(no1->getId(), *i); // busca aresta
             if (dist[*i] > (dist[no1->getId()] + arestaAux->getPeso())) { // dist de no2 maior que a soma da dist de no1 mais o peso da aresta
                 dist[*i] = dist[no1->getId()] + arestaAux->getPeso(); // atualiza dist de no2
                 ant[*i] = no1->getId(); // indica o predecessor
             }
         }
     }
-    int d = dist[noAlvo];
-    cout << "Custo: " << d << endl;
+    cout << "Custo: " << dist[noAlvo] << endl; 
 
-
-    criaCaminho(noAlvo, ant, noI);
-    grafo->arrumaVisitado();
+    if(dist[noAlvo]<INT_MAX/2) // se houve custo menor que o valor iniciado
+        criaCaminho(noAlvo, ant, noI); // imprime menor caminho encontrado
+    else
+        cout << endl << "Nao existe caminho entre o noh" << noI << " e o noh " << noAlvo << endl;
     return caminho;
 }
 
-Vertices* Dijkstra::menorDist(Grafo *grafo, int dist[]) {
-    Vertices *aux, *id;
-    int menor = INT_MAX/2;
-    for(auto i = grafo->nosGrafo.begin(); i != grafo->nosGrafo.end(); i++){
-        aux = *i;
-        if(!(aux->getVisitado())){  // busca primeiro vertice aberto
+Vertices* Dijkstra::menorDist(int dist[]) {
+    Vertices *id;
+    int menor = INT_MAX/2; 
+    for(auto i = abertos.begin(); i != abertos.end(); i++){
+        Vertices *aux = *i;
             if(dist[aux->getId()] < menor){
                 menor = dist[aux->getId()];
                 id = aux;
-            } 
         }
     }
     return id; // retorna o vertice com menor distancia

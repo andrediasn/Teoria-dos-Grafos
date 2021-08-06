@@ -7,7 +7,8 @@
 class Dijkstra {
 private:
     list<int> caminho;
-    Vertices* menorDist(Grafo *grafo, int dist[]);
+    list<Vertices*> abertos;
+    Vertices* menorDist(int dist[]);
     void criaCaminho(int no, int ant[], int noI);
     
 public:
