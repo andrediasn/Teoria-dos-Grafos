@@ -59,11 +59,6 @@ void selecionar(int selecao, Grafo* graph){
             cout << "Informe o id do Vertice alvo: ";
             cin >> no2;
             graph->caminhoMinimoDjkstra(no1, no2);
-
-            //Dijkstra aux;
-            //int distancia = aux.dijkstra(*graph, no1, no2);
-            //cout << "Distancia do " << no1 << " ate o " << no2 << ": " << distancia << endl;
-
             break;
         }
 

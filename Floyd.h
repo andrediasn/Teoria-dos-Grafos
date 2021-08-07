@@ -2,14 +2,16 @@
 #define FLOYD_H_INCLUDED
 #include "Vertices.h"
 #include "Arestas.h"
+#include "Grafo.h"
 
 class Floyd{
     private:
-    Floyd();
-    ~Floyd();
-    
 
     public:
+    Floyd();
+    ~Floyd();
+
+    int criaFloyd(Grafo* grafo, int noI, int noAlvo);
 
 
 };

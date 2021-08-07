@@ -307,13 +307,18 @@ int Grafo::caminhoEmProfundidadeAux(Agm* solucao, int id, int ultimo){
 
 Grafo* Grafo::caminhoMinimoDjkstra(int ID1, int ID2){
     Dijkstra aux;
-    Grafo* teste = this;
-    list<int> caminho = aux.caminhoMinimo(teste, ID1, ID2);
+    list<int> caminho = aux.caminhoMinimo(this, ID1, ID2);
     if(caminho.size()>0){
-        cout << "Caminho: ";
+        cout << "Caminho minimo: ";
         for(auto i = caminho.begin(); i != caminho.end(); i++){
             cout << *i << " ";
         }
         cout << endl;
     }
+}
+
+Grafo* Grafo::caminhoMinimoFloyd(int ID1, int ID2){
+    //Floyd aux;
+    Grafo* teste = this;
+
 }

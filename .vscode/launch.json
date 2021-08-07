@@ -11,7 +11,7 @@
             "request": "launch",
             "program": "${workspaceFolder}/main.exe",
             "args": [
-                "Dados/grafo_125.txt",
+                "Dados/grafo_9431.txt",
                 "Dados/saida.txt",
                 "1",
                 "1",

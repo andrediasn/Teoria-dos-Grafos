@@ -12,3 +12,7 @@ Floyd::Floyd(){
 Floyd::~Floyd(){
     
 }
+
+int Floyd::criaFloyd(Grafo* grafo, int noI, int noAlvo){
+    
+}
