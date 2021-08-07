@@ -2,6 +2,7 @@
 #include "Vertices.h"
 #include "Agm.h"
 #include "Dijkstra.h"
+#include "Floyd.h"
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -305,7 +306,7 @@ int Grafo::caminhoEmProfundidadeAux(Agm* solucao, int id, int ultimo){
 }
 
 
-Grafo* Grafo::caminhoMinimoDjkstra(int ID1, int ID2){
+Grafo* Grafo::caminhoMinimoDijkstra(int ID1, int ID2){
     Dijkstra aux;
     list<int> caminho = aux.caminhoMinimo(this, ID1, ID2);
     if(caminho.size()>0){
@@ -318,7 +319,7 @@ Grafo* Grafo::caminhoMinimoDjkstra(int ID1, int ID2){
 }
 
 Grafo* Grafo::caminhoMinimoFloyd(int ID1, int ID2){
-    //Floyd aux;
-    Grafo* teste = this;
+    Floyd aux;
+    aux.criaFloyd(this, ID1, ID2);
 
 }

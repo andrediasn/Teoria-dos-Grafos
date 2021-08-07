@@ -6,6 +6,7 @@
 
 class Floyd{
     private:
+    void impMat(int **F[], int n);
 
     public:
     Floyd();
