@@ -75,7 +75,6 @@ list<int> Floyd::criaFloyd(Grafo* grafo, int noI, int noAlvo){
 }
 
 void Floyd::criaCaminho(int noI, int noF, int **P) {
-    cout << "entrei: ";
     int aux = P[noI][noF];
     cout <<aux << endl;
     if(P[noI][noF] > -1){
