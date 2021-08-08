@@ -87,7 +87,7 @@ void Grafo::insereAresta(int id, int id_alvo,bool direcionado, float pesoArestas
                 no1->adicionarGrauSaida();//adiciona 1 ao grau de saida
                 no2->adicionarGrauEntrada();//adiciona o grau de entrada
                 arestasGrafo.push_back(auxAresta);//poe ela na lista de arestas do grafo
-                no2->ListAnt.push_back(no1->getId());
+                no2->adicionaAntecessor(no1->getId());
             }
             //cout << "Aresta inserida com sucesso!\n";//printa aresta inserida com sucesso
         }
@@ -308,10 +308,10 @@ int Grafo::caminhoEmProfundidadeAux(Agm* solucao, int id, int ultimo){
 
 Grafo* Grafo::caminhoMinimoDijkstra(int ID1, int ID2){
     Dijkstra aux;
-    list<int> caminho = aux.caminhoMinimo(this, ID1, ID2);
-    if(caminho.size()>0){
+    list<int> caminhoD = aux.caminhoMinimo(this, ID1, ID2);
+    if(caminhoD.size()>0){
         cout << "Caminho minimo: ";
-        for(auto i = caminho.begin(); i != caminho.end(); i++){
+        for(auto i = caminhoD.begin(); i != caminhoD.end(); i++){
             cout << *i << " ";
         }
         cout << endl;
@@ -320,6 +320,13 @@ Grafo* Grafo::caminhoMinimoDijkstra(int ID1, int ID2){
 
 Grafo* Grafo::caminhoMinimoFloyd(int ID1, int ID2){
     Floyd aux;
-    aux.criaFloyd(this, ID1, ID2);
+    list<int> caminhoF = aux.criaFloyd(this, ID1, ID2);
+    if(caminhoF.size()>0){
+        cout << "Caminho minimo: ";
+        for(auto i = caminhoF.begin(); i != caminhoF.end(); i++){
+            cout << *i << " ";
+        }
+        cout << endl;
+    }
 
 }

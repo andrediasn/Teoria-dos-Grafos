@@ -41,6 +41,7 @@ public: // declaraçoes publicas
 
     // Other methods
     void adicionaAdjacencia(int id_alvo);
+    void adicionaAntecessor(int id_ant);
     bool buscaAresta(int id_alvo);//existe esse vertice no grafo? passando o id do vertice alvo
     Arestas* insereAresta(int id, int id_alvo, float peso = 0);//insere novo vertice passando como parametro id e peso (se houver), se nao houver passa 0
     void removeTodasArestas();// remove todas as arestas

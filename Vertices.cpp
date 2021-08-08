@@ -46,6 +46,11 @@ void Vertices::adicionaAdjacencia(int id_alvo)
     this->ListAdj.push_back(id_alvo);
 }
 
+void Vertices::adicionaAntecessor(int id_ant)
+{
+    this->ListAnt.push_back(id_ant);
+}
+
 int Vertices::getId()
 {
     return this->id;
