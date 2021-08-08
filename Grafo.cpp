@@ -7,8 +7,10 @@
 #include <fstream>
 #include <sstream>
 #include <string.h>
+#include <vector>
+#include <algorithm>
 
-
+int ciclo[INT32_MAX];
 using namespace std;
 
 //construtor do grafo
@@ -30,8 +32,14 @@ Grafo::~Grafo()//destrutor
     
 
 }
+bool Grafo::getDirecionado(){
+    return this->direcionado;
 
+}
 
+bool Grafo::nTemCiclo(){           // FALTA IMPLEMENTAR
+    return false;
+}
 int Grafo::getOrdem(){
     return this->ordem;
 }
@@ -321,4 +329,80 @@ Grafo* Grafo::caminhoMinimoFloyd(int ID1, int ID2){
     //Floyd aux;
     Grafo* teste = this;
 
+}
+
+
+Agm* Grafo::arvoreGeradoraMinimaKruskal(int v){
+    
+    Agm *agm = new Agm();             // Criando o conjunto solucao das arestas com menor peso
+    // Ordenar as arestas conforme o peso
+    vector<Arestas*> arestasAux;
+
+    
+    for (auto  i = arestasGrafo.begin(); i != arestasGrafo.end(); i++){
+        Arestas* auxs = *i;
+        arestasAux.push_back(auxs);
+    }    
+   
+    
+    Arestas* aux = NULL;   
+
+
+    for(int i  = arestasAux.size() - 1 ;i >= 0 ;i--){
+        for(int j = 0;j < i;j++){
+            if(arestasAux[j]->getPeso() > arestasAux[j+1]->getPeso()){
+                aux = arestasAux[j];
+                arestasAux[j] = arestasAux[j + 1];
+                arestasAux[j + 1] = aux;    
+            }
+        }
+    }
+    cout <<"********************************"<<endl<<endl<<endl;
+    
+    
+    for (int i = 0;i < arestasAux.size() - 1;i++){
+        ciclo[i] = i;
+    }
+    
+    // aloca memória para criar "V" subconjuntos
+       
+    for (auto  i = arestasAux.begin(); i != arestasAux.end(); i++){
+        Arestas*  j       = *i;
+        Vertices* inicial = procurarNo(j->getId());
+        Vertices* alvo    = procurarNo(j->getId_alvo());
+        
+        
+       
+        //detectando se com esta aresta forma ciclo:
+		if ( pai(j->getId()) != pai(j->getId_alvo())){ 
+			unir(j->getId(), j->getId_alvo());
+
+            agm->insereAresta(j);
+		}
+    
+    }
+    
+     
+
+
+    for (auto  i = agm->arestasAgm.begin() ; i != agm->arestasAgm.end(); i++){
+        Arestas*  j       = *i;
+        cout << "   " << j->getId() << "    " << j->getId_alvo() << "   " << j->getPeso() <<endl;
+    }
+    cout << "Acabou" <<endl;
+}
+void Grafo::unir(int v1,int v2){
+    ciclo[pai(v1)] = pai(v2);
+}
+int Grafo::pai(int v){
+     if (ciclo[v] == v){
+        return v;
+	}
+ 
+    ciclo[v] = pai(ciclo[v]);
+ 
+    return ciclo[v];
+}
+Grafo* Grafo::ordenacaoTopologica(){
+    
 }

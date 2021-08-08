@@ -27,11 +27,13 @@ class Grafo{
     void removeNode(int id);
 
     bool existeVertice(int id);
+    bool getDirecionado();
+    bool nTemCiclo();           // FALTA IMPLEMENTAR
     Arestas* existeAresta(int id ,int id_alvo);
     Vertices* procurarNo(int id);
     
-    std::list<Arestas*> arestasGrafo; // lista com arestas do grafo        // TORNAR PRIVATE E FAZER UM GET 
-    std::list<Vertices*> nosGrafo; //lista com nos do grafo             // TORNAR PRIVATE E FAZER UM GET 
+    std::list<Arestas*> arestasGrafo; // lista com arestas do grafo       
+    std::list<Vertices*> nosGrafo; //lista com nos do grafo            
     
     int getOrdem();
 
@@ -53,13 +55,13 @@ class Grafo{
     Grafo* caminhoMinimoFloyd(int ID1, int ID2); // caminho minimo entre v1 e v2 passados por parametro usando floyd
     list<Vertices*> subconjuntoX();//cria um subconjunto de vertices
     Agm* arvoreGeradoraMinimaPrim(int v);//cria uma arvore geradora minima usando prim
-//     Agm* arvoreGeradoraMinimaKruskal(subconjuntoX());//cria uma arvore geradora minima usando kruskal
+    Agm* arvoreGeradoraMinimaKruskal(int v);//cria uma arvore geradora minima usando kruskal
     void caminhoEmProfundidade(int id);//caminha em profundidade pelo grafo
     int caminhoEmProfundidadeAux(Agm* solucao, int id, int ultimo);//aux do caminha em profundidade pelo grafo
-//     Agm* ordenacaoTopologica(this.Grafo);//faz a ordenaçao topologica do grafo
+    Grafo* ordenacaoTopologica();//faz a ordenaçao topologica do grafo
 
-
-
+    void unir(int v1,int v2);
+    int pai(int v);
 };
 
 #endif //GRAFO_H_INCLUDED

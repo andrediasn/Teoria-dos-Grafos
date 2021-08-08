@@ -80,7 +80,7 @@ void selecionar(int selecao, Grafo* graph){
         }  
         //AGM - Kruskal; (6)
         case 6:{
-        
+            Agm* agm = graph->arvoreGeradoraMinimaKruskal(1);
             break;
         }
 
@@ -100,7 +100,9 @@ void selecionar(int selecao, Grafo* graph){
         }
         //Ordenação Topologica; (8)
         case 8:{
-
+            if(graph->getDirecionado() == true && graph->nTemCiclo() == false){
+                Grafo* ordenacaoTop = graph->ordenacaoTopologica();
+            }
 
             break;
         }
