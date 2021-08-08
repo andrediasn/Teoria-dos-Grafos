@@ -58,13 +58,18 @@ void selecionar(int selecao, Grafo* graph){
             cin >> no1;
             cout << "Informe o id do Vertice alvo: ";
             cin >> no2;
-            graph->caminhoMinimoDjkstra(no1, no2);
+            graph->caminhoMinimoDijkstra(no1, no2);
             break;
         }
 
         //Caminho mínimo entre dois vértices usando Floyd (4)
         case 4:{
-
+            int no1, no2;
+            cout << "Informe o id do Vertice inicial: ";
+            cin >> no1;
+            cout << "Informe o id do Vertice alvo: ";
+            cin >> no2;
+            graph->caminhoMinimoFloyd(no1, no2);
             break;
         }
 

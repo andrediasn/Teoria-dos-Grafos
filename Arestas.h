@@ -11,8 +11,7 @@ private:// atributos privados
    int id_alvo;
 
 public:
-   
-   Arestas(int id,int id_alvo, float peso = 0);
+   Arestas(int id,int id_alvo, float peso = 1);
    ~Arestas();
    float getPeso();
    int getId();

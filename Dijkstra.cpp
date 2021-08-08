@@ -39,10 +39,11 @@ list<int> Dijkstra::caminhoMinimo(Grafo *grafo, int noI, int noAlvo){
             }
         }
     }
-    cout << "Custo: " << dist[noAlvo] << endl; 
 
-    if(dist[noAlvo]<INT_MAX/2) // se houve custo menor que o valor iniciado
+    if(dist[noAlvo]<INT_MAX/2){ // se houve custo menor que o valor iniciado
         criaCaminho(noAlvo, ant, noI); // imprime menor caminho encontrado
+        cout << "Custo minimo: " << dist[noAlvo] << endl; 
+    }
     else
         cout << endl << "Nao existe caminho entre o noh" << noI << " e o noh " << noAlvo << endl;
     return caminho;

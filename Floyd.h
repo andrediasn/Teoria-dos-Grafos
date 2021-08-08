@@ -6,12 +6,14 @@
 
 class Floyd{
     private:
+    void criaCaminho(int noI, int noF, int **P);
+    list<int> caminho;
 
     public:
     Floyd();
     ~Floyd();
 
-    int criaFloyd(Grafo* grafo, int noI, int noAlvo);
+    list<int> criaFloyd(Grafo* grafo, int noI, int noAlvo);
 
 
 };
