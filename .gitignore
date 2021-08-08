@@ -37,6 +37,6 @@
 *.dat
 
 # VScode Settings
-#*.json
-#.vscode
+*.json
+.vscode
 bookmarks.json
