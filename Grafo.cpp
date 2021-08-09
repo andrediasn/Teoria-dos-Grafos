@@ -1,7 +1,7 @@
 #include "Grafo.h"
 #include "Vertices.h"
 #include "Agm.h"
-#include "Dijkstra.h"
+#include "Djkstra.h"
 #include "Floyd.h"
 #include <iostream>
 #include <string>
@@ -317,8 +317,8 @@ int Grafo::caminhoEmProfundidadeAux(Agm* solucao, int id, int ultimo){
 }
 
 
-list<int> Grafo::caminhoMinimoDijkstra(int ID1, int ID2){
-    Dijkstra aux;
+list<int> Grafo::caminhoMinimoDjkstra(int ID1, int ID2){
+    Djkstra aux;
     list<int> caminhoD = aux.caminhoMinimo(this, ID1, ID2);
     if(caminhoD.size()>0){
         cout << "Caminho minimo: ";

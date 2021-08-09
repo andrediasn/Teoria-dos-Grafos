@@ -4,11 +4,17 @@
 #include <sstream>
 #include <string.h>
 #include "Grafo.h"
+#include "Arestas.h"
 #include "Agm.h"
 
-int menu()
-{
+std::string arqEntrada;//vai abrir e fechar o arquivo para ler o txt
+std::string arqSaida;//registra em saida o nome do arquivo de saida
+bool opc_Direc;// direcionado ou nao 
+bool opc_Peso_Aresta;//peso nas arestas ou nao
+bool opc_Peso_Nos;//peso nos nos ou nao
+Grafo* grafo;
 
+int menu(){
     int selecao;
     cout << endl;
     cout << "----" << endl;
@@ -25,12 +31,44 @@ int menu()
     cout << "----" << endl;
     cout << "Opcao escolhida: " << endl;
     cin >> selecao;
-
     return selecao;
 }
 
-void selecionar(int selecao, Grafo* graph, string saida ){
+void saidaListDot(list<int> lista, string tipoMetodo){
+    std::ofstream arq(arqSaida, ios::app);
+    arq << endl << "Metodo: " << tipoMetodo;
+    arq << endl << "Grafo do caminho minimo do vertice " << *lista.begin() << " ate o vertice " << lista.back() << endl << endl;
+    std::string tipoGrafo;
+    std::string seta;
+    if(opc_Direc){
+        tipoGrafo = "digraph ";
+        seta = " -> ";
+    }
+    else{
+        tipoGrafo = "graph ";
+        seta = " -- ";
+    }
 
+    int vert[lista.size()];
+    int j = 0;
+    for(auto i = lista.begin(); i != lista.end(); i++){
+        vert[j] = *i;
+        j++;
+    }
+    j = 0;
+
+    arq << tipoGrafo << tipoMetodo << "{" << endl;
+    arq << "    " << lista.front() << "  [shape=\"polygon\" style=\"filled\" fillcolor=\"#1f77b4\"]" << endl;
+    arq << "    " << lista.back() << "  [shape=\"polygon\" style=\"filled\" fillcolor=\"#ff7f0e\"]" << endl;
+    for(int i = 0; i < (lista.size()-1); i++){
+        cout << i << ": " << vert[i] << " - " << vert[i+1] << endl;
+        Arestas* aux = grafo->existeAresta(vert[i],vert[i+1]);
+        arq << "    " << vert[i] << seta << vert[i+1] << " [label= " << aux->getPeso() << "];"<< endl;
+    }
+    arq << "}"<< endl << endl << " ------------------------------" << endl;
+}
+
+void selecionar(int selecao, Grafo* graph, string saida ){
     switch (selecao) {
 
         //Fecho transitivo direto de um vertice (1)
@@ -58,8 +96,10 @@ void selecionar(int selecao, Grafo* graph, string saida ){
             cin >> no1;
             cout << "Informe o id do Vertice alvo: ";
             cin >> no2;
-            list<int> apenasImpressao = graph->caminhoMinimoDijkstra(no1, no2);
+            list<int> apenasImpressao = graph->caminhoMinimoDjkstra(no1, no2);
+            saidaListDot(apenasImpressao, "Djkistra");
             break;
+
         }
 
         //Caminho mínimo entre dois vértices usando Floyd (4)
@@ -70,6 +110,7 @@ void selecionar(int selecao, Grafo* graph, string saida ){
             cout << "Informe o id do Vertice alvo: ";
             cin >> no2;
             list<int> apenasImpressao = graph->caminhoMinimoFloyd(no1, no2);
+            saidaListDot(apenasImpressao, "Floyd");
             break;
         }
 
@@ -105,10 +146,8 @@ void selecionar(int selecao, Grafo* graph, string saida ){
         }
         //Ordenação Topologica; (8)
         case 8:{
-            if(graph->getDirecionado() == true && graph->nTemCiclo() == true){
+            if(graph->getDirecionado() == true && graph->nTemCiclo() == false){
                 Grafo* ordenacaoTop = graph->ordenacaoTopologica();
-            }else{
-                cout << "O grafo apresentado nao atende aos parametros para a execucao da ordenacao topologica." <<endl;
             }
 
             break;
@@ -128,13 +167,10 @@ void selecionar(int selecao, Grafo* graph, string saida ){
 
 Grafo* leitura(int argc, char * argv[]){
 
-    std::string arqEntrada = argv[1]; //vai abrir e fechar o arquivo para ler o txt
-    std::string arqSaida = argv[2]; //registra em saida o nome do arquivo de saida
-    bool opc_Direc; // direcionado ou nao 
+    arqEntrada = argv[1]; 
+    arqSaida = argv[2]; 
     std::istringstream(argv[3])>>opc_Direc; //transformando pra bool
-    bool opc_Peso_Aresta;//peso nas arestas ou nao
     std::istringstream(argv[4])>>opc_Peso_Aresta; //transformando pra bool
-    bool opc_Peso_Nos;//peso nos nos ou nao
     std::istringstream(argv[5])>>opc_Peso_Nos; //transformando pra bool
    
     std::ifstream arquivo(arqEntrada);//vai abrir o arquivo (para utilizar desse arquivo usaremos a variavel arquivo)
@@ -148,7 +184,7 @@ Grafo* leitura(int argc, char * argv[]){
 
     int ordem;//declara uma variavel ordem 
     arquivo >> ordem;//adiciona a primeira linha do arquivo na ordem (ordem recebe a primeira linha do arquivo)
-    Grafo* grafo = new Grafo(ordem, opc_Direc, opc_Peso_Aresta, opc_Peso_Nos);//constroi o grafo baseado no que foi passado no executavel
+    grafo = new Grafo(ordem, opc_Direc, opc_Peso_Aresta, opc_Peso_Nos);//constroi o grafo baseado no que foi passado no executavel
     int idNo;//variavel para salvar o id do no
     int idNoAlvo;//variavel para salvar o id do no alvo das arestas
     float Peso;// armazena o peso das arestas
@@ -235,6 +271,10 @@ Grafo* leitura(int argc, char * argv[]){
         }
     }
 
+    arquivo.close();
+    std::ofstream arq(arqSaida);
+    arq.close();
+
     while(selecao != 0){
        // system("clear");
         selecao = menu();
@@ -245,15 +285,5 @@ Grafo* leitura(int argc, char * argv[]){
     
 }
 
-void saidaListDot(list<int> lista, string saida, int tipo){
-    ofstream arq(saida, ios::app);
-    if(tipo == 1){
-        arq << "Grafo do caminho minimo do vertice " << *lista.begin() << " ate o vertice " << *lista.end() << endl;
-
-    }
-
-
-
-}
 
 
