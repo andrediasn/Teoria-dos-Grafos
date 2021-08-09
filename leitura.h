@@ -68,6 +68,45 @@ void saidaListDot(list<int> lista, string tipoMetodo){
     arq << "}"<< endl << endl << " ------------------------------" << endl;
 }
 
+void saidaAgmDot(Agm* agm,string caminho){
+    ofstream arq(arqSaida, ios::app);
+    arq << "Arvore geradora minima formada pela execução " << caminho << " é: " << endl <<endl;
+    
+
+    if(opc_Direc == true){
+        arq << "digraph {" <<endl;
+
+        for (auto i = agm->arestasAgm.begin(); i != agm->arestasAgm.end(); i++){
+            Arestas* aux = *i;
+            // Direcionado e com peso nas arestas
+            if(opc_Peso_Aresta == true){
+                arq << "    " << aux->getId() << " -> " << aux->getId_alvo() << " [label = " << aux->getPeso() << " ]" <<endl;
+            }
+            // Direcionado e sem peso nas arestas
+            if(opc_Peso_Aresta == false){
+                arq << "    " << aux->getId() << " -> " << aux->getId_alvo() << endl;
+            }
+        }
+    }else{
+        arq << "graph {" <<endl;
+
+        for (auto i = agm->arestasAgm.begin(); i != agm->arestasAgm.end(); i++){
+            Arestas* aux = *i;
+            // Ndirecionado e com peso nas arestas
+            if(opc_Peso_Aresta == true){
+                arq << "    " << aux->getId() << " -- " << aux->getId_alvo() << " [label = " << aux->getPeso() << " ]" <<endl;
+            }
+            // Ndirecionado e sem peso nas arestas
+            if(opc_Peso_Aresta == false){
+                arq << "    " << aux->getId() << " -- " << aux->getId_alvo() << endl;
+            }
+        }
+            
+    }
+    arq  << "}" <<endl;
+    
+}
+
 void selecionar(int selecao, Grafo* graph, string saida ){
     switch (selecao) {
 
@@ -122,15 +161,17 @@ void selecionar(int selecao, Grafo* graph, string saida ){
             cin >> resposta;
     
             Agm* agm = graph->arvoreGeradoraMinimaPrim(resposta);
+            saidaAgmDot(agm,"do algoritmo de prim ");
             break;
         }  
         //AGM - Kruskal; (6)
         case 6:{
-            Agm* agm = graph->arvoreGeradoraMinimaKruskal(1);
+            Agm* agm = graph->arvoreGeradoraMinimaKruskal();
+            saidaAgmDot(agm,"do algoritmo de Kruskal");
             break;
         }
 
-            //Busca em Profundidade; (7)
+        //Busca em Profundidade; (7)
         case 7:{
             int idNoBusca;
             cout << "Para realizar a busca em Profundidade, informe o id do No: ";
@@ -148,6 +189,8 @@ void selecionar(int selecao, Grafo* graph, string saida ){
         case 8:{
             if(graph->getDirecionado() == true && graph->nTemCiclo() == false){
                 Grafo* ordenacaoTop = graph->ordenacaoTopologica();
+            }else{
+                cout << "O grafo passado não atende aos parametros criteirios da ordenação topologica." <<endl;
             }
 
             break;

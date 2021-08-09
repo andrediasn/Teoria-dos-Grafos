@@ -55,8 +55,8 @@ class Grafo{
     list<int> caminhoMinimoFloyd(int ID1, int ID2); // caminho minimo entre v1 e v2 passados por parametro usando floyd
     list<Vertices*> subconjuntoX();//cria um subconjunto de vertices
     Agm* arvoreGeradoraMinimaPrim(int v);//cria uma arvore geradora minima usando prim
-    Agm* arvoreGeradoraMinimaKruskal(int v);//cria uma arvore geradora minima usando kruskal
-    void caminhoEmProfundidade(int id);//caminha em profundidade pelo grafo
+    Agm* arvoreGeradoraMinimaKruskal();//cria uma arvore geradora minima usando kruskal
+    Agm* caminhoEmProfundidade(int id);//caminha em profundidade pelo grafo
     int caminhoEmProfundidadeAux(Agm* solucao, int id, int ultimo);//aux do caminha em profundidade pelo grafo
     Grafo* ordenacaoTopologica();//faz a ordenaçao topologica do grafo
 

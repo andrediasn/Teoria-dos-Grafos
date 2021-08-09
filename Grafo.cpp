@@ -285,7 +285,7 @@ list<int> Grafo::fechoIndiretoAux(int ID, list<int> solucao){
 }
 
 
-void Grafo::caminhoEmProfundidade(int id){
+Agm* Grafo::caminhoEmProfundidade(int id){
     Agm* solucao = new Agm();
     int ultimo = -1;
     for(auto i = nosGrafo.begin(); i != nosGrafo.end(); i++){
@@ -293,6 +293,7 @@ void Grafo::caminhoEmProfundidade(int id){
         aux->setVisitado(false);
     }
     ultimo = caminhoEmProfundidadeAux(solucao, id, ultimo);
+    return solucao;
 }
 int Grafo::caminhoEmProfundidadeAux(Agm* solucao, int id, int ultimo){
     Vertices* inicial = procurarNo(id);
@@ -344,7 +345,7 @@ list<int> Grafo::caminhoMinimoFloyd(int ID1, int ID2){
 }
 
 
-Agm* Grafo::arvoreGeradoraMinimaKruskal(int v){
+Agm* Grafo::arvoreGeradoraMinimaKruskal(){
     
     Agm *agm = new Agm();             // Criando o conjunto solucao das arestas com menor peso
     
@@ -386,6 +387,7 @@ Agm* Grafo::arvoreGeradoraMinimaKruskal(int v){
 		}
     
     }
+    return agm;
   
 }
 void Grafo::unir(int v1,int v2){
