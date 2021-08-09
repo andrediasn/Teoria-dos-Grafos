@@ -105,8 +105,10 @@ void selecionar(int selecao, Grafo* graph){
         }
         //Ordenação Topologica; (8)
         case 8:{
-            if(graph->getDirecionado() == true && graph->nTemCiclo() == false){
+            if(graph->getDirecionado() == true && graph->nTemCiclo() == true){
                 Grafo* ordenacaoTop = graph->ordenacaoTopologica();
+            }else{
+                cout << "O grafo apresentado nao atende aos parametros para a execucao da ordenacao topologica." <<endl;
             }
 
             break;

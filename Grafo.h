@@ -28,7 +28,7 @@ class Grafo{
 
     bool existeVertice(int id);
     bool getDirecionado();
-    bool nTemCiclo();           // FALTA IMPLEMENTAR
+    bool nTemCiclo();          
     Arestas* existeAresta(int id ,int id_alvo);
     Vertices* procurarNo(int id);
     

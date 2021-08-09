@@ -38,9 +38,25 @@ bool Grafo::getDirecionado(){
 
 }
 
-bool Grafo::nTemCiclo(){           // FALTA IMPLEMENTAR
-    return false;
-}
+bool Grafo::nTemCiclo(){
+    for (int i = 0;i < arestasGrafo.size() - 1;i++){
+        ciclo[i] = i;
+    }
+    
+    // aloca memória para criar "V" subconjuntos
+       
+    for (auto  i = arestasGrafo.begin(); i != arestasGrafo.end(); i++){
+        Arestas*  j       = *i;
+        //detectando se com esta aresta forma ciclo:
+		if ( pai(j->getId()) != pai(j->getId_alvo())){ 
+			unir(j->getId(), j->getId_alvo());
+
+            return false;
+		}
+    
+    }
+    return true;
+} 
 int Grafo::getOrdem(){
     return this->ordem;
 }
@@ -192,8 +208,6 @@ Agm* Grafo::arestaMaisBarata(Vertices* v,Agm* agm){
 }
 
 Agm* Grafo::arvoreGeradoraMinimaPrim(int v){
-    // Verificar se o grafo e conexo
-    // Se for faca tudo abaixo se nao saia do programa 
     Vertices* aux = procurarNo(v);
 
     Agm *agm = new Agm();             // Criando o conjunto solucao das arestas com menor peso 
@@ -343,7 +357,7 @@ Grafo* Grafo::caminhoMinimoFloyd(int ID1, int ID2){
 Agm* Grafo::arvoreGeradoraMinimaKruskal(int v){
     
     Agm *agm = new Agm();             // Criando o conjunto solucao das arestas com menor peso
-    // Ordenar as arestas conforme o peso
+    
     vector<Arestas*> arestasAux;
 
     
@@ -355,7 +369,7 @@ Agm* Grafo::arvoreGeradoraMinimaKruskal(int v){
     
     Arestas* aux = NULL;   
 
-
+    // Ordenar as arestas conforme o peso
     for(int i  = arestasAux.size() - 1 ;i >= 0 ;i--){
         for(int j = 0;j < i;j++){
             if(arestasAux[j]->getPeso() > arestasAux[j+1]->getPeso()){
@@ -365,9 +379,7 @@ Agm* Grafo::arvoreGeradoraMinimaKruskal(int v){
             }
         }
     }
-    cout <<"********************************"<<endl<<endl<<endl;
-    
-    
+     
     for (int i = 0;i < arestasAux.size() - 1;i++){
         ciclo[i] = i;
     }
@@ -376,11 +388,6 @@ Agm* Grafo::arvoreGeradoraMinimaKruskal(int v){
        
     for (auto  i = arestasAux.begin(); i != arestasAux.end(); i++){
         Arestas*  j       = *i;
-        Vertices* inicial = procurarNo(j->getId());
-        Vertices* alvo    = procurarNo(j->getId_alvo());
-        
-        
-       
         //detectando se com esta aresta forma ciclo:
 		if ( pai(j->getId()) != pai(j->getId_alvo())){ 
 			unir(j->getId(), j->getId_alvo());
@@ -389,15 +396,7 @@ Agm* Grafo::arvoreGeradoraMinimaKruskal(int v){
 		}
     
     }
-    
-     
-
-
-    for (auto  i = agm->arestasAgm.begin() ; i != agm->arestasAgm.end(); i++){
-        Arestas*  j       = *i;
-        cout << "   " << j->getId() << "    " << j->getId_alvo() << "   " << j->getPeso() <<endl;
-    }
-    cout << "Acabou" <<endl;
+  
 }
 void Grafo::unir(int v1,int v2){
     ciclo[pai(v1)] = pai(v2);
