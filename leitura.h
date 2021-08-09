@@ -55,13 +55,11 @@ void saidaListDot(list<int> lista, string tipoMetodo){
         vert[j] = *i;
         j++;
     }
-    j = 0;
 
     arq << tipoGrafo << tipoMetodo << "{" << endl;
-    arq << "    " << lista.front() << "  [shape=\"polygon\" style=\"filled\" fillcolor=\"#1f77b4\"]" << endl;
-    arq << "    " << lista.back() << "  [shape=\"polygon\" style=\"filled\" fillcolor=\"#ff7f0e\"]" << endl;
+    //arq << "    " << lista.front() << "  [shape=\"polygon\" style=\"filled\" fillcolor=\"#1f77b4\"]" << endl;
+    //arq << "    " << lista.back() << "  [shape=\"polygon\" style=\"filled\" fillcolor=\"#ff7f0e\"]" << endl;
     for(int i = 0; i < (lista.size()-1); i++){
-        cout << i << ": " << vert[i] << " - " << vert[i+1] << endl;
         Arestas* aux = grafo->existeAresta(vert[i],vert[i+1]);
         arq << "    " << vert[i] << seta << vert[i+1] << " [label= " << aux->getPeso() << "];"<< endl;
     }
@@ -136,7 +134,9 @@ void selecionar(int selecao, Grafo* graph, string saida ){
             cout << "Informe o id do Vertice alvo: ";
             cin >> no2;
             list<int> apenasImpressao = graph->caminhoMinimoDjkstra(no1, no2);
-            saidaListDot(apenasImpressao, "Djkistra");
+            if(apenasImpressao.size() < 0){
+                saidaListDot(apenasImpressao, "Djkistra");
+            }
             break;
 
         }
@@ -149,7 +149,9 @@ void selecionar(int selecao, Grafo* graph, string saida ){
             cout << "Informe o id do Vertice alvo: ";
             cin >> no2;
             list<int> apenasImpressao = graph->caminhoMinimoFloyd(no1, no2);
-            saidaListDot(apenasImpressao, "Floyd");
+            if(apenasImpressao.size() < 0){
+                saidaListDot(apenasImpressao, "Floyd");
+            }
             break;
         }
 

@@ -12,7 +12,7 @@ Djkstra::~Djkstra(){}
 list<int> Djkstra::caminhoMinimo(Grafo *grafo, int noI, int noAlvo){
     Vertices* ver =  grafo->procurarNo(noAlvo);
     if(ver->getGrauEntrada() == 0){ // Se o alvo n tem entrada
-        cout << endl << "Nao existe caminho entre o noh " << noI << " e o noh " << noAlvo << endl;
+        cout << endl << "Nao existe caminho entre o vertice " << noI << " e o vertice " << noAlvo << endl;
         return caminho; 
     }
 
@@ -45,7 +45,7 @@ list<int> Djkstra::caminhoMinimo(Grafo *grafo, int noI, int noAlvo){
         cout << "Custo minimo: " << dist[noAlvo] << endl; 
     }
     else
-        cout << endl << "Nao existe caminho entre o noh" << noI << " e o noh " << noAlvo << endl;
+        cout << endl << "Nao existe caminho entre o vertice " << noI << " e o vertice " << noAlvo << endl;
     return caminho;
 }
 

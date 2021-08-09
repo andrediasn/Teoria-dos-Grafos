@@ -213,8 +213,12 @@ Agm* Grafo::arvoreGeradoraMinimaPrim(int v){
 list<int> Grafo::fechoDireto(int ID)
 {
     list<int> listaSolucao;//cria uma lista de soluçao
+    Vertices *aux = procurarNo(ID);
     if(this->direcionado == false){
         cout<< "Esse grafo nao eh direcionado, portanto, nao contem fecho transitivo direto"<< endl;
+    }
+    else if(aux->getGrauSaida() == 0){
+        cout << "Vertice nao possue fecho transitivo indireto." << endl;
     }
     else
     {
@@ -252,8 +256,12 @@ list<int> Grafo::fechoDiretoAux(int ID, list<int> ListaFechoDireto)//funçao aux
 
 list<int> Grafo::fechoIndireto(int ID){
     list<int> solucao;
+    Vertices* aux = procurarNo(ID);
     if(this->direcionado == false){
-        cout<< "Esse grafo nao eh direcionado, portanto, nao contem fecho transitivo indireto"<< endl;
+        cout << "Esse grafo nao eh direcionado, portanto, nao contem fecho transitivo indireto"<< endl;
+    }
+    else if(aux->getGrauEntrada() == 0){
+        cout << "Vertice nao possue fecho transitivo indireto." << endl;
     }
     else {
         for(auto i = nosGrafo.begin(); i != nosGrafo.end(); i++){

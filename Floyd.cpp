@@ -14,7 +14,7 @@ Floyd::~Floyd(){}
 list<int> Floyd::criaFloyd(Grafo* grafo, int noI, int noAlvo){
     Vertices* ver =  grafo->procurarNo(noAlvo);
     if(ver->getGrauEntrada() == 0){ // Se o alvo n tem entrada
-        cout << endl << "Nao existe caminho entre o noh " << noI << " e o noh " << noAlvo << endl;
+        cout << endl << "Nao existe caminho entre o vertice " << noI << " e o vertice " << noAlvo << endl;
         return caminho; 
     }
 
@@ -69,19 +69,20 @@ list<int> Floyd::criaFloyd(Grafo* grafo, int noI, int noAlvo){
         cout << "Custo minimo: " << F[noI][noAlvo] << endl;
     }
     else{
-        cout << endl << "Nao existe caminho entre o noh " << noI << " e o noh " << noAlvo << endl;
+        cout << endl << "Nao existe caminho entre o vertice " << noI << " e o vertice " << noAlvo << endl;
     }
     return caminho;
 }
 
 void Floyd::criaCaminho(int noI, int noF, int **P) {
     int aux = P[noI][noF];
-    cout <<aux << endl;
     if(P[noI][noF] > -1){
         caminho.push_back(noI);
         criaCaminho(aux, noF, P);
     }
-    else if(aux == -1)
+    else if(aux == -1){
+        caminho.push_back(noI);
         caminho.push_back(noF);
+    }
 }
 
