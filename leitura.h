@@ -29,7 +29,7 @@ int menu()
     return selecao;
 }
 
-void selecionar(int selecao, Grafo* graph){
+void selecionar(int selecao, Grafo* graph, string saida ){
 
     switch (selecao) {
 
@@ -58,7 +58,7 @@ void selecionar(int selecao, Grafo* graph){
             cin >> no1;
             cout << "Informe o id do Vertice alvo: ";
             cin >> no2;
-            graph->caminhoMinimoDijkstra(no1, no2);
+            list<int> apenasImpressao = graph->caminhoMinimoDijkstra(no1, no2);
             break;
         }
 
@@ -69,7 +69,7 @@ void selecionar(int selecao, Grafo* graph){
             cin >> no1;
             cout << "Informe o id do Vertice alvo: ";
             cin >> no2;
-            graph->caminhoMinimoFloyd(no1, no2);
+            list<int> apenasImpressao = graph->caminhoMinimoFloyd(no1, no2);
             break;
         }
 
@@ -238,10 +238,22 @@ Grafo* leitura(int argc, char * argv[]){
     while(selecao != 0){
        // system("clear");
         selecao = menu();
-        selecionar(selecao, grafo);
+        
+        selecionar(selecao, grafo, argv[2]);
     }
     return grafo;
     
+}
+
+void saidaListDot(list<int> lista, string saida, int tipo){
+    ofstream arq(saida, ios::app);
+    if(tipo == 1){
+        arq << "Grafo do caminho minimo do vertice " << *lista.begin() << " ate o vertice " << *lista.end() << endl;
+
+    }
+
+
+
 }
 
 

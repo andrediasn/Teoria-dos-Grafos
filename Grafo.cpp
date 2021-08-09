@@ -10,12 +10,12 @@
 #include <string.h>
 #include <vector>
 #include <algorithm>
+#include <limits.h>
 
-int ciclo[INT32_MAX];
 using namespace std;
+static int ciclo[100000];  
 
-//construtor do grafo
-Grafo::Grafo(int ordem, bool direcionado, bool pesoArestas, bool pesoVertices){
+Grafo::Grafo(int ordem, bool direcionado, bool pesoArestas, bool pesoVertices){//construtor do grafo
     this->ordem = ordem;//inicializa a ordem com a ordem passada
     this->direcionado = direcionado;//inicializa o grafo se é direcionado ou nao
     this->pesoArestas = pesoArestas;//inicializa o grafo com peso nas arestas ou nao
@@ -24,18 +24,11 @@ Grafo::Grafo(int ordem, bool direcionado, bool pesoArestas, bool pesoVertices){
     {
         insereVertice(i);//insere cada vertice do grafo de uma vez (ja que sabemos o numero de nos pela "ordem")
     }
-    
-
 }
+Grafo::~Grafo(){}
 
-Grafo::~Grafo()//destrutor
-{
-    
-
-}
 bool Grafo::getDirecionado(){
     return this->direcionado;
-
 }
 
 bool Grafo::nTemCiclo(){
@@ -60,6 +53,7 @@ bool Grafo::nTemCiclo(){
 int Grafo::getOrdem(){
     return this->ordem;
 }
+
 void Grafo::insereVertice(int id)// Insere vertice passando id
 {
     if(existeVertice(id))//pesquisa o id do vertice
@@ -155,8 +149,7 @@ bool Grafo::existeVertice(int id)//procura se existe aquele vertice
     return false;//se nao, retorna falso
 }
 
-// FUNCAO PARA ACHAR UMA ARESTA DADO DOIS VERTICES
-Arestas* Grafo::existeAresta(int id ,int id_alvo){
+Arestas* Grafo::existeAresta(int id ,int id_alvo){ // FUNCAO PARA ACHAR UMA ARESTA DADO DOIS VERTICES
     for (auto i = arestasGrafo.begin(); i != arestasGrafo.end(); i++){
         Arestas* verificador = *i;
         if(verificador->getId() == id && verificador->getId_alvo() == id_alvo){
@@ -167,8 +160,7 @@ Arestas* Grafo::existeAresta(int id ,int id_alvo){
     return NULL;
 }
 
-
-void Grafo::arrumaVisitado(){
+void Grafo::arrumaVisitado(){ // Seta visitados para false
     for(auto i = nosGrafo.begin(); i != nosGrafo.end(); i++){
         Vertices* aux = *i;
         aux->setVisitado(false);
@@ -206,7 +198,6 @@ Agm* Grafo::arestaMaisBarata(Vertices* v,Agm* agm){
     }
     return agm;
 }
-
 Agm* Grafo::arvoreGeradoraMinimaPrim(int v){
     Vertices* aux = procurarNo(v);
 
@@ -239,7 +230,6 @@ list<int> Grafo::fechoDireto(int ID)
     arrumaVisitado();
     return listaSolucao;
 }
-
 list<int> Grafo::fechoDiretoAux(int ID, list<int> ListaFechoDireto)//funçao auxiliar recursiva de fecho direto
 {
     Vertices* VerticeAux = procurarNo(ID);//procura o vertice com o id passado 
@@ -281,7 +271,6 @@ list<int> Grafo::fechoIndireto(int ID){
     arrumaVisitado();
     return solucao;
 }
-
 list<int> Grafo::fechoIndiretoAux(int ID, list<int> solucao){
     Vertices* alvo = procurarNo(ID);
     alvo->setVisitado(true);
@@ -328,7 +317,7 @@ int Grafo::caminhoEmProfundidadeAux(Agm* solucao, int id, int ultimo){
 }
 
 
-Grafo* Grafo::caminhoMinimoDijkstra(int ID1, int ID2){
+list<int> Grafo::caminhoMinimoDijkstra(int ID1, int ID2){
     Dijkstra aux;
     list<int> caminhoD = aux.caminhoMinimo(this, ID1, ID2);
     if(caminhoD.size()>0){
@@ -338,9 +327,10 @@ Grafo* Grafo::caminhoMinimoDijkstra(int ID1, int ID2){
         }
         cout << endl;
     }
+    return caminhoD;
 }
 
-Grafo* Grafo::caminhoMinimoFloyd(int ID1, int ID2){
+list<int> Grafo::caminhoMinimoFloyd(int ID1, int ID2){
     Floyd aux;
     list<int> caminhoF = aux.criaFloyd(this, ID1, ID2);
     if(caminhoF.size()>0){
@@ -350,7 +340,7 @@ Grafo* Grafo::caminhoMinimoFloyd(int ID1, int ID2){
         }
         cout << endl;
     }
-
+    return caminhoF;
 }
 
 
@@ -410,6 +400,7 @@ int Grafo::pai(int v){
  
     return ciclo[v];
 }
+
 Grafo* Grafo::ordenacaoTopologica(){
     
 }
