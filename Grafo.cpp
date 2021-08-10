@@ -1,7 +1,7 @@
 #include "Grafo.h"
 #include "Vertices.h"
 #include "Agm.h"
-#include "Djkstra.h"
+#include "Dijkstra.h"
 #include "Floyd.h"
 #include <iostream>
 #include <string>
@@ -227,18 +227,18 @@ list<int> Grafo::fechoDireto(int ID)
         cout<< "Esse grafo nao eh direcionado, portanto, nao contem fecho transitivo direto"<< endl;
     }
     else if(aux->getGrauSaida() == 0){
-        cout << "Vertice nao possue fecho transitivo indireto." << endl;
+        cout << "Vertice nao possue fecho transitivo direto." << endl;
     }
     else
     {
         listaSolucao = fechoDiretoAux(ID,listaSolucao);//chama a funçao auxiliar para fazer de modo recursivo
         list<int>::iterator it;
-        cout<< "Os vertices que sao alcansaveis a partir do informado sao: ( ";
+        cout<< "Os vertices que sao alcansaveis a partir do "<< ID << " sao: " << endl;
         for ( it = listaSolucao.begin(); it != listaSolucao.end(); it++){
             
             cout<< *it << " ";
         }
-        cout<< ")" <<endl;
+        cout << endl;
     }
     arrumaVisitado();
     return listaSolucao;
@@ -279,11 +279,11 @@ list<int> Grafo::fechoIndireto(int ID){
         }
 
         solucao = fechoIndiretoAux(ID, solucao);
-        cout << "Solucao FI: ( ";
+        cout<< "Os vertices que alcansao o vertice "<< ID << " sao: " << endl;
         for (auto i = solucao.begin(); i!=solucao.end(); i++){
             cout << *i << " ";
         }
-        cout << " )" << endl;
+        cout << endl;
     }
     arrumaVisitado();
     return solucao;
@@ -335,8 +335,8 @@ int Grafo::caminhoEmProfundidadeAux(Agm* solucao, int id, int ultimo){
 }
 
 
-list<int> Grafo::caminhoMinimoDjkstra(int ID1, int ID2){
-    Djkstra aux;
+list<int> Grafo::caminhoMinimoDijkstra(int ID1, int ID2){
+    Dijkstra aux;
     list<int> caminhoD = aux.caminhoMinimo(this, ID1, ID2);
     if(caminhoD.size()>0){
         cout << "Caminho minimo: ";
@@ -351,7 +351,7 @@ list<int> Grafo::caminhoMinimoDjkstra(int ID1, int ID2){
 list<int> Grafo::caminhoMinimoFloyd(int ID1, int ID2){
     Floyd aux;
     list<int> caminhoF = aux.caminhoMinimo(this, ID1, ID2);
-    if(caminhoF.size()>0){
+    if(caminhoF.size()<0){
         cout << "Caminho minimo: ";
         for(auto i = caminhoF.begin(); i != caminhoF.end(); i++){
             cout << *i << " ";

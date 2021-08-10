@@ -6,8 +6,10 @@
 
 class Floyd{
     private:
-    void criaCaminho(int noI, int noF, int **P);
     list<int> caminho;
+
+    void criaCaminho(int noI, int noF, int **P);
+    void matrizCSV(int n, int **P);
 
     public:
     Floyd();

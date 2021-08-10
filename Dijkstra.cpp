@@ -1,4 +1,4 @@
-#include "Djkstra.h"
+#include "Dijkstra.h"
 #include "Grafo.h"
 #include "Vertices.h"
 #include <iostream>
@@ -6,10 +6,10 @@
 #include <list>
 
 using namespace std;
-Djkstra::Djkstra(){}
-Djkstra::~Djkstra(){}
+Dijkstra::Dijkstra(){}
+Dijkstra::~Dijkstra(){}
 
-list<int> Djkstra::caminhoMinimo(Grafo *grafo, int noI, int noAlvo){
+list<int> Dijkstra::caminhoMinimo(Grafo *grafo, int noI, int noAlvo){
     Vertices* ver =  grafo->procurarNo(noAlvo);
     if(ver->getGrauEntrada() == 0){ // Se o alvo n tem entrada
         cout << endl << "Nao existe caminho entre o vertice " << noI << " e o vertice " << noAlvo << endl;
@@ -49,7 +49,7 @@ list<int> Djkstra::caminhoMinimo(Grafo *grafo, int noI, int noAlvo){
     return caminho;
 }
 
-Vertices* Djkstra::menorDist(int dist[]) {
+Vertices* Dijkstra::menorDist(int dist[]) {
     Vertices *id;
     int menor = INT_MAX/2; 
     for(auto i = abertos.begin(); i != abertos.end(); i++){
@@ -62,7 +62,7 @@ Vertices* Djkstra::menorDist(int dist[]) {
     return id; // retorna o vertice com menor distancia
 }
 
-void Djkstra::criaCaminho(int noA, int ant[], int noI){
+void Dijkstra::criaCaminho(int noA, int ant[], int noI){
     //cout << " No A: " << noA << " Ant: "<< ant[noA] << " Inicial: " << noI <<endl;
     if(noA != noI){
         caminho.push_front(noA);

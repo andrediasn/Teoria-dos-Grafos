@@ -5,7 +5,7 @@
 #include <list>
 #include <vector>
 
-class Djkstra;
+class Dijkstra;
 class Floyd;
 
 class Grafo{
@@ -48,7 +48,7 @@ class Grafo{
     list<int> fechoDiretoAux(int ID, list<int> ListaFechoDireto); //auxiliar para recursividade do fecho
     list<int> fechoIndireto(int ID);//achar o fecho transitivo indireto
     list<int> fechoIndiretoAux(int ID, list<int> listaFechoIndireto);//achar o fecho transitivo indireto
-    list<int> caminhoMinimoDjkstra(int ID1, int ID2);//caminho minimo entre v1 e v2 passados por parametro usando Djkstra
+    list<int> caminhoMinimoDijkstra(int ID1, int ID2);//caminho minimo entre v1 e v2 passados por parametro usando Dijkstra
     list<int> caminhoMinimoFloyd(int ID1, int ID2); // caminho minimo entre v1 e v2 passados por parametro usando floyd
     list<Vertices*> subconjuntoX();//cria um subconjunto de vertices
     Agm* arvoreGeradoraMinimaPrim(int v);//cria uma arvore geradora minima usando prim

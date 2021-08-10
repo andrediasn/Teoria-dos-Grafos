@@ -48,8 +48,6 @@ list<int> Floyd::caminhoMinimo(Grafo* grafo, int noI, int noAlvo){
     int ant, dep, soma, teste;
     for(int k=0;k<n;k++){
         Vertices* vK = grafo->procurarNo(k);
-        //for(auto i=vK->ListAnt.begin();i!=vK->ListAnt.end();i++){
-            //ant = *i;
         for(auto i = grafo->nosGrafo.begin(); i != grafo->nosGrafo.end(); i++){
             Vertices *auxI = *i;
             ant = auxI->getId();
@@ -68,22 +66,12 @@ list<int> Floyd::caminhoMinimo(Grafo* grafo, int noI, int noAlvo){
         }  
     }
 
-    ofstream mat("Dados/matriz.txt");
-    for (int i = 0; i < n; i++)
-    {
-        mat << "L" << i << ": ";
-        mat << P[i][0] << " " << P[i][1] << " " << endl;
-    }
-    mat.close();
-    
-
     if(F[noI][noAlvo] < INT_MAX/2){ // Se encontrou caminho
         criaCaminho(noI, noAlvo, P);
         cout << endl << "Custo do caminho minimo: " << F[noI][noAlvo] << endl;
     }
-    else{
+    else
         cout << endl << "Nao existe caminho entre o vertice " << noI << " e o vertice " << noAlvo << endl;
-    }
     return caminho;
 }
 
@@ -97,5 +85,15 @@ void Floyd::criaCaminho(int noI, int noF, int **P) { //Busca caminho percorrendo
         caminho.push_front(noF); // Inclui vertice final na lista
         caminho.push_front(noI); // Inclui ultimo antecessor
     }
+}
+
+void Floyd::matrizCSV(int n, int **P){
+    ofstream mat("Dados/matriz.csv");
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++)
+            mat << P[i][j] << ",";
+        mat<<endl;
+    }
+    mat.close();
 }
 

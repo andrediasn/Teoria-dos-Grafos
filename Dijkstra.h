@@ -1,10 +1,10 @@
-#ifndef DJKSTRA_H_INCLUDED
-#define DJKSTRA_H_INCLUDED
+#ifndef DIJKSTRA_H_INCLUDED
+#define DIJKSTRA_H_INCLUDED
 #include "Grafo.h"
 #include "Vertices.h"
 #include <list>
 
-class Djkstra {
+class Dijkstra {
 private:
     list<int> caminho;
     list<Vertices*> abertos;
@@ -12,10 +12,10 @@ private:
     void criaCaminho(int no, int ant[], int noI);
     
 public:
-    Djkstra();
-    ~Djkstra();
+    Dijkstra();
+    ~Dijkstra();
     list<int> caminhoMinimo(Grafo *grafo, int noI, int noAlvo);
     
 };
   
-#endif //DJKSTRA_H_INCLUDED
+#endif //DIJKSTRA_H_INCLUDED
