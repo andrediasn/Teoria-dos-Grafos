@@ -36,8 +36,8 @@ int menu(){
 
 void saidaListDot(list<int> lista, string tipoMetodo){
     std::ofstream arq(arqSaida, ios::app);
-    arq << "//Grafo do caminho minimo do vertice " << *lista.begin() << " ate o vertice " << lista.back() << endl; 
-    arq << "//Gerado pelo algoritimo de" << tipoMetodo << endl << endl;
+    arq << "//Grafo do caminho minimo do vertice " << *lista.begin() << " ate o vertice " << lista.back(); 
+    arq << "// gerado pelo algoritimo de " << tipoMetodo << ":" << endl << endl;
     std::string tipoGrafo;
     std::string seta;
     if(opc_Direc){
@@ -66,9 +66,9 @@ void saidaListDot(list<int> lista, string tipoMetodo){
 void saidaAgmDot(Agm* agm, string caminho, int id){
     ofstream arq(arqSaida, ios::app);
     if(id > -1)
-        arq << "//Arvore Geradora Minima gerado pelo algoritimo de " << caminho << " com indice " << id << endl << endl;
+        arq << "//Arvore Geradora Minima gerado pelo algoritimo de " << caminho << " com indice " << id << ":" << endl << endl;
     else
-        arq << "//Arvore Geradora Minima gerado pelo algoritimo de " << caminho << endl <<endl;
+        arq << "//Arvore Geradora Minima gerado pelo algoritimo de " << caminho << ":" << endl <<endl;
     
     if(opc_Direc == true){
         arq << "digraph "<< caminho << "{" <<endl;
@@ -77,7 +77,7 @@ void saidaAgmDot(Agm* agm, string caminho, int id){
             Arestas* aux = *i;
             // Direcionado e com peso nas arestas
             if(opc_Peso_Aresta == true){
-                arq << "    " << aux->getId() << " -> " << aux->getId_alvo() << " [label = " << aux->getPeso() << " ]" <<endl;
+                arq << "    " << aux->getId() << " -> " << aux->getId_alvo() << " [label = " << aux->getPeso() << "]" <<endl;
             }
             // Direcionado e sem peso nas arestas
             if(opc_Peso_Aresta == false){
@@ -91,7 +91,7 @@ void saidaAgmDot(Agm* agm, string caminho, int id){
             Arestas* aux = *i;
             // Ndirecionado e com peso nas arestas
             if(opc_Peso_Aresta == true){
-                arq << "    " << aux->getId() << " -- " << aux->getId_alvo() << " [label = " << aux->getPeso() << " ]" <<endl;
+                arq << "    " << aux->getId() << " -- " << aux->getId_alvo() << " [label = " << aux->getPeso() << "]" <<endl;
             }
             // Ndirecionado e sem peso nas arestas
             if(opc_Peso_Aresta == false){
@@ -141,7 +141,7 @@ void selecionar(int selecao, Grafo* graph, string saida ){
                 if(graph->existeVertice(no1) && graph->existeVertice(no2)){
                     list<int> apenasImpressao = graph->caminhoMinimoDijkstra(no1, no2);
                     if(apenasImpressao.size() > 0){
-                        saidaListDot(apenasImpressao, "Djkistra");
+                        saidaListDot(apenasImpressao, "Dijkstra");
                         cout << "Grafo gerado." << endl;
                     }
                 } else
