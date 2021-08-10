@@ -13,8 +13,6 @@ ok    c) Parâmetro: dois IDs de vértices do grafo;
 ok    d) Parâmetro: dois IDs de vértices do grafo;
       Saída: o caminho mínimo entre estes dois vértices usando algoritmo de Floyd;
 
--> mudar de ant para todos nohs
-
 
 ok    e) Parâmetro: um subconjunto X de vértices do grafo;
       Saída: uma Árvore Geradora Mínima sobre o subgrafo vértice-induzido por X usando o algoritmo de Prim;
