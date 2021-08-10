@@ -13,7 +13,7 @@ class Floyd{
     Floyd();
     ~Floyd();
 
-    list<int> criaFloyd(Grafo* grafo, int noI, int noAlvo);
+    list<int> caminhoMinimo(Grafo* grafo, int noI, int noAlvo);
 
 
 };

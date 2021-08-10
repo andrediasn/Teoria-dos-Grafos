@@ -42,7 +42,7 @@ list<int> Djkstra::caminhoMinimo(Grafo *grafo, int noI, int noAlvo){
 
     if(dist[noAlvo]<INT_MAX/2){ // se houve custo menor que o valor iniciado
         criaCaminho(noAlvo, ant, noI); // imprime menor caminho encontrado
-        cout << "Custo minimo: " << dist[noAlvo] << endl; 
+        cout << endl << "Custo do caminho minimo: " << dist[noAlvo] << endl; 
     }
     else
         cout << endl << "Nao existe caminho entre o vertice " << noI << " e o vertice " << noAlvo << endl;

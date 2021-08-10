@@ -313,7 +313,6 @@ int Grafo::caminhoEmProfundidadeAux(Agm* solucao, int id, int ultimo){
         if(i != inicial->ListAdj.begin() && ultimo != -1){
             Arestas* retorno = new Arestas(ultimo, inicial->getId());
             solucao->insereAresta(retorno);
-            cout << "Inserindo Aresta: (" << ultimo << "," << inicial->getId() << ")" << endl;
             ultimo = -1;
         }
         Vertices* vVisitado = procurarNo(aux);
@@ -341,7 +340,7 @@ list<int> Grafo::caminhoMinimoDjkstra(int ID1, int ID2){
 
 list<int> Grafo::caminhoMinimoFloyd(int ID1, int ID2){
     Floyd aux;
-    list<int> caminhoF = aux.criaFloyd(this, ID1, ID2);
+    list<int> caminhoF = aux.caminhoMinimo(this, ID1, ID2);
     if(caminhoF.size()>0){
         cout << "Caminho minimo: ";
         for(auto i = caminhoF.begin(); i != caminhoF.end(); i++){

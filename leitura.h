@@ -29,15 +29,15 @@ int menu(){
     cout << "[8] Imprimir ordenacao topologica" << endl;
     cout << "[0] Sair" << endl;
     cout << "----" << endl;
-    cout << "Opcao escolhida: " << endl;
+    cout << "Opcao escolhida: "; 
     cin >> selecao;
     return selecao;
 }
 
 void saidaListDot(list<int> lista, string tipoMetodo){
     std::ofstream arq(arqSaida, ios::app);
-    arq << endl << "Metodo: " << tipoMetodo;
-    arq << endl << "Grafo do caminho minimo do vertice " << *lista.begin() << " ate o vertice " << lista.back() << endl << endl;
+    arq << endl << "Grafo do caminho minimo do vertice " << *lista.begin(); 
+    arq << " ate o vertice " << lista.back() << " pelo algoritimo de" << tipoMetodo << endl;
     std::string tipoGrafo;
     std::string seta;
     if(opc_Direc){
@@ -48,7 +48,6 @@ void saidaListDot(list<int> lista, string tipoMetodo){
         tipoGrafo = "graph ";
         seta = " -- ";
     }
-
     int vert[lista.size()];
     int j = 0;
     for(auto i = lista.begin(); i != lista.end(); i++){
@@ -56,9 +55,7 @@ void saidaListDot(list<int> lista, string tipoMetodo){
         j++;
     }
 
-    arq << tipoGrafo << tipoMetodo << "{" << endl;
-    //arq << "    " << lista.front() << "  [shape=\"polygon\" style=\"filled\" fillcolor=\"#1f77b4\"]" << endl;
-    //arq << "    " << lista.back() << "  [shape=\"polygon\" style=\"filled\" fillcolor=\"#ff7f0e\"]" << endl;
+    arq << tipoGrafo << tipoMetodo << "{" << endl;  // Exemplo: "digraph Floyd{"
     for(int i = 0; i < (lista.size()-1); i++){
         Arestas* aux = grafo->existeAresta(vert[i],vert[i+1]);
         arq << "    " << vert[i] << seta << vert[i+1] << " [label= " << aux->getPeso() << "];"<< endl;
@@ -111,7 +108,7 @@ void selecionar(int selecao, Grafo* graph, string saida ){
         //Fecho transitivo direto de um vertice (1)
         case 1:{
             int IdFecho;
-            cout << "Informe o id do Vertice inicial que deseja o fecho transitivo direto: ";
+            cout << endl << "Informe o id do Vertice que deseja o fecho transitivo direto: ";
             cin >> IdFecho;
             list<int> apenasImpressao = graph->fechoDireto(IdFecho);
             
@@ -120,7 +117,7 @@ void selecionar(int selecao, Grafo* graph, string saida ){
         //Fecho transitivo indireto de um vertice (2)
         case 2:{
             int IdFechoInd;
-            cout << "Informe o id do Vertice inicial que deseja o fecho transitivo indireto: ";
+            cout << endl << "Informe o id do Vertice que deseja o fecho transitivo indireto: ";
             cin >> IdFechoInd;
             list<int> apenasImpressao = graph->fechoIndireto(IdFechoInd);
             break;
@@ -129,13 +126,14 @@ void selecionar(int selecao, Grafo* graph, string saida ){
         //Caminho mínimo entre dois vértices usando Djkstra (3)
         case 3:{
             int no1, no2;
-            cout << "Informe o id do Vertice inicial: ";
+            cout << endl << "Informe o id do Vertice inicial: ";
             cin >> no1;
             cout << "Informe o id do Vertice alvo: ";
             cin >> no2;
             list<int> apenasImpressao = graph->caminhoMinimoDjkstra(no1, no2);
-            if(apenasImpressao.size() < 0){
+            if(apenasImpressao.size() > 0){
                 saidaListDot(apenasImpressao, "Djkistra");
+                cout << "Grafo gerado." << endl;
             }
             break;
 
@@ -149,8 +147,9 @@ void selecionar(int selecao, Grafo* graph, string saida ){
             cout << "Informe o id do Vertice alvo: ";
             cin >> no2;
             list<int> apenasImpressao = graph->caminhoMinimoFloyd(no1, no2);
-            if(apenasImpressao.size() < 0){
+            if(apenasImpressao.size() > 0){
                 saidaListDot(apenasImpressao, "Floyd");
+                cout << "Grafo gerado." << endl;
             }
             break;
         }
@@ -181,6 +180,7 @@ void selecionar(int selecao, Grafo* graph, string saida ){
             if(graph->existeVertice(idNoBusca)){
                 cout << "Realizando busca em Profundidade..." << endl;
                 graph->caminhoEmProfundidade(idNoBusca);
+                cout << "Grafo gerado." << endl;
                 return;
             }
             else
@@ -203,7 +203,7 @@ void selecionar(int selecao, Grafo* graph, string saida ){
         }
         default:
         {
-            cout << " Error!!! invalid option!!" << endl;
+            cout << " Erro!!! Opcao invalida!!" << endl;
         }
 
     }
