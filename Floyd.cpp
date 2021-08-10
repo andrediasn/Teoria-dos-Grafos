@@ -48,20 +48,34 @@ list<int> Floyd::caminhoMinimo(Grafo* grafo, int noI, int noAlvo){
     int ant, dep, soma, teste;
     for(int k=0;k<n;k++){
         Vertices* vK = grafo->procurarNo(k);
-        for(auto i=vK->ListAnt.begin();i!=vK->ListAnt.end();i++){
-            ant = *i;
+        //for(auto i=vK->ListAnt.begin();i!=vK->ListAnt.end();i++){
+            //ant = *i;
+        for(auto i = grafo->nosGrafo.begin(); i != grafo->nosGrafo.end(); i++){
+            Vertices *auxI = *i;
+            ant = auxI->getId();
             for(auto j = grafo->nosGrafo.begin(); j != grafo->nosGrafo.end(); j++){
-                Vertices *aux = *j;
-                dep = aux->getId();
-                soma = F[ant][k] + F[k][dep];
-                teste = F[ant][dep];
-                if(soma < teste){
-                    F[ant][dep] = soma;
-                    P[ant][dep] = k;
+                Vertices *auxJ = *j;
+                dep = auxJ->getId();
+                if(ant != dep){
+                    soma = F[ant][k] + F[k][dep];
+                    teste = F[ant][dep];
+                    if(soma < teste){
+                        F[ant][dep] = soma;
+                        P[ant][dep] = k;
+                    }
                 }
             }
         }  
     }
+
+    ofstream mat("Dados/matriz.txt");
+    for (int i = 0; i < n; i++)
+    {
+        mat << "L" << i << ": ";
+        mat << P[i][0] << " " << P[i][1] << " " << endl;
+    }
+    mat.close();
+    
 
     if(F[noI][noAlvo] < INT_MAX/2){ // Se encontrou caminho
         criaCaminho(noI, noAlvo, P);
@@ -76,12 +90,12 @@ list<int> Floyd::caminhoMinimo(Grafo* grafo, int noI, int noAlvo){
 void Floyd::criaCaminho(int noI, int noF, int **P) { //Busca caminho percorrendo predecessores
     int aux = P[noI][noF];
     if(P[noI][noF] > -1){ //Se existe antecessor
-        caminho.push_back(noI); // Salva antecessor na lista
-        criaCaminho(aux, noF, P); // Chama recursivamente antecessor do antecessor
+        caminho.push_front(noF); // Salva antecessor na lista
+        criaCaminho(noI, aux, P); // Chama recursivamente antecessor do antecessor
     }
     else if(aux == -1){ // Não houver antecessor
-        caminho.push_back(noI); // Inclui ultimo antecessor
-        caminho.push_back(noF); // Inclui vertice final na lista
+        caminho.push_front(noF); // Inclui vertice final na lista
+        caminho.push_front(noI); // Inclui ultimo antecessor
     }
 }
 

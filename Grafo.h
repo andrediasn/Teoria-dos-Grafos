@@ -15,11 +15,8 @@ class Grafo{
     bool direcionado; //direcionado ou nao
     bool pesoArestas; //peso nas arestas
     bool pesoVertice; //peso nos vertices
-    
-    
 
     public:
-    
     
     //  Deve ser implementadas
     void insereVertice(int id);     

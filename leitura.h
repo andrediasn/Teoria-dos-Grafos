@@ -110,8 +110,10 @@ void selecionar(int selecao, Grafo* graph, string saida ){
             int IdFecho;
             cout << endl << "Informe o id do Vertice que deseja o fecho transitivo direto: ";
             cin >> IdFecho;
-            list<int> apenasImpressao = graph->fechoDireto(IdFecho);
-            
+            if(graph->existeVertice(IdFecho))
+                list<int> apenasImpressao = graph->fechoDireto(IdFecho);
+            else
+                cout << "Id do vertice não encontrado." << endl;
             break;
         }
         //Fecho transitivo indireto de um vertice (2)
@@ -119,7 +121,10 @@ void selecionar(int selecao, Grafo* graph, string saida ){
             int IdFechoInd;
             cout << endl << "Informe o id do Vertice que deseja o fecho transitivo indireto: ";
             cin >> IdFechoInd;
-            list<int> apenasImpressao = graph->fechoIndireto(IdFechoInd);
+            if(graph->existeVertice(IdFechoInd))
+                list<int> apenasImpressao = graph->fechoIndireto(IdFechoInd);
+            else
+                cout << "Id do vertice não encontrado." << endl;
             break;
         }
 
@@ -131,11 +136,14 @@ void selecionar(int selecao, Grafo* graph, string saida ){
                 cin >> no1;
                 cout << "Informe o id do Vertice alvo: ";
                 cin >> no2;
-                list<int> apenasImpressao = graph->caminhoMinimoDjkstra(no1, no2);
-                if(apenasImpressao.size() > 0){
-                    saidaListDot(apenasImpressao, "Djkistra");
-                    cout << "Grafo gerado." << endl;
-                }
+                if(graph->existeVertice(no1) && graph->existeVertice(no2)){
+                    list<int> apenasImpressao = graph->caminhoMinimoDjkstra(no1, no2);
+                    if(apenasImpressao.size() > 0){
+                        saidaListDot(apenasImpressao, "Djkistra");
+                        cout << "Grafo gerado." << endl;
+                    }
+                } else
+                    cout << "Id do vertice não encontrado." << endl;
             } else{
                 cout << "O grafo nao esta ponderado. Nao eh possivel executar o algoritimo." << endl;
             }
@@ -150,14 +158,16 @@ void selecionar(int selecao, Grafo* graph, string saida ){
                 cin >> no1;
                 cout << "Informe o id do Vertice alvo: ";
                 cin >> no2;
-                list<int> apenasImpressao = graph->caminhoMinimoFloyd(no1, no2);
-                if(apenasImpressao.size() > 0){
-                    saidaListDot(apenasImpressao, "Floyd");
-                    cout << "Grafo gerado." << endl;
-                }
-            } else{
-                cout << "O grafo nao esta ponderado. Nao eh possivel executar o algoritimo." << endl;
-            }
+                if(graph->existeVertice(no1) && graph->existeVertice(no2)){
+                    list<int> apenasImpressao = graph->caminhoMinimoFloyd(no1, no2);
+                    if(apenasImpressao.size() > 0){
+                        //saidaListDot(apenasImpressao, "Floyd");
+                        cout << "Grafo gerado." << endl;
+                    }
+                } else
+                    cout << "Id do vertice não encontrado." << endl;
+            } else
+                cout << "O grafo nao esta ponderado. Nao eh possivel executar o algoritimo." << endl; 
             break;
         }
 
@@ -167,14 +177,16 @@ void selecionar(int selecao, Grafo* graph, string saida ){
                 int resposta;
                 cout << endl << "Informe o id do Vertice inicial da AGM Prim: ";
                 cin >> resposta;
-                Agm* agm = graph->arvoreGeradoraMinimaPrim(resposta);
-                saidaAgmDot(agm,"Prim");
-                cout << endl << "Grafo gerado." << endl;
-            } else if(opc_Direc){
+                if(graph->existeVertice(resposta)){
+                    Agm* agm = graph->arvoreGeradoraMinimaPrim(resposta);
+                    saidaAgmDot(agm,"Prim");
+                    cout << endl << "Grafo gerado." << endl;
+                } else
+                    cout << "Id do vertice não encontrado." << endl;
+            } else if(opc_Direc)
                 cout << "O grafo esta direcionado. Nao eh possivel executar o algoritimo." << endl;
-            } else if(!graph->conexo()){
+            else if(!graph->conexo())
                 cout << "O grafo nao eh conexo. Nao eh possivel executar o algoritimo." << endl;
-            }
             break;
         }  
         //AGM - Kruskal; (6)
@@ -183,11 +195,10 @@ void selecionar(int selecao, Grafo* graph, string saida ){
                 Agm* agm = graph->arvoreGeradoraMinimaKruskal();
                 saidaAgmDot(agm,"Kruskal");
                 cout << endl << "Grafo gerado." << endl;
-            } else if(opc_Direc){
+            } else if(opc_Direc)
                 cout << "O grafo esta direcionado. Nao eh possivel executar o algoritimo." << endl;
-            } else if(!graph->conexo()){
+            else if(!graph->conexo())
                 cout << "O grafo nao eh conexo. Nao eh possivel executar o algoritimo." << endl;
-            }
             break;
         }
 
@@ -200,10 +211,9 @@ void selecionar(int selecao, Grafo* graph, string saida ){
                 Agm* agm = graph->caminhoEmProfundidade(idNoBusca);
                 saidaAgmDot(agm,"BuscaProfundidade");
                 cout << "Grafo gerado." << endl;
-                return;
             }
             else
-                cout << "No nao encontrado no grafo" << endl;
+                cout << "Id do vertice não encontrado." << endl;
             break;
         }
         //Ordenação Topologica; (8)
