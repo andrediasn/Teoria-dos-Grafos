@@ -182,19 +182,21 @@ void selecionar(int selecao, Grafo* graph, string saida ){
                     cout << "Id do vertice não encontrado." << endl;
             } else if(opc_Direc)
                 cout << "O grafo esta direcionado. Nao eh possivel executar o algoritimo." << endl;
-            else if(!graph->conexo())
+            else
                 cout << "O grafo nao eh conexo. Nao eh possivel executar o algoritimo." << endl;
             break;
         }  
         //AGM - Kruskal; (6)
         case 6:{
-            if(!opc_Direc){
+            if(!opc_Direc && opc_Peso_Aresta && graph->conexo()){
                 Agm* agm = graph->arvoreGeradoraMinimaKruskal();
                 saidaAgmDot(agm,"Kruskal", -1);
                 cout << endl << "Grafo gerado." << endl;
             } else if(opc_Direc)
                 cout << "O grafo esta direcionado. Nao eh possivel executar o algoritimo." << endl;
-            else if(!graph->conexo())
+            else if(!opc_Peso_Aresta)
+                cout << "O grafo nao possui peso nas arestas. Nao eh possivel executar o algoritimo." << endl;
+            else
                 cout << "O grafo nao eh conexo. Nao eh possivel executar o algoritimo." << endl;
             break;
         }
