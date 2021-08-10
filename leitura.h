@@ -146,9 +146,8 @@ void selecionar(int selecao, Grafo* graph, string saida ){
                     }
                 } else
                     cout << "Id do vertice não encontrado." << endl;
-            } else{
+            } else
                 cout << "O grafo nao esta ponderado. Nao eh possivel executar o algoritimo." << endl;
-            }
             break;
         }
 
@@ -216,12 +215,12 @@ void selecionar(int selecao, Grafo* graph, string saida ){
         }
         //Ordenação Topologica; (8)
         case 8:{
-            if(graph->getDirecionado() == true && graph->nTemCiclo() == false){
-                Grafo* ordenacaoTop = graph->ordenacaoTopologica();
-            }else{
-                cout << "O grafo passado não atende aos parametros criteirios da ordenação topologica." <<endl;
-            }
-
+            if(graph->getDirecionado() == true && graph->nTemCiclo() == false)
+                list<int> ordenacaoTop = graph->ordenacaoTopologica();
+            else if (!graph->getDirecionado())
+                cout << "O grafo nao esta direcionado. Nao eh possivel executar o algoritimo." << endl;
+            else
+                cout << "O grafo possui ao menos um ciclo. Nao eh possivel executar o algoritimo." << endl;
             break;
         }
         case 0:{

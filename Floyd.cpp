@@ -19,8 +19,11 @@ list<int> Floyd::caminhoMinimo(Grafo* grafo, int noI, int noAlvo){
     }
 
     int n = grafo->getOrdem();
-    int F[n][n]; // Matriz grafo
-    int **P; // Martiz de antecessores
+    int **F; // Alocando Matriz de custos
+    F = new int *[n];
+    for(int i = 0; i < n; i++)
+        F[i] = new int[n];
+    int **P; // Alocando Matriz de antecessores
     P = new int *[n];
     for(int i = 0; i < n; i++)
         P[i] = new int[n];
@@ -72,6 +75,9 @@ list<int> Floyd::caminhoMinimo(Grafo* grafo, int noI, int noAlvo){
     }
     else
         cout << endl << "Nao existe caminho entre o vertice " << noI << " e o vertice " << noAlvo << endl;
+    
+    delete F;
+    delete P;
     return caminho;
 }
 

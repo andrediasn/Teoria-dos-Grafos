@@ -16,8 +16,8 @@ list<int> Dijkstra::caminhoMinimo(Grafo *grafo, int noI, int noAlvo){
         return caminho; 
     }
 
-    int dist[grafo->getOrdem()]; // Vetor de distancia
-    int ant[grafo->getOrdem()];  // Armazena predecessor
+    int *dist = new int[grafo->getOrdem()]; // Vetor de distancia
+    int *ant = new int[grafo->getOrdem()];  // Armazena predecessor
 
     for(auto i = grafo->nosGrafo.begin(); i != grafo->nosGrafo.end(); i++){
         Vertices* aux = *i;
@@ -46,6 +46,8 @@ list<int> Dijkstra::caminhoMinimo(Grafo *grafo, int noI, int noAlvo){
     }
     else
         cout << endl << "Nao existe caminho entre o vertice " << noI << " e o vertice " << noAlvo << endl;
+    delete dist;
+    delete ant;
     return caminho;
 }
 

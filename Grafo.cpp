@@ -13,7 +13,7 @@
 #include <limits.h>
 
 using namespace std;
-static int ciclo[100000];  
+//static int *ciclo = new int[100000];  
 
 Grafo::Grafo(int ordem, bool direcionado, bool pesoArestas, bool pesoVertices){//construtor do grafo
     this->ordem = ordem;//inicializa a ordem com a ordem passada
@@ -32,6 +32,8 @@ bool Grafo::getDirecionado(){
 }
 
 bool Grafo::nTemCiclo(){
+    int *ciclo;
+    ciclo = new int [ordem];
     for (int i = 0;i < arestasGrafo.size() - 1;i++){
         ciclo[i] = i;
     }
@@ -41,13 +43,14 @@ bool Grafo::nTemCiclo(){
     for (auto  i = arestasGrafo.begin(); i != arestasGrafo.end(); i++){
         Arestas*  j       = *i;
         //detectando se com esta aresta forma ciclo:
-		if ( pai(j->getId()) != pai(j->getId_alvo())){ 
-			unir(j->getId(), j->getId_alvo());
-
+		if ( pai(j->getId(), ciclo) != pai(j->getId_alvo(), ciclo)){ 
+			unir(j->getId(), j->getId_alvo(), ciclo);
+            delete ciclo;
             return false;
 		}
     
     }
+    delete ciclo;
     return true;
 } 
 int Grafo::getOrdem(){
@@ -351,7 +354,7 @@ list<int> Grafo::caminhoMinimoDijkstra(int ID1, int ID2){
 list<int> Grafo::caminhoMinimoFloyd(int ID1, int ID2){
     Floyd aux;
     list<int> caminhoF = aux.caminhoMinimo(this, ID1, ID2);
-    if(caminhoF.size()<0){
+    if(caminhoF.size()>0){
         cout << "Caminho minimo: ";
         for(auto i = caminhoF.begin(); i != caminhoF.end(); i++){
             cout << *i << " ";
@@ -367,7 +370,8 @@ Agm* Grafo::arvoreGeradoraMinimaKruskal(){
     Agm *agm = new Agm();             // Criando o conjunto solucao das arestas com menor peso
     
     vector<Arestas*> arestasAux;
-
+    int *ciclo;
+    ciclo = new int [ordem];
     
     for (auto  i = arestasGrafo.begin(); i != arestasGrafo.end(); i++){
         Arestas* auxs = *i;
@@ -397,29 +401,62 @@ Agm* Grafo::arvoreGeradoraMinimaKruskal(){
     for (auto  i = arestasAux.begin(); i != arestasAux.end(); i++){
         Arestas*  j       = *i;
         //detectando se com esta aresta forma ciclo:
-		if ( pai(j->getId()) != pai(j->getId_alvo())){ 
-			unir(j->getId(), j->getId_alvo());
+		if ( pai(j->getId(), ciclo) != pai(j->getId_alvo(), ciclo)){ 
+			unir(j->getId(), j->getId_alvo(), ciclo);
 
             agm->insereAresta(j);
 		}
     
     }
+    delete ciclo;
     return agm;
   
 }
-void Grafo::unir(int v1,int v2){
-    ciclo[pai(v1)] = pai(v2);
+void Grafo::unir(int v1,int v2, int *ciclo){
+    ciclo[pai(v1, ciclo)] = pai(v2, ciclo);
 }
-int Grafo::pai(int v){
+int Grafo::pai(int v, int *ciclo){
      if (ciclo[v] == v){
         return v;
 	}
  
-    ciclo[v] = pai(ciclo[v]);
+    ciclo[v] = pai(ciclo[v], ciclo);
  
     return ciclo[v];
 }
 
-Grafo* Grafo::ordenacaoTopologica(){
+list<int> Grafo::ordenacaoTopologica(){
     
+    int menor ;
+    Vertices* apontaVertice;
+    Vertices* aux;
+    list<Vertices*> copia;
+    
+    list<int> solucao;
+    for (auto i = nosGrafo.begin(); i != nosGrafo.end();i++){
+        copia.push_back(*i);
+    }
+
+    while(copia.size() != 0){
+        for (auto k = copia.begin(); k != copia.end();k++){
+            aux = *k;
+            if(aux->getGrauSaida() < menor){
+                menor = aux->getGrauSaida();
+                apontaVertice = *k;
+            }   
+        }
+        solucao.push_back(apontaVertice->getId());
+        copia.remove(apontaVertice);
+    }
+
+    if(solucao.size()>0){
+        cout << "Vertices ordenados a partir do grau de saida: ";
+        for(auto i = solucao.begin(); i != solucao.end(); i++){
+            cout << *i << " ";
+        }
+        cout << endl;
+    }
+
+    
+    return solucao;
 }
