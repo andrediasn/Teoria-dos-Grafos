@@ -36,7 +36,7 @@ class Grafo{
     std::list<Vertices*> nosGrafo; //lista com nos do grafo            
     
     int getOrdem();
-
+    bool conexo();
     void arrumaVisitado();
 
     Grafo(int ordem, bool direcionado = false, bool pesoArestas= false, bool pesoVertices = false);

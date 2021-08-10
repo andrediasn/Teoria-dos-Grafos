@@ -36,8 +36,8 @@ int menu(){
 
 void saidaListDot(list<int> lista, string tipoMetodo){
     std::ofstream arq(arqSaida, ios::app);
-    arq << endl << "Grafo do caminho minimo do vertice " << *lista.begin(); 
-    arq << " ate o vertice " << lista.back() << " pelo algoritimo de" << tipoMetodo << endl;
+    //arq << "Grafo do caminho minimo do vertice " << *lista.begin(); 
+    //arq << " ate o vertice " << lista.back() << " gerado pelo algoritimo de" << tipoMetodo << endl << endl;
     std::string tipoGrafo;
     std::string seta;
     if(opc_Direc){
@@ -60,16 +60,16 @@ void saidaListDot(list<int> lista, string tipoMetodo){
         Arestas* aux = grafo->existeAresta(vert[i],vert[i+1]);
         arq << "    " << vert[i] << seta << vert[i+1] << " [label= " << aux->getPeso() << "];"<< endl;
     }
-    arq << "}"<< endl << endl << " ------------------------------" << endl;
+    arq << "}"<< endl << endl << endl;
 }
 
-void saidaAgmDot(Agm* agm,string caminho){
+void saidaAgmDot(Agm* agm, string caminho){
     ofstream arq(arqSaida, ios::app);
-    arq << "Arvore geradora minima formada pela execução " << caminho << " é: " << endl <<endl;
+    //arq << "Arvore Geradora Minima gerado pelo algoritimo de " << caminho << endl <<endl;
     
 
     if(opc_Direc == true){
-        arq << "digraph {" <<endl;
+        arq << "digraph "<< caminho << "{" <<endl;
 
         for (auto i = agm->arestasAgm.begin(); i != agm->arestasAgm.end(); i++){
             Arestas* aux = *i;
@@ -83,7 +83,7 @@ void saidaAgmDot(Agm* agm,string caminho){
             }
         }
     }else{
-        arq << "graph {" <<endl;
+        arq << "graph "<< caminho << "{" <<endl;
 
         for (auto i = agm->arestasAgm.begin(); i != agm->arestasAgm.end(); i++){
             Arestas* aux = *i;
@@ -125,61 +125,80 @@ void selecionar(int selecao, Grafo* graph, string saida ){
 
         //Caminho mínimo entre dois vértices usando Djkstra (3)
         case 3:{
-            int no1, no2;
-            cout << endl << "Informe o id do Vertice inicial: ";
-            cin >> no1;
-            cout << "Informe o id do Vertice alvo: ";
-            cin >> no2;
-            list<int> apenasImpressao = graph->caminhoMinimoDjkstra(no1, no2);
-            if(apenasImpressao.size() > 0){
-                saidaListDot(apenasImpressao, "Djkistra");
-                cout << "Grafo gerado." << endl;
+            if(opc_Peso_Aresta){
+                int no1, no2;
+                cout << endl << "Informe o id do Vertice inicial: ";
+                cin >> no1;
+                cout << "Informe o id do Vertice alvo: ";
+                cin >> no2;
+                list<int> apenasImpressao = graph->caminhoMinimoDjkstra(no1, no2);
+                if(apenasImpressao.size() > 0){
+                    saidaListDot(apenasImpressao, "Djkistra");
+                    cout << "Grafo gerado." << endl;
+                }
+            } else{
+                cout << "O grafo nao esta ponderado. Nao eh possivel executar o algoritimo." << endl;
             }
             break;
-
         }
 
         //Caminho mínimo entre dois vértices usando Floyd (4)
         case 4:{
-            int no1, no2;
-            cout << "Informe o id do Vertice inicial: ";
-            cin >> no1;
-            cout << "Informe o id do Vertice alvo: ";
-            cin >> no2;
-            list<int> apenasImpressao = graph->caminhoMinimoFloyd(no1, no2);
-            if(apenasImpressao.size() > 0){
-                saidaListDot(apenasImpressao, "Floyd");
-                cout << "Grafo gerado." << endl;
+            if(opc_Peso_Aresta){
+                int no1, no2;
+                cout << "Informe o id do Vertice inicial: ";
+                cin >> no1;
+                cout << "Informe o id do Vertice alvo: ";
+                cin >> no2;
+                list<int> apenasImpressao = graph->caminhoMinimoFloyd(no1, no2);
+                if(apenasImpressao.size() > 0){
+                    saidaListDot(apenasImpressao, "Floyd");
+                    cout << "Grafo gerado." << endl;
+                }
+            } else{
+                cout << "O grafo nao esta ponderado. Nao eh possivel executar o algoritimo." << endl;
             }
             break;
         }
 
         //AGM - Prim; (5)
         case 5:{
-            int resposta;
-            
-            cout << "Qual e o indice inicial da arvore geradora minima: ";
-            cin >> resposta;
-    
-            Agm* agm = graph->arvoreGeradoraMinimaPrim(resposta);
-            saidaAgmDot(agm,"do algoritmo de prim ");
+            if(!opc_Direc && graph->conexo()){
+                int resposta;
+                cout << endl << "Informe o id do Vertice inicial da AGM Prim: ";
+                cin >> resposta;
+                Agm* agm = graph->arvoreGeradoraMinimaPrim(resposta);
+                saidaAgmDot(agm,"Prim");
+                cout << endl << "Grafo gerado." << endl;
+            } else if(opc_Direc){
+                cout << "O grafo esta direcionado. Nao eh possivel executar o algoritimo." << endl;
+            } else if(!graph->conexo()){
+                cout << "O grafo nao eh conexo. Nao eh possivel executar o algoritimo." << endl;
+            }
             break;
         }  
         //AGM - Kruskal; (6)
         case 6:{
-            Agm* agm = graph->arvoreGeradoraMinimaKruskal();
-            saidaAgmDot(agm,"do algoritmo de Kruskal");
+            if(!opc_Direc){
+                Agm* agm = graph->arvoreGeradoraMinimaKruskal();
+                saidaAgmDot(agm,"Kruskal");
+                cout << endl << "Grafo gerado." << endl;
+            } else if(opc_Direc){
+                cout << "O grafo esta direcionado. Nao eh possivel executar o algoritimo." << endl;
+            } else if(!graph->conexo()){
+                cout << "O grafo nao eh conexo. Nao eh possivel executar o algoritimo." << endl;
+            }
             break;
         }
 
         //Busca em Profundidade; (7)
         case 7:{
             int idNoBusca;
-            cout << "Para realizar a busca em Profundidade, informe o id do No: ";
+            cout << endl << "Informe o id do Vertice para a Busca em Profundidade: ";
             cin >> idNoBusca;
             if(graph->existeVertice(idNoBusca)){
-                cout << "Realizando busca em Profundidade..." << endl;
-                graph->caminhoEmProfundidade(idNoBusca);
+                Agm* agm = graph->caminhoEmProfundidade(idNoBusca);
+                saidaAgmDot(agm,"BuscaProfundidade");
                 cout << "Grafo gerado." << endl;
                 return;
             }
@@ -317,8 +336,6 @@ Grafo* leitura(int argc, char * argv[]){
     }
 
     arquivo.close();
-    std::ofstream arq(arqSaida);
-    arq.close();
 
     while(selecao != 0){
        // system("clear");

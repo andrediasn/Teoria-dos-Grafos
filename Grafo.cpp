@@ -167,6 +167,15 @@ void Grafo::arrumaVisitado(){ // Seta visitados para false
     }
 }
 
+bool Grafo::conexo(){
+    for (auto i = nosGrafo.begin(); i != nosGrafo.end(); i++){
+        Vertices* auxVertice = *i;
+        if(auxVertice->ListAdj.empty() == true)
+            return false;
+    }
+    return true;
+}
+
 // FUNCAO PARA ACHAR A MENOR ARESTA DENTRE DOIS NOS 
 Agm* Grafo::arestaMaisBarata(Vertices* v,Agm* agm){
     int menor = INT32_MAX; 
@@ -311,7 +320,8 @@ int Grafo::caminhoEmProfundidadeAux(Agm* solucao, int id, int ultimo){
     for (auto i = inicial->ListAdj.begin(); i != inicial->ListAdj.end(); i++) {
         aux = *i;
         if(i != inicial->ListAdj.begin() && ultimo != -1){
-            Arestas* retorno = new Arestas(ultimo, inicial->getId());
+            Arestas *peso = existeAresta(inicial->getId(), ultimo);
+            Arestas* retorno = new Arestas(ultimo, inicial->getId(), peso->getPeso());
             solucao->insereAresta(retorno);
             ultimo = -1;
         }
