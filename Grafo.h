@@ -18,13 +18,14 @@ class Grafo{
 
     public:
     
-    //  Deve ser implementadas
-    void insereVertice(int id);     
+    Grafo(int ordem, bool direcionado = false, bool pesoArestas= false, bool pesoVertices = false);
+    ~Grafo();
+
+    void insereVertice(int id); //  
     void insereAresta(int id,int id_alvo,bool direcionado = false ,float pesoArestas = 0);
     void removeNode(int id);
 
     bool existeVertice(int id);
-    bool getDirecionado();
     bool nTemCiclo();          
     Arestas* existeAresta(int id ,int id_alvo);
     Vertices* procurarNo(int id);
@@ -36,8 +37,6 @@ class Grafo{
     bool conexo();
     void arrumaVisitado();
 
-    Grafo(int ordem, bool direcionado = false, bool pesoArestas= false, bool pesoVertices = false);
-    ~Grafo();
    
     
     Agm* arestaMaisBarata(Vertices* v,Agm* agm);
@@ -49,14 +48,13 @@ class Grafo{
     list<int> fechoIndireto(int ID);//achar o fecho transitivo indireto
     list<int> fechoIndiretoAux(int ID, list<int> listaFechoIndireto);//achar o fecho transitivo indireto
     list<int> caminhoMinimoDijkstra(int ID1, int ID2);//caminho minimo entre v1 e v2 passados por parametro usando Dijkstra
-    list<int> caminhoMinimoFloyd(int ID1, int ID2); // caminho minimo entre v1 e v2 passados por parametro usando floyd
+    void caminhoMinimoFloyd(int ID1, int ID2); // custo minimo entre v1 e v2 passados por parametro usando floyd
     list<Vertices*> subconjuntoX();//cria um subconjunto de vertices
     Agm* arvoreGeradoraMinimaPrim(int v);//cria uma arvore geradora minima usando prim
     Agm* arvoreGeradoraMinimaKruskal();//cria uma arvore geradora minima usando kruskal
     Agm* caminhoEmProfundidade(int id);//caminha em profundidade pelo grafo
     int caminhoEmProfundidadeAux(Agm* solucao, int id, int ultimo);//aux do caminha em profundidade pelo grafo
     void ordenacaoTopologica();//faz a ordenaçao topologica do grafo
-    list<int> ordenacaoTopologica2();
 
     void quickSort(vector<Vertices*> *copia, int inicio, int fim);
     int partQuick(vector<Vertices*> *copia, int inicio, int fim);

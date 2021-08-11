@@ -7,45 +7,35 @@
 #include <sstream>
 #include <string.h>
 
-Arestas::Arestas(int id, int id_alvo, float peso)
-{
+Arestas::Arestas(int id, int id_alvo, float peso){
     this->id = id;
     this->id_alvo = id_alvo;
     this->Peso = peso;
 }
 
-Arestas::~Arestas()
-{
-    
-}
+Arestas::~Arestas(){}
 
-float Arestas::getPeso()
-{
+float Arestas::getPeso(){
     return this->Peso;
 }
 
-void Arestas::setPeso(float peso)
-{
+void Arestas::setPeso(float peso){
     this->Peso = peso;
 }
 
-int Arestas::getId()
-{
+int Arestas::getId(){
     return this->id;
 }
 
-void Arestas::setId(int id)
-{
+void Arestas::setId(int id){
     this->id = id;
 }
 
-int Arestas::getId_alvo()
-{
+int Arestas::getId_alvo(){
     return this->id_alvo;
 }
 
-void Arestas::setId_alvo(int id_alvo)
-{
+void Arestas::setId_alvo(int id_alvo){
     this->id_alvo = id_alvo;
 }
 

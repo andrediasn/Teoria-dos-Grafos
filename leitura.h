@@ -160,7 +160,7 @@ void selecionar(int selecao, Grafo* graph, string saida ){
                 cout << "Informe o id do Vertice alvo: ";
                 cin >> no2;
                 if(graph->existeVertice(no1) && graph->existeVertice(no2))
-                    list<int> apenasImpressao = graph->caminhoMinimoFloyd(no1, no2);
+                    graph->caminhoMinimoFloyd(no1, no2);
                 else
                     cout << "Id do vertice não encontrado." << endl;
             } else
@@ -217,9 +217,9 @@ void selecionar(int selecao, Grafo* graph, string saida ){
         }
         //Ordenação Topologica; (8)
         case 8:{
-            if(graph->getDirecionado() == true && graph->nTemCiclo() == false)
+            if(opc_Direc == true && graph->nTemCiclo() == false)
                 graph->ordenacaoTopologica();
-            else if (!graph->getDirecionado())
+            else if (!opc_Direc)
                 cout << "O grafo nao esta direcionado. Nao eh possivel executar o algoritimo." << endl;
             else
                 cout << "O grafo possui ao menos um ciclo. Nao eh possivel executar o algoritimo." << endl;

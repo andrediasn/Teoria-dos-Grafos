@@ -6,13 +6,14 @@
 
 class Agm{
     public:
-    std::list<Arestas*> arestasAgm; // lista com arestas do grafo   
-    std::list<Vertices*> nosAgm; //lista com nos do grafo    
+        Agm();
+        ~Agm();
 
-    Agm();
-    ~Agm();
-    void insereVertice(Vertices* v);     
-    void insereAresta(Arestas* a);
+        std::list<Arestas*> arestasAgm; // lista com arestas do grafo   
+        std::list<Vertices*> nosAgm; //lista com nos do grafo    
+
+        void insereVertice(Vertices* v); // Insere vertice passando id    
+        void insereAresta(Arestas* a); // Insere aresta passando id do vertice de origem, vertice alvo, e o peso
 
 };
 #endif //AGM_H_INCLUDED

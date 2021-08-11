@@ -13,65 +13,51 @@
 #include <limits.h>
 
 using namespace std;
-//static int *ciclo = new int[100000];  
 
 Grafo::Grafo(int ordem, bool direcionado, bool pesoArestas, bool pesoVertices){//construtor do grafo
     this->ordem = ordem;//inicializa a ordem com a ordem passada
     this->direcionado = direcionado;//inicializa o grafo se é direcionado ou nao
     this->pesoArestas = pesoArestas;//inicializa o grafo com peso nas arestas ou nao
     this->pesoVertice = pesoVertices;//inicializa o grafo com peso nos vertices ou nao
-    for(int i=0; i<this->ordem;i++)//inicializa a lista de vertices do grafo com todos os vertices de 0 a n-1 sendo n a ordem do grafo
-    {
+    for(int i=0; i<this->ordem;i++) {//inicializa a lista de vertices do grafo com todos os vertices de 0 a n-1 sendo n a ordem do grafo
         insereVertice(i);//insere cada vertice do grafo de uma vez (ja que sabemos o numero de nos pela "ordem")
     }
 }
 Grafo::~Grafo(){}
 
-bool Grafo::getDirecionado(){
-    return this->direcionado;
-}
-
-bool Grafo::nTemCiclo(){
-    int *ciclo;
-    ciclo = new int [ordem];
-    for (int i = 0;i < arestasGrafo.size() - 1;i++){
-        ciclo[i] = i;
-    }
-    
-    // aloca memória para criar "V" subconjuntos
-       
-    for (auto  i = arestasGrafo.begin(); i != arestasGrafo.end(); i++){
-        Arestas*  j       = *i;
-        //detectando se com esta aresta forma ciclo:
-		if ( pai(j->getId(), ciclo) != pai(j->getId_alvo(), ciclo)){ 
-			unir(j->getId(), j->getId_alvo(), ciclo);
-            delete ciclo;
-            return false;
-		}
-    
-    }
-    delete ciclo;
-    return true;
-} 
 int Grafo::getOrdem(){
     return this->ordem;
 }
 
-void Grafo::insereVertice(int id)// Insere vertice passando id
-{
-    if(existeVertice(id))//pesquisa o id do vertice
-    {
-        cout << "O no jah existe no grafo.\n";//se ja existir printa que ja existe
-        return;//e volta
+bool Grafo::nTemCiclo(){ // Verifica se ha ciclo no grafo
+    int *ciclo;
+    ciclo = new int [ordem]; // aloca espaco para o vetor
+    for (int i = 0;i < arestasGrafo.size() - 1;i++)
+        ciclo[i] = i;
+       
+    for (auto i = arestasGrafo.begin(); i != arestasGrafo.end(); i++){
+        Arestas *j = *i;
+		if (pai(j->getId(), ciclo) != pai(j->getId_alvo(), ciclo)){ //detectando se com esta aresta forma ciclo:
+			unir(j->getId(), j->getId_alvo(), ciclo);
+            delete ciclo; // free memory
+            return false; // achou ciclo
+		}
+    
     }
+    delete ciclo; // free memory
+    return true; // nao ha ciclo
+} 
+
+void Grafo::insereVertice(int id){// Insere vertice passando id
+    if(existeVertice(id))//pesquisa o id do vertice
+        cout << "O no jah existe no grafo.\n";//se ja existir printa que ja existe
+    else{
     Vertices* no = new Vertices(id);//aloca um novo no dinamicamente
     nosGrafo.push_back(no);//cria um novo no
-    //cout << "No inserido com sucesso.\n";//printa que foi inserido com sucesso
+    }
 }
 
-void Grafo::insereAresta(int id, int id_alvo,bool direcionado, float pesoArestas)// Inseri aresta passando id do vertice de origem, vertice alvo, e o peso
-{
-
+void Grafo::insereAresta(int id, int id_alvo,bool direcionado, float pesoArestas){// Inseri aresta passando id do vertice de origem, vertice alvo, e o peso
     if(!nosGrafo.empty()){//se o grafo nao for vazio
         if(!existeVertice(id)){//se nao existir o no no grafo
             cout << "O vertice de origem nao existe no grafo.\n";//printa que nao tem vertice
@@ -82,8 +68,7 @@ void Grafo::insereAresta(int id, int id_alvo,bool direcionado, float pesoArestas
         }
         else{//caso tenha os 2
             Arestas* auxAresta;//cria uma aresta auxiliar
-            if(direcionado == false)//se ela nao for direcionada
-            {
+            if(direcionado == false){//se ela nao for direcionada
                 Vertices* no1 = procurarNo(id);//cria um vertice auxiliar para alterarmos os dados dos vertices
                 Vertices* no2 = procurarNo(id_alvo);//cria um auxiliar para o vertice alvo igual ao primeiro
                 auxAresta = no1->insereAresta(id, id_alvo, pesoArestas);//insere aresta no grafo passando o vertice inicial, final e peso
@@ -99,8 +84,7 @@ void Grafo::insereAresta(int id, int id_alvo,bool direcionado, float pesoArestas
                 arestasGrafo.push_back(arestasContraria);
                 
             }
-            else if(direcionado == true)//se for direcionada
-            {
+            else if(direcionado == true){//se for direcionada
                 Vertices* no1 = procurarNo(id);//cria um vertice auxiliar para alterarmos os dados dos vertices
                 Vertices* no2 = procurarNo(id_alvo);//cria um auxiliar para o vertice alvo igual ao primeiro
                 //adicionando peso nos vertices
@@ -110,30 +94,22 @@ void Grafo::insereAresta(int id, int id_alvo,bool direcionado, float pesoArestas
                 arestasGrafo.push_back(auxAresta);//poe ela na lista de arestas do grafo
                 no2->adicionaAntecessor(no1->getId());
             }
-            //cout << "Aresta inserida com sucesso!\n";//printa aresta inserida com sucesso
         }
     }
 }
 
 void Grafo::removeNode(int id){ //remove vertice
     if(existeVertice(id)){//se o vertice nao existe no grafo entra no if
-        cout << "O no nao existe no grafo!\n";//o vertice nao existe
-    }
-    for (auto i = nosGrafo.begin();i!=nosGrafo.end();i++)//percorre os vertices do grafo 
-    {
-        Vertices* aux = *i;//cria um vertice auxiliar
-        if (aux->getId() == id)//se o id do vertice passado for igual
-        {
-            nosGrafo.erase(i);//apaga o no do grafo na posiçao i
+        for (auto i = nosGrafo.begin();i!=nosGrafo.end();i++){//percorre os vertices do grafo 
+            Vertices* aux = *i;//cria um vertice auxiliar
+            if (aux->getId() == id)//se o id do vertice passado for igual
+                nosGrafo.erase(i);//apaga o no do grafo na posiçao i
         }
     }
-
 }
 
-Vertices* Grafo::procurarNo(int id)//pesquisa vertice no grafo e retorna ele
-{
-    for (auto i = nosGrafo.begin();i!=nosGrafo.end();i++)//percorre os vertices do grafo 
-    {
+Vertices* Grafo::procurarNo(int id){//pesquisa vertice no grafo e retorna ele
+    for (auto i = nosGrafo.begin();i!=nosGrafo.end();i++){//percorre os vertices do grafo 
         Vertices* aux = *i;//cria um vertice auxiliar
         if (aux->getId() == id)//se o id do vertice passado for igual
             return aux;//retorna o vertice
@@ -141,10 +117,8 @@ Vertices* Grafo::procurarNo(int id)//pesquisa vertice no grafo e retorna ele
     return nullptr;//se nao, retorna null
 }
 
-bool Grafo::existeVertice(int id)//procura se existe aquele vertice
-{
-     for (auto i = nosGrafo.begin();i!=nosGrafo.end();i++)//percorre os vertices do grafo 
-    {
+bool Grafo::existeVertice(int id){//procura se existe aquele vertice
+     for (auto i = nosGrafo.begin();i!=nosGrafo.end();i++){//percorre os vertices do grafo 
         Vertices* aux = *i;//cria um auxiliar para conferencia
         if (aux->getId() == id)//se o id do vertice passado for igual
             return true;//retorna que existe o vertice
@@ -181,7 +155,7 @@ bool Grafo::conexo(){
 
 // FUNCAO PARA ACHAR A MENOR ARESTA DENTRE DOIS NOS 
 Agm* Grafo::arestaMaisBarata(Vertices* v,Agm* agm){
-    int menor = INT32_MAX; 
+    int menor = INT_MAX/2; 
     
     v->setVisitado(true);
     Arestas* ponteiro = NULL;
@@ -200,7 +174,6 @@ Agm* Grafo::arestaMaisBarata(Vertices* v,Agm* agm){
         }
     }
     if(ponteiro != NULL){
-        
         Vertices* verticeVisitado = procurarNo(ponteiro->getId_alvo());
         verticeVisitado->setVisitado(true);
         agm->insereVertice(v);
@@ -222,8 +195,7 @@ Agm* Grafo::arvoreGeradoraMinimaPrim(int v){
 }
 
 
-list<int> Grafo::fechoDireto(int ID)
-{
+list<int> Grafo::fechoDireto(int ID){
     list<int> listaSolucao;//cria uma lista de soluçao
     Vertices *aux = procurarNo(ID);
     if(this->direcionado == false){
@@ -351,24 +323,14 @@ list<int> Grafo::caminhoMinimoDijkstra(int ID1, int ID2){
     return caminhoD;
 }
 
-list<int> Grafo::caminhoMinimoFloyd(int ID1, int ID2){
+void Grafo::caminhoMinimoFloyd(int ID1, int ID2){
     Floyd aux;
-    list<int> caminhoF = aux.caminhoMinimo(this, ID1, ID2);
-    if(caminhoF.size()>0){
-        cout << "Caminho minimo: ";
-        for(auto i = caminhoF.begin(); i != caminhoF.end(); i++){
-            cout << *i << " ";
-        }
-        cout << endl;
-    }
-    return caminhoF;
+    aux.caminhoMinimo(this, ID1, ID2);
 }
 
 
 Agm* Grafo::arvoreGeradoraMinimaKruskal(){
-    
     Agm *agm = new Agm();             // Criando o conjunto solucao das arestas com menor peso
-    
     vector<Arestas*> arestasAux;
     int *ciclo;
     ciclo = new int [ordem];
@@ -378,7 +340,6 @@ Agm* Grafo::arvoreGeradoraMinimaKruskal(){
         arestasAux.push_back(auxs);
     }    
    
-    
     Arestas* aux = NULL;   
 
     // Ordenar as arestas conforme o peso
@@ -397,7 +358,6 @@ Agm* Grafo::arvoreGeradoraMinimaKruskal(){
     }
     
     // aloca memória para criar "V" subconjuntos
-       
     for (auto  i = arestasAux.begin(); i != arestasAux.end(); i++){
         Arestas*  j       = *i;
         //detectando se com esta aresta forma ciclo:
@@ -412,6 +372,7 @@ Agm* Grafo::arvoreGeradoraMinimaKruskal(){
     return agm;
   
 }
+
 void Grafo::unir(int v1,int v2, int *ciclo){
     ciclo[pai(v1, ciclo)] = pai(v2, ciclo);
 }
@@ -425,43 +386,6 @@ int Grafo::pai(int v, int *ciclo){
     return ciclo[v];
 }
 
-list<int> Grafo::ordenacaoTopologica2(){
-    
-    int menor ;
-    Vertices* apontaVertice;
-    Vertices* aux;
-    list<Vertices*> copia;
-    
-    list<int> solucao;
-    for (auto i = nosGrafo.begin(); i != nosGrafo.end();i++){
-        copia.push_back(*i);
-    }
-
-    while(copia.size() != 0){
-        for (auto k = copia.begin(); k != copia.end();k++){
-            aux = *k;
-            if(aux->getGrauSaida() < menor){
-                menor = aux->getGrauSaida();
-                apontaVertice = *k;
-            }   
-        }
-        solucao.push_back(apontaVertice->getId());
-        copia.remove(apontaVertice);
-    }
-
-    if(solucao.size()>0){
-        cout << "Vertices ordenados a partir do grau de saida: ";
-        for(auto i = solucao.begin(); i != solucao.end(); i++){
-            cout << *i << " ";
-        }
-        cout << endl;
-    }
-
-    
-    return solucao;
-}
-
-
 void Grafo::ordenacaoTopologica(){
 
     vector<Vertices*> copia;
@@ -470,11 +394,11 @@ void Grafo::ordenacaoTopologica(){
     for (auto i = nosGrafo.begin(); i != nosGrafo.end();i++)//copia lista de vertices
         copia.push_back(*i);
     
-    quickSort(&copia, 0, ordem-1);
+    quickSort(&copia, 0, ordem-1); // ordenacao pelo metodo de quiksort com o grau de saido como parametro
 
     cout << "Vertices ordenados a partir do grau de saida: ";
     for(int i = 0; i < ordem; i++)
-        cout << copia[i]->getId() << " ";
+        cout << copia[i]->getId() << " "; //imprime vertices ordenados
     cout << endl;
 }
 
@@ -491,9 +415,9 @@ int Grafo::partQuick(vector<Vertices*> *copia, int esq, int dir){
     int i = esq; // Posicao percorrida pela esquerda
     int j = dir; // Posicao percorrida pela direita
     while(i<=j) { // Enquanto esquerda nao ultrapassar direita
-        while(copia->at(i)->getGrauSaida() < pivo->getGrauSaida())  // Compara followers de pivo com posicao mais a esquerda
+        while(copia->at(i)->getGrauSaida() < pivo->getGrauSaida())  // Compara grau de saida de pivo com posicao mais a esquerda
             i++;
-        while(copia->at(j)->getGrauSaida() > pivo->getGrauSaida())  // Compara followers de pivo com posicao mais a direita
+        while(copia->at(j)->getGrauSaida() > pivo->getGrauSaida())  // Compara grau de saida de pivo com posicao mais a direita
             j--;
          if(i <= j) { 
             Vertices *aux = copia->at(i); // auxiliar para fazer a troca
