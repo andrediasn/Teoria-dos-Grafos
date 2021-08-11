@@ -313,11 +313,12 @@ void Grafo::caminhoMinimoFloyd(int ID1, int ID2){
 
 Agm* Grafo::arvoreGeradoraMinimaKruskal(){
     Agm *agm = new Agm();             // Criando o conjunto solucao das arestas com menor peso
-    vector<Arestas*> arestasAux;
+    vector<Arestas*> arestasAux;      // Criando vetor que guarda as arestas
     int *ciclo;
     ciclo = new int [arestasGrafo.size()];
     
-    for (auto  i = arestasGrafo.begin(); i != arestasGrafo.end(); i++){
+    // Atribuindo as arestas do grafo no vetor que sera ordenado 
+    for (auto  i = arestasGrafo.begin(); i != arestasGrafo.end(); i++){    
         Arestas* auxs = *i;
         arestasAux.push_back(auxs);
     }    
@@ -339,14 +340,14 @@ Agm* Grafo::arvoreGeradoraMinimaKruskal(){
         ciclo[i] = i;
     }
     
-    // aloca memória para criar "V" subconjuntos
+    
     for (auto  i = arestasAux.begin(); i != arestasAux.end(); i++){
         Arestas*  j       = *i;
-        //detectando se com esta aresta forma ciclo:
+        // Detectando se com esta aresta forma ciclo:
 		if ( pai(j->getId(), ciclo) != pai(j->getId_alvo(), ciclo)){ 
 			unir(j->getId(), j->getId_alvo(), ciclo);
 
-            agm->insereAresta(j);
+            agm->insereAresta(j);       // Insere aresta na arvore agm 
 		}
     
     }
@@ -355,6 +356,7 @@ Agm* Grafo::arvoreGeradoraMinimaKruskal(){
   
 }
 
+// Funcao que uni o pai de dois vertices no ciclo para descobrir se forma ciclo
 void Grafo::unir(int v1,int v2, int *ciclo){
     ciclo[pai(v1, ciclo)] = pai(v2, ciclo);
 }
