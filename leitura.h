@@ -218,7 +218,7 @@ void selecionar(int selecao, Grafo* graph, string saida ){
         //Ordenação Topologica; (8)
         case 8:{
             if(graph->getDirecionado() == true && graph->nTemCiclo() == false)
-                list<int> ordenacaoTop = graph->ordenacaoTopologica();
+                graph->ordenacaoTopologica();
             else if (!graph->getDirecionado())
                 cout << "O grafo nao esta direcionado. Nao eh possivel executar o algoritimo." << endl;
             else

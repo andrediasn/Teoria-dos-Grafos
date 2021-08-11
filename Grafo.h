@@ -55,7 +55,11 @@ class Grafo{
     Agm* arvoreGeradoraMinimaKruskal();//cria uma arvore geradora minima usando kruskal
     Agm* caminhoEmProfundidade(int id);//caminha em profundidade pelo grafo
     int caminhoEmProfundidadeAux(Agm* solucao, int id, int ultimo);//aux do caminha em profundidade pelo grafo
-    list<int> ordenacaoTopologica();//faz a ordenaçao topologica do grafo
+    void ordenacaoTopologica();//faz a ordenaçao topologica do grafo
+    list<int> ordenacaoTopologica2();
+
+    void quickSort(vector<Vertices*> *copia, int inicio, int fim);
+    int partQuick(vector<Vertices*> *copia, int inicio, int fim);
 
     void unir(int v1,int v2, int *ciclo);
     int pai(int v, int *ciclo);

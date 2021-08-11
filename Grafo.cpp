@@ -425,7 +425,7 @@ int Grafo::pai(int v, int *ciclo){
     return ciclo[v];
 }
 
-list<int> Grafo::ordenacaoTopologica(){
+list<int> Grafo::ordenacaoTopologica2(){
     
     int menor ;
     Vertices* apontaVertice;
@@ -459,4 +459,49 @@ list<int> Grafo::ordenacaoTopologica(){
 
     
     return solucao;
+}
+
+
+void Grafo::ordenacaoTopologica(){
+
+    vector<Vertices*> copia;
+    copia.reserve(ordem);
+    
+    for (auto i = nosGrafo.begin(); i != nosGrafo.end();i++)//copia lista de vertices
+        copia.push_back(*i);
+    
+    quickSort(&copia, 0, ordem-1);
+
+    cout << "Vertices ordenados a partir do grau de saida: ";
+    for(int i = 0; i < ordem; i++)
+        cout << copia[i]->getId() << " ";
+    cout << endl;
+}
+
+void Grafo::quickSort(vector<Vertices*> *copia, int inicio, int fim){ 
+    if(inicio < fim){ // Enquanto posicao de inicio nao ultrapassar final
+        int p = partQuick(copia, inicio, fim); // Calcula posicao do pivo
+        quickSort(copia, inicio, p - 1); // Recursividade da primeira metade do vetor
+        quickSort(copia, p, fim); // Recursividade da segunda metade do vetor
+    }
+}
+int Grafo::partQuick(vector<Vertices*> *copia, int esq, int dir){
+    int p = esq + (dir - esq) / 2; // indicado do pivo recebe a metade do vetor como posicao
+    Vertices* pivo = copia->at(p); // posiciona pivo utilizando ponteiro
+    int i = esq; // Posicao percorrida pela esquerda
+    int j = dir; // Posicao percorrida pela direita
+    while(i<=j) { // Enquanto esquerda nao ultrapassar direita
+        while(copia->at(i)->getGrauSaida() < pivo->getGrauSaida())  // Compara followers de pivo com posicao mais a esquerda
+            i++;
+        while(copia->at(j)->getGrauSaida() > pivo->getGrauSaida())  // Compara followers de pivo com posicao mais a direita
+            j--;
+         if(i <= j) { 
+            Vertices *aux = copia->at(i); // auxiliar para fazer a troca
+            copia->at(i) = copia->at(j);
+            copia->at(j) = aux;
+            i++;
+            j--;
+        }
+    }
+    return i; // Retorna indice para o pivo
 }
