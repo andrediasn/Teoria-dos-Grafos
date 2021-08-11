@@ -373,7 +373,7 @@ int Grafo::pai(int v, int *ciclo){
 
 void Grafo::ordenacaoTopologica(){
 
-    vector<Vertices*> copia(ordem);
+    vector<Vertices*> copia;
     copia.reserve(ordem);
 
     for (auto i = nosGrafo.begin(); i != nosGrafo.end();i++)//copia lista de vertices
