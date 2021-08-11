@@ -351,7 +351,7 @@ Agm* Grafo::arvoreGeradoraMinimaKruskal(){
 		}
     
     }
-    delete ciclo;
+    delete[] ciclo;
     return agm;
   
 }
