@@ -11,6 +11,7 @@
 #include <vector>
 #include <algorithm>
 #include <limits.h>
+#include <stack>
 
 using namespace std;
 
@@ -28,25 +29,6 @@ Grafo::~Grafo(){}
 int Grafo::getOrdem(){
     return this->ordem;
 }
-
-bool Grafo::nTemCiclo(){ // Verifica se ha ciclo no grafo
-    int *ciclo;
-    ciclo = new int [ordem]; // aloca espaco para o vetor
-    for (int i = 0;i < arestasGrafo.size() - 1;i++)
-        ciclo[i] = i;
-       
-    for (auto i = arestasGrafo.begin(); i != arestasGrafo.end(); i++){
-        Arestas *j = *i;
-		if (pai(j->getId(), ciclo) != pai(j->getId_alvo(), ciclo)){ //detectando se com esta aresta forma ciclo:
-			unir(j->getId(), j->getId_alvo(), ciclo);
-            delete ciclo; // free memory
-            return false; // achou ciclo
-		}
-    
-    }
-    delete ciclo; // free memory
-    return true; // nao ha ciclo
-} 
 
 void Grafo::insereVertice(int id){// Insere vertice passando id
     if(existeVertice(id))//pesquisa o id do vertice
@@ -208,7 +190,7 @@ list<int> Grafo::fechoDireto(int ID){
     {
         listaSolucao = fechoDiretoAux(ID,listaSolucao);//chama a funçao auxiliar para fazer de modo recursivo
         list<int>::iterator it;
-        cout<< "Os vertices que sao alcansaveis a partir do "<< ID << " sao: " << endl;
+        cout << endl << "Os vertices que sao alcansaveis a partir do "<< ID << " sao: " << endl;
         for ( it = listaSolucao.begin(); it != listaSolucao.end(); it++){
             
             cout<< *it << " ";
@@ -254,7 +236,7 @@ list<int> Grafo::fechoIndireto(int ID){
         }
 
         solucao = fechoIndiretoAux(ID, solucao);
-        cout<< "Os vertices que alcansao o vertice "<< ID << " sao: " << endl;
+        cout<< endl << "Os vertices que alcansao o vertice "<< ID << " sao: " << endl;
         for (auto i = solucao.begin(); i!=solucao.end(); i++){
             cout << *i << " ";
         }
@@ -333,7 +315,7 @@ Agm* Grafo::arvoreGeradoraMinimaKruskal(){
     Agm *agm = new Agm();             // Criando o conjunto solucao das arestas com menor peso
     vector<Arestas*> arestasAux;
     int *ciclo;
-    ciclo = new int [ordem];
+    ciclo = new int [arestasGrafo.size()];
     
     for (auto  i = arestasGrafo.begin(); i != arestasGrafo.end(); i++){
         Arestas* auxs = *i;
@@ -353,7 +335,7 @@ Agm* Grafo::arvoreGeradoraMinimaKruskal(){
         }
     }
      
-    for (int i = 0;i < arestasAux.size() - 1;i++){
+    for (int i = 0;i < arestasAux.size();i++){
         ciclo[i] = i;
     }
     
@@ -376,6 +358,7 @@ Agm* Grafo::arvoreGeradoraMinimaKruskal(){
 void Grafo::unir(int v1,int v2, int *ciclo){
     ciclo[pai(v1, ciclo)] = pai(v2, ciclo);
 }
+
 int Grafo::pai(int v, int *ciclo){
      if (ciclo[v] == v){
         return v;
@@ -388,12 +371,12 @@ int Grafo::pai(int v, int *ciclo){
 
 void Grafo::ordenacaoTopologica(){
 
-    vector<Vertices*> copia;
+    vector<Vertices*> copia(ordem);
     copia.reserve(ordem);
-    
+
     for (auto i = nosGrafo.begin(); i != nosGrafo.end();i++)//copia lista de vertices
         copia.push_back(*i);
-    
+
     quickSort(&copia, 0, ordem-1); // ordenacao pelo metodo de quiksort com o grau de saido como parametro
 
     cout << "Vertices ordenados a partir do grau de saida: ";

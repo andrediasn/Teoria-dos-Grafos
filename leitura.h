@@ -12,7 +12,7 @@ std::string arqSaida;//registra em saida o nome do arquivo de saida
 bool opc_Direc;// direcionado ou nao 
 bool opc_Peso_Aresta;//peso nas arestas ou nao
 bool opc_Peso_Nos;//peso nos nos ou nao
-Grafo* grafo;
+Grafo* grafo; // grafo
 
 int menu(){
     int selecao;
@@ -37,7 +37,7 @@ int menu(){
 void saidaListDot(list<int> lista, string tipoMetodo){
     std::ofstream arq(arqSaida, ios::app);
     arq << "//Grafo do caminho minimo do vertice " << *lista.begin() << " ate o vertice " << lista.back(); 
-    arq << "// gerado pelo algoritimo de " << tipoMetodo << ":" << endl << endl;
+    arq << " gerado pelo algoritimo de " << tipoMetodo << ":" << endl << endl;
     std::string tipoGrafo;
     std::string seta;
     if(opc_Direc){
@@ -48,7 +48,7 @@ void saidaListDot(list<int> lista, string tipoMetodo){
         tipoGrafo = "graph ";
         seta = " -- ";
     }
-    int vert[lista.size()];
+    int *vert = new int[lista.size()];
     int j = 0;
     for(auto i = lista.begin(); i != lista.end(); i++){
         vert[j] = *i;
@@ -61,6 +61,7 @@ void saidaListDot(list<int> lista, string tipoMetodo){
         arq << "    " << vert[i] << seta << vert[i+1] << " [label= " << aux->getPeso() << "];"<< endl;
     }
     arq << "}"<< endl << endl << endl;
+    delete vert;
 }
 
 void saidaAgmDot(Agm* agm, string caminho, int id){
@@ -217,12 +218,10 @@ void selecionar(int selecao, Grafo* graph, string saida ){
         }
         //Ordenação Topologica; (8)
         case 8:{
-            if(opc_Direc == true && graph->nTemCiclo() == false)
+            if(opc_Direc)
                 graph->ordenacaoTopologica();
-            else if (!opc_Direc)
+            else 
                 cout << "O grafo nao esta direcionado. Nao eh possivel executar o algoritimo." << endl;
-            else
-                cout << "O grafo possui ao menos um ciclo. Nao eh possivel executar o algoritimo." << endl;
             break;
         }
         case 0:{

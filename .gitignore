@@ -37,10 +37,10 @@
 *.dat
 
 # VScode Settings
-*.json
+*.json*
 .vscode
 
 # Extra
-Dados/saida.txt
 execGrupo10
+*saida*
 
