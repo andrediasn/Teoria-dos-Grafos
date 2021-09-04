@@ -3,12 +3,16 @@
 #include <fstream>
 #include <sstream>
 #include <string.h>
+#include <string>
+#include <math.h> 
 #include "Grafo.h"
 #include "Arestas.h"
 #include "Agm.h"
 
-std::string arqEntrada;//vai abrir e fechar o arquivo para ler o txt
-std::string arqSaida;//registra em saida o nome do arquivo de saida
+using namespace std;
+
+string arqEntrada;//vai abrir e fechar o arquivo para ler o txt
+string arqSaida;//registra em saida o nome do arquivo de saida
 bool opc_Direc;// direcionado ou nao 
 bool opc_Peso_Aresta;//peso nas arestas ou nao
 bool opc_Peso_Nos;//peso nos nos ou nao
@@ -27,6 +31,9 @@ int menu(){
     cout << "[6] Arvore Geradora Minima de Kruskal" << endl;
     cout << "[7] Imprimir caminhamento em Profundidade" << endl;
     cout << "[8] Imprimir ordenacao topologica" << endl;
+    cout << "[9] Algoritmo Guloso"<<endl;
+    cout << "[10] Algoritmo Guloso Randomizado"<<endl;
+    cout << "[11] Algoritmo Guloso Randomizado Reativo"<<endl;
     cout << "[0] Sair" << endl;
     cout << "----" << endl;
     cout << "Opcao escolhida: "; 
@@ -35,11 +42,11 @@ int menu(){
 }
 
 void saidaListDot(list<int> lista, string tipoMetodo){
-    std::ofstream arq(arqSaida, ios::app);
+    ofstream arq(arqSaida, ios::app);
     arq << "//Grafo do caminho minimo do vertice " << *lista.begin() << " ate o vertice " << lista.back(); 
     arq << " gerado pelo algoritimo de " << tipoMetodo << ":" << endl << endl;
-    std::string tipoGrafo;
-    std::string seta;
+    string tipoGrafo;
+    string seta;
     if(opc_Direc){
         tipoGrafo = "digraph ";
         seta = " -> ";
@@ -224,10 +231,24 @@ void selecionar(int selecao, Grafo* graph, string saida ){
                 cout << "O grafo nao esta direcionado. Nao eh possivel executar o algoritimo." << endl;
             break;
         }
+         //Algoritmo Guloso; (9)
+        case 9:{
+            break;
+        }
+         //Algoritmo Guloso Randomizado; (10)
+        case 10:{
+            break;
+        }
+         //Algoritmo Guloso Randomizado Reativo; (11)
+        case 11:{
+            break;
+        }
+        //caso 0 sai do programa
         case 0:{
             cout << "Bye bye!" << endl;
             break;
         }
+        //opcao invalida
         default:
         {
             cout << " Erro!!! Opcao invalida!!" << endl;
@@ -241,28 +262,98 @@ Grafo* leitura(int argc, char * argv[]){
 
     arqEntrada = argv[1]; 
     arqSaida = argv[2]; 
-    std::istringstream(argv[3])>>opc_Direc; //transformando pra bool
-    std::istringstream(argv[4])>>opc_Peso_Aresta; //transformando pra bool
-    std::istringstream(argv[5])>>opc_Peso_Nos; //transformando pra bool
+    bool arqTipo = false;//possui exponencial??
+    if(arqEntrada[0] == 'd' ||  arqEntrada[0] == 'u')
+        arqTipo = true;
+    opc_Direc=false; //transformando pra bool
+    opc_Peso_Aresta=true; //transformando pra bool
+    opc_Peso_Nos=false; //transformando pra bool
    
-    std::ifstream arquivo(arqEntrada);//vai abrir o arquivo (para utilizar desse arquivo usaremos a variavel arquivo)
+    ifstream arquivo(arqEntrada);//vai abrir o arquivo (para utilizar desse arquivo usaremos a variavel arquivo)
 
     if(!arquivo.is_open())//se o arquivo de alguma forma nao for aberto....
     {
-        std::cout<< "Erro ao abrir aquivo, saindo do programa " << arqEntrada << std::endl;//emite um erro de abrir arquivo, e passa o local que pediu para abrir
+        cout<< "Erro ao abrir aquivo, saindo do programa " << arqEntrada << endl;//emite um erro de abrir arquivo, e passa o local que pediu para abrir
         exit(1);//nao retorna nada e volta pra main
     }
     
+    //leitura da ordem
+    string lixo, strOrdem;
+    getline(arquivo,lixo,'\n');
+    getline(arquivo,lixo,'\n');
+    getline(arquivo,lixo,'\n');
+    getline(arquivo,lixo,':');
+    getline(arquivo,lixo,' ');
+    getline(arquivo,strOrdem,'\n');
+    int ordem = stoi(strOrdem);
 
-    int ordem;//declara uma variavel ordem 
-    arquivo >> ordem;//adiciona a primeira linha do arquivo na ordem (ordem recebe a primeira linha do arquivo)
-    grafo = new Grafo(ordem, opc_Direc, opc_Peso_Aresta, opc_Peso_Nos);//constroi o grafo baseado no que foi passado no executavel
+    float **coord; // Declarando Matriz de coordenadas x e y de cada vertice
+    coord = new float *[ordem-1];
+    for(int i = 0; i < ordem; i++)
+        coord[i] = new float[2];
+
+    getline(arquivo,lixo,'\n');
+    getline(arquivo,lixo,'\n');
+
+    int c = 0; //contador para numero do vertice que estamos
+    if(!arqTipo){
+        while(c < ordem){//repete ate que o contador seja um numero antes da ordem
+            string fim, strX, strY;//declarando strings
+            getline(arquivo,fim,' ');//testa se chegou em EOF
+            if(fim=="EOF"){//se chegou
+                cout<< "sai sem barra n"<< endl;
+                break;//sai
+            }
+            if(fim=="EOF\n"){//verificaçao de como vai sair
+                cout<< "sai com barra n"<< endl;
+                break;
+            }
+            getline(arquivo,strX,' ');//pega o valor de X
+            coord[c][0] = stof(strX);//armazena o valor na matriz com o id do vertice C
+            
+            getline(arquivo,strY,'\n');//pega o valor de Y
+            coord[c][1] = stof(strY);//armazena o valor na matriz com o id do vertice C
+
+            c++;
+        }
+    }
+    else {//se possui exponencial
+        while(c < ordem){//repete ate que o contador seja um numero antes da ordem
+            string fim, strX, strY;//declarando strings
+            getline(arquivo,fim,' ');// pegando as linhas ate o espaço
+            if(fim=="EOF"){//se fim for EOF sai
+                cout<< "sai sem barra n"<< endl;
+                break;
+            }
+            if(fim=="EOF\n"){// se fim for EOF com barra n sai tambem
+                cout<< "sai com barra n"<< endl;
+                break;
+            }
+            getline(arquivo,strX,'e');//anda ate o "e"
+            coord[c][0] = stof(strX);//armazena o valor em strX
+            getline(arquivo,lixo,'0');//joga fora ate o primeiro 0
+            getline(arquivo,strX,' ');//armazena o valor do expoente ate o espaço
+            int pot = stoi(strX);//pot recebe string convertida pra inteiro
+            coord[c][0] = coord[c][0]*pow(10,pot);//faz a potencia do valor armazenado
+            
+            getline(arquivo,strY,'e');//analogamente ao de cima
+            coord[c][1] = stof(strY);
+            getline(arquivo,lixo,'0');
+            getline(arquivo,strY,'\n');
+            pot = stoi(strY);
+            coord[c][1] = coord[c][1]*pow(10,pot);
+
+            c++;//inclui 1 no C
+        }
+    }
+
+    grafo = new Grafo(ordem, coord, opc_Direc, opc_Peso_Aresta, opc_Peso_Nos);//constroi o grafo baseado no que foi passado no executavel
     int idNo;//variavel para salvar o id do no
     int idNoAlvo;//variavel para salvar o id do no alvo das arestas
     float Peso;// armazena o peso das arestas
     int selecao = 1;//selecao do menu
 
-    if(opc_Peso_Nos == 0 && opc_Peso_Aresta == 0 && opc_Direc == 0)//se o grafo nao for direcionado e nao tiver peso
+    /*if(opc_Peso_Nos == 0 && opc_Peso_Aresta == 0 && opc_Direc == 0)//se o grafo nao for direcionado e nao tiver peso
     {
         while(arquivo>>idNo>>idNoAlvo)//le ate a ultima linha do arquivo
         {
@@ -275,20 +366,26 @@ Grafo* leitura(int argc, char * argv[]){
         {
             grafo->insereAresta(idNo,idNoAlvo,true);//insere aresta direcionada
         }
-    }
-    else if(opc_Peso_Nos == 0 && opc_Peso_Aresta == 1 && opc_Direc == 0)// se o grafo nao é direcionado mas tem peso somente nas arestas
+    }*/
+    if(opc_Peso_Nos == 0 && opc_Peso_Aresta == 1 && opc_Direc == 0)// se o grafo nao é direcionado mas tem peso somente nas arestas
     {
-        while(arquivo>>idNo>>idNoAlvo>>Peso)//enquanto tiver linha pra ler
-        {
-            
-            grafo->insereAresta(idNo,idNoAlvo,false,Peso);//insere aresta com id e peso nas arestas
+        for (int i=1;i<=ordem;i++){
+            for(int j=i+1;j<=ordem;j++){
+                grafo->insereAresta(i,j,false);
+            }
         }
+        cout<< grafo->getOrdem() << " ordem do grafo" <<endl;
+        
+        /* for(auto i = grafo->nosGrafo.begin(); i != grafo->nosGrafo.end(); i++){
+            Vertices* impressao = *i;
+            cout << "no: " << impressao->getId() << " X: "<< impressao->getX() << " Y: "<< impressao->getY()<< endl;
+        } */
     }
-    else if(opc_Peso_Nos == 0 && opc_Peso_Aresta == 1 && opc_Direc == 1)// se o grafo é direcionado e tem peso nas arestas
+    /*else if(opc_Peso_Nos == 0 && opc_Peso_Aresta == 1 && opc_Direc == 1)// se o grafo é direcionado e tem peso nas arestas
     {
         while (arquivo>>idNo>>idNoAlvo>>Peso)//enquanto tiver linha pra ler
         {
-            grafo->insereAresta(idNo,idNoAlvo,true,Peso);//insere aresta direcionada com peso nas arestas
+            grafo->insereAresta(idNo,idNoAlvo,true);//insere aresta direcionada com peso nas arestas
         }
         
     }
@@ -339,9 +436,9 @@ Grafo* leitura(int argc, char * argv[]){
             Vertices* no2 = grafo->procurarNo(idNoAlvo);//cria um auxiliar para o vertice 2
             no1->setPeso(PesoVertice1);
             no2->setPeso(PesoVerticeAlvo);
-            grafo->insereAresta(idNo,idNoAlvo,true,Peso);
+            grafo->insereAresta(idNo,idNoAlvo,true);
         }
-    }
+    }*/
 
     arquivo.close();
 

@@ -16,6 +16,8 @@ private:// atributos privados
     int grau_de_saida;// grau de saida do vertice (direcionado) 
     float peso;// peso dos vertices
     bool visitado;//visitado? sim ou nao
+    float x;
+    float y;
     
 
 public: // declaraçoes publicas
@@ -24,7 +26,7 @@ public: // declaraçoes publicas
     list<int> ListAdj; //lista de adjacencia de vertice               
 
     // Constructor
-    Vertices(int id, float peso=0); // construtor, passando como parametro o identificador do vertice
+    Vertices(int id, float x, float y, float peso=0); // construtor, passando como parametro o identificador do vertice
     // Destructor
     ~Vertices(); // destrutor
     // Getters (declaracao dos gets)
@@ -43,14 +45,16 @@ public: // declaraçoes publicas
     void adicionaAdjacencia(int id_alvo); // add adjacencia
     void adicionaAntecessor(int id_ant); // add predecessor
     bool buscaAresta(int id_alvo);//existe esse vertice no grafo? passando o id do vertice alvo
-    Arestas* insereAresta(int id, int id_alvo, float peso = 0);//insere novo vertice passando como parametro id e peso (se houver), se nao houver passa 0
+    //Arestas* insereAresta(int id, int id_alvo, float peso = 0);//insere novo vertice passando como parametro id e peso (se houver), se nao houver passa 0
     void removeTodasArestas();// remove todas as arestas
     int removeAresta(int id, bool direcionado, Vertices* target_node);// remove aresta
     
     Arestas* pesoEntreVerticeAlvo(int id_alvo);//tem aresta entre esse vertice e o passado por parametro?
     bool getVisitado(); // retorna se esta visitado
     void setVisitado(bool visitado); // altera visitado
-    
+
+    float getX();
+    float getY();
         
 
 };

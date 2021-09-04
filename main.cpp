@@ -9,11 +9,11 @@
 
 int main (int argc, char * argv[])
 {
-    if (argc != 6) 
+    /* if (argc != 6) 
     {
-        std::cout << "ERROR: Expecting: ./<program_name> <input_file> <output_file> <directed> <weighted_edge> <weighted_node> " << std::endl; //mensagem de erro
+        std::cout << "ERROR: Expecting: ./<program_name> <instancia> <graulimitador> <weighted_edge> <weighted_node> " << std::endl; //mensagem de erro
         return 1;//retorne
-    }
+    } */
    Grafo* grafo = leitura(argc,argv);
 
    return 0;

@@ -16,14 +16,15 @@ class Grafo{
     bool pesoArestas; //peso nas arestas
     bool pesoVertice; //peso nos vertices
 
+    int calculaDist(int id, int id_alvo);
 
     public:
     
-    Grafo(int ordem, bool direcionado = false, bool pesoArestas= false, bool pesoVertices = false);
+    Grafo(int ordem, float **coord, bool direcionado = false, bool pesoArestas= false, bool pesoVertices = false);
     ~Grafo();
 
-    void insereVertice(int id); // Insere vertice no grafo 
-    void insereAresta(int id,int id_alvo,bool direcionado = false ,float pesoArestas = 0); // Insere aresta no grafo
+    void insereVertice(int id, float x, float y); // Insere vertice no grafo 
+    void insereAresta(int id,int id_alvo,bool direcionado = false); // Insere aresta no grafo
     void removeNode(int id); // Remove vertice do grafo
     bool existeVertice(int id); // Procura vertice no grafo
     Arestas* existeAresta(int id ,int id_alvo); //retorna aresta se existir

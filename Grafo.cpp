@@ -12,16 +12,17 @@
 #include <algorithm>
 #include <limits.h>
 #include <stack>
+#include <math.h>
 
 using namespace std;
 
-Grafo::Grafo(int ordem, bool direcionado, bool pesoArestas, bool pesoVertices){//construtor do grafo
+Grafo::Grafo(int ordem, float **coord, bool direcionado, bool pesoArestas, bool pesoVertices ){//construtor do grafo
     this->ordem = ordem;//inicializa a ordem com a ordem passada
     this->direcionado = direcionado;//inicializa o grafo se é direcionado ou nao
     this->pesoArestas = pesoArestas;//inicializa o grafo com peso nas arestas ou nao
     this->pesoVertice = pesoVertices;//inicializa o grafo com peso nos vertices ou nao
-    for(int i=0; i<this->ordem;i++) {//inicializa a lista de vertices do grafo com todos os vertices de 0 a n-1 sendo n a ordem do grafo
-        insereVertice(i);//insere cada vertice do grafo de uma vez (ja que sabemos o numero de nos pela "ordem")
+    for(int i=1; i<=this->ordem;i++) {//inicializa a lista de vertices do grafo com todos os vertices de 0 a n-1 sendo n a ordem do grafo
+        insereVertice(i, coord[i-1][0], coord[i-1][1]);//insere cada vertice do grafo de uma vez (ja que sabemos o numero de nos pela "ordem")
     }
 }
 Grafo::~Grafo(){}
@@ -30,16 +31,28 @@ int Grafo::getOrdem(){
     return this->ordem;
 }
 
-void Grafo::insereVertice(int id){// Insere vertice passando id
+void Grafo::insereVertice(int id, float x, float y){// Insere vertice passando id
     if(existeVertice(id))//pesquisa o id do vertice
         cout << "O no jah existe no grafo.\n";//se ja existir printa que ja existe
     else{
-    Vertices* no = new Vertices(id);//aloca um novo no dinamicamente
+    Vertices* no = new Vertices(id, x, y);//aloca um novo no dinamicamente
     nosGrafo.push_back(no);//cria um novo no
     }
 }
 
-void Grafo::insereAresta(int id, int id_alvo,bool direcionado, float pesoArestas){// Inseri aresta passando id do vertice de origem, vertice alvo, e o peso
+int Grafo::calculaDist(int id, int id_alvo){
+    Vertices* no1 = procurarNo(id);
+    Vertices* no2 = procurarNo(id_alvo);
+    float valf = pow((no2->getX()-no1->getX()),2)+pow((no2->getY()-no1->getY()),2);
+    valf = sqrt(valf);
+    int vali = (int)valf;
+    float var = fabs(valf - vali);
+    if(var >= 0.5)
+        vali++;
+    return vali;
+}
+
+void Grafo::insereAresta(int id, int id_alvo,bool direcionado){// Inseri aresta passando id do vertice de origem, vertice alvo, e o peso
     if(!nosGrafo.empty()){//se o grafo nao for vazio
         if(!existeVertice(id)){//se nao existir o no no grafo
             cout << "O vertice de origem nao existe no grafo.\n";//printa que nao tem vertice
@@ -50,10 +63,12 @@ void Grafo::insereAresta(int id, int id_alvo,bool direcionado, float pesoArestas
         }
         else{//caso tenha os 2
             Arestas* auxAresta;//cria uma aresta auxiliar
+            int peso = calculaDist(id, id_alvo);
             if(direcionado == false){//se ela nao for direcionada
                 Vertices* no1 = procurarNo(id);//cria um vertice auxiliar para alterarmos os dados dos vertices
                 Vertices* no2 = procurarNo(id_alvo);//cria um auxiliar para o vertice alvo igual ao primeiro
-                auxAresta = no1->insereAresta(id, id_alvo, pesoArestas);//insere aresta no grafo passando o vertice inicial, final e peso
+                auxAresta = new Arestas(id, id_alvo, peso);//declara uma nova aresta
+                no1->adicionaAdjacencia(id_alvo);//insere aresta no grafo passando o vertice inicial, final e peso
                 no1->adicionarGrauSaida();//adiciona 1 ao grau de saida
                 no1->adicionarGrauEntrada();//adiciona grau de entrada, ja que nao é direcionado
                 //como nao é um grafo direcionado temos que fazer o mesmo para o vertice 2 tambem para adicionarmos a adjacencia
@@ -62,11 +77,9 @@ void Grafo::insereAresta(int id, int id_alvo,bool direcionado, float pesoArestas
                 no2->adicionarGrauEntrada();//adiciona o grau de entrada
                 no2->adicionarGrauSaida();//adiciona o grau de saida
                 arestasGrafo.push_back(auxAresta);//poe ela na lista de arestas do grafo
-                Arestas *arestasContraria = new Arestas(id_alvo,id,pesoArestas);
-                arestasGrafo.push_back(arestasContraria);
-                
+                               
             }
-            else if(direcionado == true){//se for direcionada
+            /* else if(direcionado == true){//se for direcionada
                 Vertices* no1 = procurarNo(id);//cria um vertice auxiliar para alterarmos os dados dos vertices
                 Vertices* no2 = procurarNo(id_alvo);//cria um auxiliar para o vertice alvo igual ao primeiro
                 //adicionando peso nos vertices
@@ -75,7 +88,7 @@ void Grafo::insereAresta(int id, int id_alvo,bool direcionado, float pesoArestas
                 no2->adicionarGrauEntrada();//adiciona o grau de entrada
                 arestasGrafo.push_back(auxAresta);//poe ela na lista de arestas do grafo
                 no2->adicionaAntecessor(no1->getId());
-            }
+            } */
         }
     }
 }

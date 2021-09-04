@@ -4,21 +4,15 @@
 #include <vector>
 #include <list>
 
-Vertices::Vertices(int id, float peso){ // construtor passando o identificador como parametro
+Vertices::Vertices(int id, float x, float y, float peso){ // construtor passando o identificador como parametro
 
     this->id = id; // seta o identificador
     this->grau_de_entrada = 0;// coloca grau de entrada como 0
     this->grau_de_saida = 0;// coloca grau de saida como 0
     this->peso = peso;// declara peso , se nao for passado é igual a 0
     this->visitado = false;
-
-}
-
-Arestas* Vertices::insereAresta(int id, int id_alvo, float peso)//insere aresta passando como parametro o identificador, o identificador do vertice alvo e o peso
-{ 
-    Arestas* aresta = new Arestas(id, id_alvo,peso);//declara uma nova aresta
-    adicionaAdjacencia(id_alvo); //aloca o id do vertice na lista de adj na lista de adjacencia 
-    return aresta;       
+    this->x = x; // Coordenadas x
+    this->y = y; // Coordenadas y
 }
 
 void Vertices::adicionarGrauSaida()
@@ -75,4 +69,12 @@ int Vertices::getGrauEntrada(){
 
 int Vertices::getGrauSaida(){
     return this->grau_de_saida;
+}
+
+float Vertices::getX(){
+    return this->x;
+}
+
+float Vertices::getY(){
+    return this->y;
 }
