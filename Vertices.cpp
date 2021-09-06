@@ -10,6 +10,7 @@ Vertices::Vertices(int id, float x, float y, float peso){ // construtor passando
     this->grau_de_entrada = 0;// coloca grau de entrada como 0
     this->grau_de_saida = 0;// coloca grau de saida como 0
     this->peso = peso;// declara peso , se nao for passado é igual a 0
+    this->grau= 0;
     this->visitado = false;
     this->x = x; // Coordenadas x
     this->y = y; // Coordenadas y
@@ -33,6 +34,9 @@ void Vertices::adicionarGrauEntrada()
 void Vertices::subtrairGrauEntrada()
 {
     this->grau_de_entrada = grau_de_entrada - 1;//decrementa em 1 o grau de entrada
+}
+void Vertices::addGrau(){
+    this->grau ++;
 }
 
 void Vertices::adicionaAdjacencia(int id_alvo)
@@ -69,6 +73,10 @@ int Vertices::getGrauEntrada(){
 
 int Vertices::getGrauSaida(){
     return this->grau_de_saida;
+}
+
+int Vertices::getGrau(){
+    this->grau;
 }
 
 float Vertices::getX(){

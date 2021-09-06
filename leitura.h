@@ -115,7 +115,7 @@ void saidaAgmDot(Agm* agm, string caminho, int id){
 void selecionar(int selecao, Grafo* graph, string saida ){
     switch (selecao) {
 
-        //Fecho transitivo direto de um vertice (1)
+/*         //Fecho transitivo direto de um vertice (1)
         case 1:{
             int IdFecho;
             cout << endl << "Informe o id do Vertice que deseja o fecho transitivo direto: ";
@@ -136,9 +136,9 @@ void selecionar(int selecao, Grafo* graph, string saida ){
             else
                 cout << "Id do vertice não encontrado." << endl;
             break;
-        }
+        } */
 
-        //Caminho mínimo entre dois vértices usando Dijkstra (3)
+/*         //Caminho mínimo entre dois vértices usando Dijkstra (3)
         case 3:{
             if(opc_Peso_Aresta){
                 int no1, no2;
@@ -174,8 +174,8 @@ void selecionar(int selecao, Grafo* graph, string saida ){
             } else
                 cout << "O grafo nao esta ponderado. Nao eh possivel executar o algoritimo." << endl; 
             break;
-        }
-
+        } */
+/* 
         //AGM - Prim; (5)
         case 5:{
             if(!opc_Direc && graph->conexo()){
@@ -207,9 +207,9 @@ void selecionar(int selecao, Grafo* graph, string saida ){
             else
                 cout << "O grafo nao eh conexo. Nao eh possivel executar o algoritimo." << endl;
             break;
-        }
+        } */
 
-        //Busca em Profundidade; (7)
+/*         //Busca em Profundidade; (7)
         case 7:{
             int idNoBusca;
             cout << endl << "Informe o id do Vertice para a Busca em Profundidade: ";
@@ -230,9 +230,10 @@ void selecionar(int selecao, Grafo* graph, string saida ){
             else 
                 cout << "O grafo nao esta direcionado. Nao eh possivel executar o algoritimo." << endl;
             break;
-        }
+        } */
          //Algoritmo Guloso; (9)
         case 9:{
+            graph->Guloso();
             break;
         }
          //Algoritmo Guloso Randomizado; (10)
@@ -353,20 +354,6 @@ Grafo* leitura(int argc, char * argv[]){
     float Peso;// armazena o peso das arestas
     int selecao = 1;//selecao do menu
 
-    /*if(opc_Peso_Nos == 0 && opc_Peso_Aresta == 0 && opc_Direc == 0)//se o grafo nao for direcionado e nao tiver peso
-    {
-        while(arquivo>>idNo>>idNoAlvo)//le ate a ultima linha do arquivo
-        {
-            grafo->insereAresta(idNo,idNoAlvo);//insere aresta com ids dos vertices
-        }
-    }
-    else if(opc_Peso_Nos == 0 && opc_Peso_Aresta == 0 && opc_Direc == 1)//se o grafo nao tem peso mas é direcionado
-    {   
-        while(arquivo>>idNo>>idNoAlvo) //enquanto tiver linha pra ler
-        {
-            grafo->insereAresta(idNo,idNoAlvo,true);//insere aresta direcionada
-        }
-    }*/
     if(opc_Peso_Nos == 0 && opc_Peso_Aresta == 1 && opc_Direc == 0)// se o grafo nao é direcionado mas tem peso somente nas arestas
     {
         for (int i=1;i<=ordem;i++){
@@ -374,71 +361,8 @@ Grafo* leitura(int argc, char * argv[]){
                 grafo->insereAresta(i,j,false);
             }
         }
-        cout<< grafo->getOrdem() << " ordem do grafo" <<endl;
-        
-        /* for(auto i = grafo->nosGrafo.begin(); i != grafo->nosGrafo.end(); i++){
-            Vertices* impressao = *i;
-            cout << "no: " << impressao->getId() << " X: "<< impressao->getX() << " Y: "<< impressao->getY()<< endl;
-        } */
     }
-    /*else if(opc_Peso_Nos == 0 && opc_Peso_Aresta == 1 && opc_Direc == 1)// se o grafo é direcionado e tem peso nas arestas
-    {
-        while (arquivo>>idNo>>idNoAlvo>>Peso)//enquanto tiver linha pra ler
-        {
-            grafo->insereAresta(idNo,idNoAlvo,true);//insere aresta direcionada com peso nas arestas
-        }
-        
-    }
-    else if(opc_Peso_Nos == 1 && opc_Peso_Aresta == 0 && opc_Direc == 0)//o grafo nao é direcionado mas tem peso somente nos vertices
-    {
-        float PesoVertice1, PesoVerticeAlvo;
-        while (arquivo>>idNo>>PesoVertice1>>idNoAlvo>>PesoVerticeAlvo)
-        {
-            Vertices* no1 = grafo->procurarNo(idNo);//cria um auxiliar para setar o peso dos vertices
-            Vertices* no2 = grafo->procurarNo(idNoAlvo);//cria um auxiliar para o vertice 2
-            no1->setPeso(PesoVertice1);
-            no2->setPeso(PesoVerticeAlvo);
-            grafo->insereAresta(idNo,idNoAlvo);
-        }
-        
-        
-    }
-    else if(opc_Peso_Nos == 1 && opc_Peso_Aresta == 0 && opc_Direc == 1)//o grafo é direcionado e com peso nos vertices
-    {
-         float PesoVertice1, PesoVerticeAlvo;
-        while (arquivo>>idNo>>PesoVertice1>>idNoAlvo>>PesoVerticeAlvo)
-        {
-            Vertices* no1 = grafo->procurarNo(idNo);//cria um auxiliar para setar o peso dos vertices
-            Vertices* no2 = grafo->procurarNo(idNoAlvo);//cria um auxiliar para o vertice 2
-            no1->setPeso(PesoVertice1);
-            no2->setPeso(PesoVerticeAlvo);
-            grafo->insereAresta(idNo,idNoAlvo,true);
-        }
-    }
-    else if(opc_Peso_Nos == 1 && opc_Peso_Aresta == 1 && opc_Direc == 0)// o grafo nao é direcionado mas tem peso nos vertices e arestas
-    {
-         float PesoVertice1, PesoVerticeAlvo;
-        while (arquivo>>idNo>>PesoVertice1>>idNoAlvo>>PesoVerticeAlvo>>Peso)
-        {
-            Vertices* no1 = grafo->procurarNo(idNo);//cria um auxiliar para setar o peso dos vertices
-            Vertices* no2 = grafo->procurarNo(idNoAlvo);//cria um auxiliar para o vertice 2
-            no1->setPeso(PesoVertice1);
-            no2->setPeso(PesoVerticeAlvo);
-            grafo->insereAresta(idNo,idNoAlvo,Peso);
-        }
-    }
-    else if(opc_Peso_Nos == 1 && opc_Peso_Aresta == 1 && opc_Direc == 1)// o grafo é direcionado e com peso nas arestas e vertices
-    {
-        float PesoVertice1, PesoVerticeAlvo;
-        while (arquivo>>idNo>>PesoVertice1>>idNoAlvo>>PesoVerticeAlvo>>Peso)
-        {
-            Vertices* no1 = grafo->procurarNo(idNo);//cria um auxiliar para setar o peso dos vertices
-            Vertices* no2 = grafo->procurarNo(idNoAlvo);//cria um auxiliar para o vertice 2
-            no1->setPeso(PesoVertice1);
-            no2->setPeso(PesoVerticeAlvo);
-            grafo->insereAresta(idNo,idNoAlvo,true);
-        }
-    }*/
+    
 
     arquivo.close();
 

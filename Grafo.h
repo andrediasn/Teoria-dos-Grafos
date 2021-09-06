@@ -1,9 +1,21 @@
 #ifndef GRAFO_H_INCLUDED
 #define GRAFO_H_INCLUDED
-#include "Vertices.h"
-#include "Agm.h"
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <string.h>
+#include <algorithm>
+#include <limits.h>
+#include <stack>
+#include <math.h>
 #include <list>
 #include <vector>
+#include <chrono>
+#include "Vertices.h"
+#include "Agm.h"
+
+using namespace std;
 
 class Dijkstra;
 class Floyd;
@@ -30,8 +42,8 @@ class Grafo{
     Arestas* existeAresta(int id ,int id_alvo); //retorna aresta se existir
     Vertices* procurarNo(int id); //retorna vertice se existir
     
-    std::list<Arestas*> arestasGrafo; // lista com arestas do grafo       
-    std::list<Vertices*> nosGrafo; //lista com nos do grafo            
+    list<Arestas*> arestasGrafo; // lista com arestas do grafo       
+    list<Vertices*> nosGrafo; //lista com nos do grafo            
     
     int getOrdem(); //retorna ordem do grafo
     bool conexo(); // verifica se grafo eh conexo
@@ -48,11 +60,16 @@ class Grafo{
     Agm* caminhoEmProfundidade(int id);//caminha em profundidade pelo grafo
     int caminhoEmProfundidadeAux(Agm* solucao, int id, int ultimo);//aux do caminha em profundidade pelo grafo
     void ordenacaoTopologica();//faz a ordenaçao topologica do grafo
-    void quickSort(vector<Vertices*> *copia, int inicio, int fim); // ordenacao pelo metodo de quicksort
-    int partQuick(vector<Vertices*> *copia, int inicio, int fim); // aux do quicksort
     Agm* arvoreGeradoraMinimaKruskal();//cria uma arvore geradora minima usando kruskal
     void unir(int v1,int v2, int *ciclo); // Usado para verificar ciclos
     int pai(int v, int *ciclo); // Usado para verificar ciclos
+
+    void Guloso();
+    list<Arestas*> ordenaArestas(list<Arestas*> lista);
+    void quickSort(vector<Arestas*> *copia, int inicio, int fim); // ordenacao pelo metodo de quicksort
+    int partQuick(vector<Arestas*> *copia, int inicio, int fim); // aux do quicksort
+    bool aciclico(int id, int alvo, Agm *agm);
+
 };
 
 #endif //GRAFO_H_INCLUDED

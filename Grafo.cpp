@@ -1,20 +1,4 @@
 #include "Grafo.h"
-#include "Vertices.h"
-#include "Agm.h"
-#include "Dijkstra.h"
-#include "Floyd.h"
-#include <iostream>
-#include <string>
-#include <fstream>
-#include <sstream>
-#include <string.h>
-#include <vector>
-#include <algorithm>
-#include <limits.h>
-#include <stack>
-#include <math.h>
-
-using namespace std;
 
 Grafo::Grafo(int ordem, float **coord, bool direcionado, bool pesoArestas, bool pesoVertices ){//construtor do grafo
     this->ordem = ordem;//inicializa a ordem com a ordem passada
@@ -149,7 +133,7 @@ bool Grafo::conexo(){
 }
 
 // FUNCAO PARA ACHAR A MENOR ARESTA DENTRE DOIS NOS 
-Agm* Grafo::arestaMaisBarata(Vertices* v,Agm* agm){
+/* Agm* Grafo::arestaMaisBarata(Vertices* v,Agm* agm){
     int menor = INT_MAX/2; 
     
     v->setVisitado(true);
@@ -187,10 +171,10 @@ Agm* Grafo::arvoreGeradoraMinimaPrim(int v){
     // Percorrendo a lista de adj ate achar o mais barato
     arrumaVisitado();
     return agm;
-}
+} */
 
 
-list<int> Grafo::fechoDireto(int ID){
+/* list<int> Grafo::fechoDireto(int ID){
     list<int> listaSolucao;//cria uma lista de soluçao
     Vertices *aux = procurarNo(ID);
     if(this->direcionado == false){
@@ -231,9 +215,9 @@ list<int> Grafo::fechoDiretoAux(int ID, list<int> ListaFechoDireto)//funçao aux
         }
     }
     return ListaFechoDireto;//volta a lista no final
-}
+} */
 
-list<int> Grafo::fechoIndireto(int ID){
+/* list<int> Grafo::fechoIndireto(int ID){
     list<int> solucao;
     Vertices* aux = procurarNo(ID);
     if(this->direcionado == false){
@@ -269,10 +253,10 @@ list<int> Grafo::fechoIndiretoAux(int ID, list<int> solucao){
         }
     }
     return solucao;
-}
+} */
 
 
-Agm* Grafo::caminhoEmProfundidade(int id){
+/* Agm* Grafo::caminhoEmProfundidade(int id){
     Agm* solucao = new Agm();
     int ultimo = -1;
     for(auto i = nosGrafo.begin(); i != nosGrafo.end(); i++){
@@ -302,10 +286,10 @@ int Grafo::caminhoEmProfundidadeAux(Agm* solucao, int id, int ultimo){
     }
     ultimo = inicial->getId();
     return ultimo;
-}
+} */
 
 
-list<int> Grafo::caminhoMinimoDijkstra(int ID1, int ID2){
+/* list<int> Grafo::caminhoMinimoDijkstra(int ID1, int ID2){
     Dijkstra aux;
     list<int> caminhoD = aux.caminhoMinimo(this, ID1, ID2);
     if(caminhoD.size()>0){
@@ -321,10 +305,10 @@ list<int> Grafo::caminhoMinimoDijkstra(int ID1, int ID2){
 void Grafo::caminhoMinimoFloyd(int ID1, int ID2){
     Floyd aux;
     aux.caminhoMinimo(this, ID1, ID2);
-}
+} */
 
 
-Agm* Grafo::arvoreGeradoraMinimaKruskal(){
+/* Agm* Grafo::arvoreGeradoraMinimaKruskal(){
     Agm *agm = new Agm();             // Criando o conjunto solucao das arestas com menor peso
     vector<Arestas*> arestasAux;      // Criando vetor que guarda as arestas
     int *ciclo;
@@ -382,9 +366,9 @@ int Grafo::pai(int v, int *ciclo){
     ciclo[v] = pai(ciclo[v], ciclo);
  
     return ciclo[v];
-}
+} */
 
-void Grafo::ordenacaoTopologica(){
+/* void Grafo::ordenacaoTopologica(){
 
     vector<Vertices*> copia;
     copia.reserve(ordem);
@@ -398,9 +382,9 @@ void Grafo::ordenacaoTopologica(){
     for(int i = 0; i < ordem; i++)
         cout << copia[i]->getId() << " "; //imprime vertices ordenados
     cout << endl;
-}
+} */
 
-void Grafo::quickSort(vector<Vertices*> *copia, int inicio, int fim){ 
+/* void Grafo::quickSort(vector<Vertices*> *copia, int inicio, int fim){ 
     if(inicio < fim){ // Enquanto posicao de inicio nao ultrapassar final
         int p = partQuick(copia, inicio, fim); // Calcula posicao do pivo
         quickSort(copia, inicio, p - 1); // Recursividade da primeira metade do vetor
@@ -426,4 +410,141 @@ int Grafo::partQuick(vector<Vertices*> *copia, int esq, int dir){
         }
     }
     return i; // Retorna indice para o pivo
+} */
+
+
+/*void Grafo::Guloso(){
+    vector<Arestas*> arestas;
+    arestas.reserve((ordem*(ordem-1))/2);
+
+    for (auto i = this->arestasGrafo.begin(); i != this->arestasGrafo.end();i++)//copia lista de vertices
+        arestas.push_back(*i);
+    quickSort(&arestas, 0, (((ordem*(ordem-1))/2)-1)); 
+
+    arrumaVisitado();
+    Agm* solucao = new Agm;
+    for(auto i= arestas.begin(); i != arestas.end(); i++)
+    {
+        Arestas* auxiliar = *i;
+        Vertices* v1 = procurarNo(auxiliar->getId());
+        Vertices* v2 = procurarNo(auxiliar->getId_alvo());
+        Vertices* Spartida = solucao->retornaVertice(v1->getId());
+
+        if(solucao->nosAgm.empty()){
+           solucao->insereAresta(v1,v2,auxiliar);
+        }
+        else
+        {
+            if(v1->getVisitado() == false || v2->getVisitado() == false)
+            {
+                if(Spartida !=nullptr && Spartida->getGrauSaida()<3)
+                {
+                    solucao->insereAresta(v1->getId(),v2->getId(),auxiliar);
+                }
+            }
+        }
+        
+    }
+    
+
+}*/
+
+void Grafo::Guloso(){
+    vector<Arestas*> arestas;
+    arestas.reserve((ordem*(ordem-1))/2);
+
+    for (auto i = this->arestasGrafo.begin(); i != this->arestasGrafo.end();i++)//copia lista de vertices
+        arestas.push_back(*i);
+    quickSort(&arestas, 0, (((ordem*(ordem-1))/2)-1)); 
+
+    for (auto i = arestas.begin(); i != arestas.end();i++){
+        Arestas *aux = *i;
+        cout << aux->getPeso() << endl;
+    }
+    cout << endl << endl;
+
+    Agm* solucao = new Agm;
+
+    for(auto i= arestas.begin(); i != arestas.end(); i++)
+    {
+        Arestas* aux = *i;
+        Vertices* v1 = procurarNo(aux->getId());
+        Vertices* v2 = procurarNo(aux->getId_alvo());
+        if(v1->getGrau() < 3 && v2->getGrau() < 3){
+            if(v1->getVisitado() || v2->getVisitado()){
+                int nv = 0;
+                if(v1->getVisitado())
+                    nv = 1;
+                if(v2->getVisitado())
+                    nv = 2;
+                solucao->insereAresta(v1->getId(), v2->getId(), nv, aux);
+                v1->setVisitado(true);
+                v2->setVisitado(true);
+                v1->addGrau();
+                v2->addGrau();
+            }
+            else if (aciclico(v1->getId(), v2->getId(), solucao)){
+                solucao->insereAresta(v1->getId(), v2->getId(), 4, aux);
+                v1->setVisitado(true);
+                v2->setVisitado(true);
+                v1->addGrau();
+                v2->addGrau();
+            } 
+        }
+    }
+    solucao->imprimeAGM();
+} 
+
+
+/*
+
+if(v1 grau < 3 && v2 grau <3)
+    if(v1 getvistado || v2 getvistado)
+        add aresta
+    else if ( v2 nao alcança v1)
+        add aresta
+
+*/
+
+void Grafo::quickSort(vector<Arestas*> *copia, int inicio, int fim){ 
+    if(inicio < fim){ // Enquanto posicao de inicio nao ultrapassar final
+        int p = partQuick(copia, inicio, fim); // Calcula posicao do pivo
+        quickSort(copia, inicio, p - 1); // Recursividade da primeira metade do vetor
+        quickSort(copia, p, fim); // Recursividade da segunda metade do vetor
+    }
+}
+int Grafo::partQuick(vector<Arestas*> *copia, int esq, int dir){
+    int p = esq + (dir - esq) / 2; // indicado do pivo recebe a metade do vetor como posicao
+    Arestas* pivo = copia->at(p); // posiciona pivo utilizando ponteiro
+    int i = esq; // Posicao percorrida pela esquerda
+    int j = dir; // Posicao percorrida pela direita
+    while(i<=j) { // Enquanto esquerda nao ultrapassar direita
+        while(copia->at(i)->getPeso() < pivo->getPeso())  // Compara peso da aresta de pivo com posicao mais a esquerda
+            i++;
+        while(copia->at(j)->getPeso() > pivo->getPeso())  // Compara peso da aresta de pivo com posicao mais a direita
+            j--;
+         if(i <= j) { 
+            Arestas *aux = copia->at(i); // auxiliar para fazer a troca
+            copia->at(i) = copia->at(j);
+            copia->at(j) = aux;
+            i++;
+            j--;
+        }
+    }
+    return i; // Retorna indice para o pivo
+}
+
+bool Grafo::aciclico(int id, int alvo, Agm *agm){
+    Vertices *v = agm->retornaVertice(v->getId());
+    for (auto i = v->ListAdj.begin(); i != v->ListAdj.end(); i++){
+        if(*i == alvo)
+            return true;
+        Vertices* vAdj = agm->retornaVertice(*i);
+        if(!vAdj->getVisitado()) {
+            vAdj->setVisitado(true);
+            if(aciclico(*i, alvo, agm))
+                return true;
+        }
+    }
+    return false;//volta a lista no final
 }

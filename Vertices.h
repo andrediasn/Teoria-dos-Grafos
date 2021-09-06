@@ -14,6 +14,7 @@ private:// atributos privados
     int id; // identificador do vertice
     int grau_de_entrada; // grau de entrada do vertice (direcionado)
     int grau_de_saida;// grau de saida do vertice (direcionado) 
+    int grau;
     float peso;// peso dos vertices
     bool visitado;//visitado? sim ou nao
     float x;
@@ -25,14 +26,14 @@ public: // declaraçoes publicas
     list<int> ListAnt; // Lista de predecessores
     list<int> ListAdj; //lista de adjacencia de vertice               
 
-    // Constructor
-    Vertices(int id, float x, float y, float peso=0); // construtor, passando como parametro o identificador do vertice
+    Vertices(int id, float x=0, float y=0, float peso=0); // construtor, passando como parametro o identificador do vertice
     // Destructor
     ~Vertices(); // destrutor
     // Getters (declaracao dos gets)
     int getId();//retorna o identificador
     int getGrauEntrada();//retorna o grau de entrada do vertice (direcionado)
     int getGrauSaida();//retorna o grau de saida do vertice (direcionado)
+    int getGrau();
     float getPeso();//retorna o peso do vertice se houver
     // Setters (declaracao do sets)
     void setPeso(float peso);//insere o peso no vertice
@@ -40,6 +41,7 @@ public: // declaraçoes publicas
     void subtrairGrauSaida();//decrementa grau de saida
     void adicionarGrauEntrada();//incrementa grau de entrada
     void subtrairGrauEntrada();//decrementa grau de entrada
+    void addGrau();
 
     // Other methods
     void adicionaAdjacencia(int id_alvo); // add adjacencia
