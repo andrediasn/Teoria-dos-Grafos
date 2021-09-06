@@ -21,5 +21,7 @@ class Agm{
         Vertices* retornaVertice(int id);//pesquisa vertice no grafo e retorna ele
         void adicionaArestaAGM(Vertices* v1, Vertices* v2, Arestas* auxiliar);
         void imprimeAGM();
+        void saidaAgmDot();
+        void arrumaVisitado();
 };
 #endif //AGM_H_INCLUDED

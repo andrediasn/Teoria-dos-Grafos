@@ -76,7 +76,7 @@ int Vertices::getGrauSaida(){
 }
 
 int Vertices::getGrau(){
-    this->grau;
+    return this->grau;
 }
 
 float Vertices::getX(){

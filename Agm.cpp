@@ -55,9 +55,12 @@ void Agm::insereAresta(int id1, int id2,int nv, Arestas* a) { // Insere aresta p
     }
 }
 
-
-
-
+void Agm::arrumaVisitado(){ // Seta visitados para false
+    for(auto i = nosAgm.begin(); i != nosAgm.end(); i++){
+        Vertices* aux = *i;
+        aux->setVisitado(false);
+    }
+}
 
 
 Vertices* Agm::retornaVertice(int id){//pesquisa vertice no grafo e retorna ele
@@ -71,9 +74,23 @@ Vertices* Agm::retornaVertice(int id){//pesquisa vertice no grafo e retorna ele
 
 void Agm::imprimeAGM()
 {
-    for(auto i = arestasAgm.begin(); i != arestasAgm.end(); i++)
-    {
+    int lb = 0;
+    for(auto i = arestasAgm.begin(); i != arestasAgm.end(); i++){
         Arestas* auxiliar = *i;
-        cout<< auxiliar->getId() << " "<<auxiliar->getId_alvo() <<" " << auxiliar->getPeso()<<endl;
+        lb += auxiliar->getPeso(); 
     }
+    cout<< "Lower Bound: " << lb << endl;
+}
+
+void Agm::saidaAgmDot(){
+    ofstream arq("agm.txt", ios::out);
+   
+    arq << "graph {" << endl;
+
+    for (auto i = arestasAgm.begin(); i != arestasAgm.end(); i++){
+        Arestas* aux = *i;
+        arq << "    " << aux->getId() << " -- " << aux->getId_alvo() << " [label = " << aux->getPeso() << "]" <<endl;
+    }
+  
+    arq << "}" << endl;
 }

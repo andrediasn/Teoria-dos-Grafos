@@ -288,26 +288,6 @@ int Grafo::caminhoEmProfundidadeAux(Agm* solucao, int id, int ultimo){
     return ultimo;
 } */
 
-
-/* list<int> Grafo::caminhoMinimoDijkstra(int ID1, int ID2){
-    Dijkstra aux;
-    list<int> caminhoD = aux.caminhoMinimo(this, ID1, ID2);
-    if(caminhoD.size()>0){
-        cout << "Caminho minimo: ";
-        for(auto i = caminhoD.begin(); i != caminhoD.end(); i++){
-            cout << *i << " ";
-        }
-        cout << endl;
-    }
-    return caminhoD;
-}
-
-void Grafo::caminhoMinimoFloyd(int ID1, int ID2){
-    Floyd aux;
-    aux.caminhoMinimo(this, ID1, ID2);
-} */
-
-
 /* Agm* Grafo::arvoreGeradoraMinimaKruskal(){
     Agm *agm = new Agm();             // Criando o conjunto solucao das arestas com menor peso
     vector<Arestas*> arestasAux;      // Criando vetor que guarda as arestas
@@ -368,49 +348,6 @@ int Grafo::pai(int v, int *ciclo){
     return ciclo[v];
 } */
 
-/* void Grafo::ordenacaoTopologica(){
-
-    vector<Vertices*> copia;
-    copia.reserve(ordem);
-
-    for (auto i = nosGrafo.begin(); i != nosGrafo.end();i++)//copia lista de vertices
-        copia.push_back(*i);
-
-    quickSort(&copia, 0, ordem-1); // ordenacao pelo metodo de quiksort com o grau de saido como parametro
-
-    cout << "Vertices ordenados a partir do grau de saida: ";
-    for(int i = 0; i < ordem; i++)
-        cout << copia[i]->getId() << " "; //imprime vertices ordenados
-    cout << endl;
-} */
-
-/* void Grafo::quickSort(vector<Vertices*> *copia, int inicio, int fim){ 
-    if(inicio < fim){ // Enquanto posicao de inicio nao ultrapassar final
-        int p = partQuick(copia, inicio, fim); // Calcula posicao do pivo
-        quickSort(copia, inicio, p - 1); // Recursividade da primeira metade do vetor
-        quickSort(copia, p, fim); // Recursividade da segunda metade do vetor
-    }
-}
-int Grafo::partQuick(vector<Vertices*> *copia, int esq, int dir){
-    int p = esq + (dir - esq) / 2; // indicado do pivo recebe a metade do vetor como posicao
-    Vertices* pivo = copia->at(p); // posiciona pivo utilizando ponteiro
-    int i = esq; // Posicao percorrida pela esquerda
-    int j = dir; // Posicao percorrida pela direita
-    while(i<=j) { // Enquanto esquerda nao ultrapassar direita
-        while(copia->at(i)->getGrauSaida() < pivo->getGrauSaida())  // Compara grau de saida de pivo com posicao mais a esquerda
-            i++;
-        while(copia->at(j)->getGrauSaida() > pivo->getGrauSaida())  // Compara grau de saida de pivo com posicao mais a direita
-            j--;
-         if(i <= j) { 
-            Vertices *aux = copia->at(i); // auxiliar para fazer a troca
-            copia->at(i) = copia->at(j);
-            copia->at(j) = aux;
-            i++;
-            j--;
-        }
-    }
-    return i; // Retorna indice para o pivo
-} */
 
 
 /*void Grafo::Guloso(){
@@ -450,28 +387,24 @@ int Grafo::partQuick(vector<Vertices*> *copia, int esq, int dir){
 }*/
 
 void Grafo::Guloso(){
+    clock_t start, mid, end;
+    start = clock();
     vector<Arestas*> arestas;
     arestas.reserve((ordem*(ordem-1))/2);
 
     for (auto i = this->arestasGrafo.begin(); i != this->arestasGrafo.end();i++)//copia lista de vertices
         arestas.push_back(*i);
     quickSort(&arestas, 0, (((ordem*(ordem-1))/2)-1)); 
-
-    for (auto i = arestas.begin(); i != arestas.end();i++){
-        Arestas *aux = *i;
-        cout << aux->getPeso() << endl;
-    }
-    cout << endl << endl;
-
+    mid = clock();
+    
     Agm* solucao = new Agm;
 
-    for(auto i= arestas.begin(); i != arestas.end(); i++)
-    {
+    for(auto i= arestas.begin(); i != arestas.end(); i++){
         Arestas* aux = *i;
         Vertices* v1 = procurarNo(aux->getId());
         Vertices* v2 = procurarNo(aux->getId_alvo());
         if(v1->getGrau() < 3 && v2->getGrau() < 3){
-            if(v1->getVisitado() || v2->getVisitado()){
+            if(!v1->getVisitado() || !v2->getVisitado()){
                 int nv = 0;
                 if(v1->getVisitado())
                     nv = 1;
@@ -483,7 +416,7 @@ void Grafo::Guloso(){
                 v1->addGrau();
                 v2->addGrau();
             }
-            else if (aciclico(v1->getId(), v2->getId(), solucao)){
+            else if (verAciclico(v1->getId(), v2->getId(), solucao)){
                 solucao->insereAresta(v1->getId(), v2->getId(), 4, aux);
                 v1->setVisitado(true);
                 v2->setVisitado(true);
@@ -492,19 +425,13 @@ void Grafo::Guloso(){
             } 
         }
     }
+    end=clock();
+    cout << "Tempo de execucao QuickSort: " << ((float)(mid-start))/1000 << "s\n";
+    cout << "Tempo de execucao Guloso: " << ((float)(end-mid))/1000 << "s\n";
+    cout << "Tempo de execucao Total: " << ((float)(end-start))/1000 << "s\n";
     solucao->imprimeAGM();
+    //solucao->saidaAgmDot();
 } 
-
-
-/*
-
-if(v1 grau < 3 && v2 grau <3)
-    if(v1 getvistado || v2 getvistado)
-        add aresta
-    else if ( v2 nao alcança v1)
-        add aresta
-
-*/
 
 void Grafo::quickSort(vector<Arestas*> *copia, int inicio, int fim){ 
     if(inicio < fim){ // Enquanto posicao de inicio nao ultrapassar final
@@ -534,17 +461,23 @@ int Grafo::partQuick(vector<Arestas*> *copia, int esq, int dir){
     return i; // Retorna indice para o pivo
 }
 
+bool Grafo::verAciclico(int id, int alvo, Agm *agm){
+    agm->arrumaVisitado();
+    bool ver = aciclico(id, alvo, agm);
+    return ver;
+}
+
 bool Grafo::aciclico(int id, int alvo, Agm *agm){
-    Vertices *v = agm->retornaVertice(v->getId());
+    Vertices *v = agm->retornaVertice(id);
     for (auto i = v->ListAdj.begin(); i != v->ListAdj.end(); i++){
         if(*i == alvo)
-            return true;
+            return false;
         Vertices* vAdj = agm->retornaVertice(*i);
         if(!vAdj->getVisitado()) {
             vAdj->setVisitado(true);
-            if(aciclico(*i, alvo, agm))
-                return true;
+            if(!aciclico(*i, alvo, agm))
+                return false;
         }
     }
-    return false;//volta a lista no final
+    return true;//volta a lista no final
 }

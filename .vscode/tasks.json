@@ -13,7 +13,7 @@
                 "*.h",
                 "-o",
                 "main",
-                "-O3"
+                //"-O3"
             ],
             "options": {
                 "cwd": "${workspaceFolder}"

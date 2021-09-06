@@ -11,7 +11,8 @@
 #include <math.h>
 #include <list>
 #include <vector>
-#include <chrono>
+#include <ctime>
+#include <bits/stdc++.h>
 #include "Vertices.h"
 #include "Agm.h"
 
@@ -68,6 +69,7 @@ class Grafo{
     list<Arestas*> ordenaArestas(list<Arestas*> lista);
     void quickSort(vector<Arestas*> *copia, int inicio, int fim); // ordenacao pelo metodo de quicksort
     int partQuick(vector<Arestas*> *copia, int inicio, int fim); // aux do quicksort
+    bool verAciclico(int id, int alvo, Agm *agm);
     bool aciclico(int id, int alvo, Agm *agm);
 
 };

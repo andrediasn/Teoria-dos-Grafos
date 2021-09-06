@@ -35,9 +35,10 @@
 *.csv
 *.bin
 *.dat
+*.txt
 
 # VScode Settings
-*.json*
+*.json
 .vscode
 
 # Extra
