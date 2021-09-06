@@ -65,7 +65,7 @@ class Grafo{
     void unir(int v1,int v2, int *ciclo); // Usado para verificar ciclos
     int pai(int v, int *ciclo); // Usado para verificar ciclos
 
-    void Guloso();
+    void Guloso(string instancia);
     list<Arestas*> ordenaArestas(list<Arestas*> lista);
     void quickSort(vector<Arestas*> *copia, int inicio, int fim); // ordenacao pelo metodo de quicksort
     int partQuick(vector<Arestas*> *copia, int inicio, int fim); // aux do quicksort

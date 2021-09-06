@@ -386,7 +386,7 @@ int Grafo::pai(int v, int *ciclo){
 
 }*/
 
-void Grafo::Guloso(){
+void Grafo::Guloso(string instancia){
     clock_t start, mid, end;
     start = clock();
     vector<Arestas*> arestas;
@@ -398,7 +398,9 @@ void Grafo::Guloso(){
     mid = clock();
     
     Agm* solucao = new Agm;
-
+    int cp = 0;
+    int p = arestas.size()/5;
+    cout << "Executando [0%";
     for(auto i= arestas.begin(); i != arestas.end(); i++){
         Arestas* aux = *i;
         Vertices* v1 = procurarNo(aux->getId());
@@ -422,15 +424,26 @@ void Grafo::Guloso(){
                 v2->setVisitado(true);
                 v1->addGrau();
                 v2->addGrau();
-            } 
+            }
         }
+        if(cp == p)
+            cout << " - 20%";
+        else if(cp == 2*p)
+            cout << " - 40%";
+        else if(cp == 3*p)
+            cout << " - 60%";
+        else if(cp == 4*p)
+            cout << " - 80%";
+
     }
+    cout << " - 100%]" << endl << endl;
     end=clock();
     cout << "Tempo de execucao QuickSort: " << ((float)(mid-start))/1000 << "s\n";
     cout << "Tempo de execucao Guloso: " << ((float)(end-mid))/1000 << "s\n";
     cout << "Tempo de execucao Total: " << ((float)(end-start))/1000 << "s\n";
-    solucao->imprimeAGM();
-    //solucao->saidaAgmDot();
+
+    solucao->saidaAgmDot();
+    solucao->saidaResult(instancia, ((float)(end-start))/1000);
 } 
 
 void Grafo::quickSort(vector<Arestas*> *copia, int inicio, int fim){ 
@@ -467,12 +480,12 @@ bool Grafo::verAciclico(int id, int alvo, Agm *agm){
     return ver;
 }
 
-bool Grafo::aciclico(int id, int alvo, Agm *agm){
+bool Grafo::aciclico(int id, int alvo, Agm *agm){ // Para melhorar, alterar pra que o id ja seja o vertice
     Vertices *v = agm->retornaVertice(id);
-    for (auto i = v->ListAdj.begin(); i != v->ListAdj.end(); i++){
+    for (auto i = v->ListAdj.begin(); i != v->ListAdj.end(); i++){ // Para melhorar, alterar pra a lista ja ser de vertices.
         if(*i == alvo)
             return false;
-        Vertices* vAdj = agm->retornaVertice(*i);
+        Vertices* vAdj = agm->retornaVertice(*i); // Para melhorar, alterar pra a lista ja ser de vertices.
         if(!vAdj->getVisitado()) {
             vAdj->setVisitado(true);
             if(!aciclico(*i, alvo, agm))
@@ -481,3 +494,25 @@ bool Grafo::aciclico(int id, int alvo, Agm *agm){
     }
     return true;//volta a lista no final
 }
+
+
+/* bool Grafo::verAciclico(int id, int alvo, Agm *agm){ //Função melhorada
+    agm->arrumaVisitado();
+    Vertices *vId = agm->retornaVertice(id);
+    bool ver = aciclico(vId, alvo, agm);
+    return ver;
+}
+
+bool Grafo::aciclico(Vertices *v, int alvo, Agm *agm){
+    for (auto i = v->ListAdj.begin(); i != v->ListAdj.end(); i++){ 
+        Vertices* vAdj = *i;
+        if(vAdj->getId() == alvo)
+            return false;
+        if(!vAdj->getVisitado()) {
+            vAdj->setVisitado(true);
+            if(!aciclico(vAdj, alvo, agm))
+                return false;
+        }
+    }
+    return true;//volta a lista no final
+} */

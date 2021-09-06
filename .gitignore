@@ -35,7 +35,7 @@
 *.csv
 *.bin
 *.dat
-*.txt
+agm.txt
 
 # VScode Settings
 *.json

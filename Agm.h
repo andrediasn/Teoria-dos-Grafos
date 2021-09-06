@@ -19,8 +19,7 @@ class Agm{
         void insereVertice(Vertices* v); // Insere vertice passando id    
         void insereAresta(int id1, int id2,int nv, Arestas* a); // Insere aresta passando id do vertice de origem, vertice alvo, e o peso
         Vertices* retornaVertice(int id);//pesquisa vertice no grafo e retorna ele
-        void adicionaArestaAGM(Vertices* v1, Vertices* v2, Arestas* auxiliar);
-        void imprimeAGM();
+        void saidaResult(string instancia, float time);
         void saidaAgmDot();
         void arrumaVisitado();
 };

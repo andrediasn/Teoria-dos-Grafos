@@ -72,7 +72,7 @@ Vertices* Agm::retornaVertice(int id){//pesquisa vertice no grafo e retorna ele
     return nullptr;//se nao, retorna null
 }
 
-void Agm::imprimeAGM()
+void Agm::saidaResult(string instancia, float time)
 {
     int lb = 0;
     for(auto i = arestasAgm.begin(); i != arestasAgm.end(); i++){
@@ -80,10 +80,12 @@ void Agm::imprimeAGM()
         lb += auxiliar->getPeso(); 
     }
     cout<< "Lower Bound: " << lb << endl;
+    ofstream arq("Resultado/resultGuloso.txt", ios::app);
+    arq << instancia << "; ;" << lb << ";" << time << "s" << endl;
 }
 
 void Agm::saidaAgmDot(){
-    ofstream arq("agm.txt", ios::out);
+    ofstream arq("Resultado/agm.txt", ios::out);
    
     arq << "graph {" << endl;
 
@@ -93,4 +95,6 @@ void Agm::saidaAgmDot(){
     }
   
     arq << "}" << endl;
+
+    arq.close();
 }
