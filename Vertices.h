@@ -53,7 +53,6 @@ public: // declaraçoes publicas
     void removeTodasArestas();// remove todas as arestas
     int removeAresta(int id, bool direcionado, Vertices* target_node);// remove aresta
     
-    Arestas* pesoEntreVerticeAlvo(int id_alvo);//tem aresta entre esse vertice e o passado por parametro?
     bool getVisitado(); // retorna se esta visitado
     void setVisitado(bool visitado); // altera visitado
 

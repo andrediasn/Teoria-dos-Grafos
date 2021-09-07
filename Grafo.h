@@ -14,12 +14,11 @@
 #include <ctime>
 #include <bits/stdc++.h>
 #include "Vertices.h"
+#include "Arestas.h"
 #include "Agm.h"
 
 using namespace std;
 
-class Dijkstra;
-class Floyd;
 
 class Grafo{
     //atributos
@@ -40,7 +39,6 @@ class Grafo{
     void insereAresta(int id,int id_alvo,bool direcionado = false); // Insere aresta no grafo
     void removeNode(int id); // Remove vertice do grafo
     bool existeVertice(int id); // Procura vertice no grafo
-    Arestas* existeAresta(int id ,int id_alvo); //retorna aresta se existir
     Vertices* procurarNo(int id); //retorna vertice se existir
     
     list<Arestas*> arestasGrafo; // lista com arestas do grafo       
@@ -50,22 +48,8 @@ class Grafo{
     bool conexo(); // verifica se grafo eh conexo
     void arrumaVisitado(); // seta todos vertices.visitado como false 
     
-    Agm* arestaMaisBarata(Vertices* v,Agm* agm);  
-    list<int> fechoDireto(int ID);//funçao para achar o fecho transitivo direto
-    list<int> fechoDiretoAux(int ID, list<int> ListaFechoDireto); //auxiliar para recursividade do fecho
-    list<int> fechoIndireto(int ID);//achar o fecho transitivo indireto
-    list<int> fechoIndiretoAux(int ID, list<int> listaFechoIndireto);//achar o fecho transitivo indireto
-    list<int> caminhoMinimoDijkstra(int ID1, int ID2);//caminho minimo entre v1 e v2 passados por parametro usando Dijkstra
-    void caminhoMinimoFloyd(int ID1, int ID2); // custo minimo entre v1 e v2 passados por parametro usando floyd
-    Agm* arvoreGeradoraMinimaPrim(int v);//cria uma arvore geradora minima usando prim
-    Agm* caminhoEmProfundidade(int id);//caminha em profundidade pelo grafo
-    int caminhoEmProfundidadeAux(Agm* solucao, int id, int ultimo);//aux do caminha em profundidade pelo grafo
-    void ordenacaoTopologica();//faz a ordenaçao topologica do grafo
-    Agm* arvoreGeradoraMinimaKruskal();//cria uma arvore geradora minima usando kruskal
-    void unir(int v1,int v2, int *ciclo); // Usado para verificar ciclos
-    int pai(int v, int *ciclo); // Usado para verificar ciclos
-
     void Guloso(string instancia);
+    void Guloso_v2(string instancia);
     list<Arestas*> ordenaArestas(list<Arestas*> lista);
     void quickSort(vector<Arestas*> *copia, int inicio, int fim); // ordenacao pelo metodo de quicksort
     int partQuick(vector<Arestas*> *copia, int inicio, int fim); // aux do quicksort

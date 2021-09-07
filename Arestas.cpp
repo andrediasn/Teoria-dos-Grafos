@@ -1,15 +1,9 @@
-#include "Grafo.h"
-#include "Vertices.h"
 #include "Arestas.h"
-#include <iostream>
-#include <string>
-#include <fstream>
-#include <sstream>
-#include <string.h>
 
-Arestas::Arestas(int id, int id_alvo, float peso){
-    this->id = id;
-    this->id_alvo = id_alvo;
+
+Arestas::Arestas(Vertices* v1,Vertices *v2, float peso){
+    this->v1 = v1;
+    this->v2 = v2;
     this->Peso = peso;
 }
 
@@ -23,19 +17,19 @@ void Arestas::setPeso(float peso){
     this->Peso = peso;
 }
 
-int Arestas::getId(){
-    return this->id;
+Vertices* Arestas::getV1(){
+    return this->v1;
 }
 
-void Arestas::setId(int id){
-    this->id = id;
+void Arestas::setV1(Vertices* v1){
+    this->v1 = v1;
 }
 
-int Arestas::getId_alvo(){
-    return this->id_alvo;
+Vertices* Arestas::getV2(){
+    return this->v2;
 }
 
-void Arestas::setId_alvo(int id_alvo){
-    this->id_alvo = id_alvo;
+void Arestas::setV2(Vertices* v2){
+    this->v2 = v2;
 }
 

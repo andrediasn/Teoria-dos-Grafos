@@ -1,11 +1,12 @@
 #ifndef AGM_H_INCLUDED
 #define AGM_H_INCLUDED
-#include "Vertices.h"
 #include <iostream>
 #include <string>
 #include <fstream>
 #include <sstream>
 #include <list>
+#include "Vertices.h"
+#include "Arestas.h"
 
 using namespace std;
 class Agm{

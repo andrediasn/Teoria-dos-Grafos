@@ -34,7 +34,8 @@ void Agm::insereAresta(int id1, int id2,int nv, Arestas* a) { // Insere aresta p
     Agmv2->adicionaAdjacenciaV(Agmv1);
     insereVertice(Agmv1);
     insereVertice(Agmv2);
-    this->arestasAgm.push_back(a);
+    Arestas* aux = new Arestas(Agmv1,Agmv2,a->getPeso());
+    this->arestasAgm.push_back(aux);
 }
 
 void Agm::arrumaVisitado(){ // Seta visitados para false
@@ -54,6 +55,28 @@ Vertices* Agm::retornaVertice(int id){//pesquisa vertice no grafo e retorna ele
 }
 
 void Agm::saidaResult(string instancia, float time){
+    int lit = 0;
+    if(instancia == "pr124.tsp")
+        lit = 50535;
+    else if(instancia == "pr136.tsp")
+        lit = 88964;
+    else if(instancia == "pr144.tsp")
+        lit = 49446;
+    else if(instancia == "d493.tsp")
+        lit = 29272;
+    else if(instancia == "u574.tsp")
+        lit = 32078;
+    else if(instancia == "rat575.tsp")
+        lit = 6248;
+    else if(instancia == "d657.tsp")
+        lit = 42590;
+    else if(instancia == "d1291.tsp")
+        lit = 46931;
+    else if(instancia == "d1655.tsp")
+        lit = 56542;
+    else if(instancia == "d2103.tsp")
+        lit = 76331;
+
     int lb = 0;
     for(auto i = arestasAgm.begin(); i != arestasAgm.end(); i++){
         Arestas* auxiliar = *i;
@@ -61,7 +84,7 @@ void Agm::saidaResult(string instancia, float time){
     }
     cout<< "Lower Bound: " << lb << endl;
     ofstream arq("Resultado/resultGuloso.txt", ios::app);
-    arq << instancia << "; ;" << lb << ";" << time << "s" << endl;
+    arq << instancia << ";"<< lit << ";" << lb << ";" << time << "s" << endl;
     arq.close();
 }
 
@@ -71,7 +94,9 @@ void Agm::saidaAgmDot(){
 
     for (auto i = arestasAgm.begin(); i != arestasAgm.end(); i++){
         Arestas* aux = *i;
-        arq << "    " << aux->getId() << " -- " << aux->getId_alvo() << " [label = " << aux->getPeso() << "]" <<endl;
+        Vertices* v1 = aux->getV1();
+        Vertices* v2 = aux->getV2();
+        arq << "    " << v1->getId() << " -- " << v2->getId() << " [label = " << aux->getPeso() << "]" <<endl;
     }
   
     arq << "}" << endl;
