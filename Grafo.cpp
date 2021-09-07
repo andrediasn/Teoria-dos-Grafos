@@ -474,7 +474,7 @@ int Grafo::partQuick(vector<Arestas*> *copia, int esq, int dir){
     return i; // Retorna indice para o pivo
 }
 
-bool Grafo::verAciclico(int id, int alvo, Agm *agm){
+/* bool Grafo::verAciclico(int id, int alvo, Agm *agm){
     agm->arrumaVisitado();
     bool ver = aciclico(id, alvo, agm);
     return ver;
@@ -493,10 +493,10 @@ bool Grafo::aciclico(int id, int alvo, Agm *agm){ // Para melhorar, alterar pra 
         }
     }
     return true;//volta a lista no final
-}
+} */
 
 
-/*  bool Grafo::verAciclico(int id, int alvo, Agm *agm){ //Função melhorada
+bool Grafo::verAciclico(int id, int alvo, Agm *agm){ //Função melhorada
     agm->arrumaVisitado();
     Vertices *vId = agm->retornaVertice(id);
     bool ver = aciclico(vId, alvo, agm);
@@ -515,4 +515,4 @@ bool Grafo::aciclico(Vertices *v, int alvo, Agm *agm){
         }
     }
     return true;//volta a lista no final
-}  */
+} 
