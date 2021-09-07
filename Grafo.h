@@ -70,7 +70,7 @@ class Grafo{
     void quickSort(vector<Arestas*> *copia, int inicio, int fim); // ordenacao pelo metodo de quicksort
     int partQuick(vector<Arestas*> *copia, int inicio, int fim); // aux do quicksort
     bool verAciclico(int id, int alvo, Agm *agm);
-    bool aciclico(int id, int alvo, Agm *agm);
+    bool aciclico(Vertices *v, int alvo, Agm *agm);
 
 };
 

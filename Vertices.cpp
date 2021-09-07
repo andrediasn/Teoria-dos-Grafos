@@ -39,6 +39,10 @@ void Vertices::addGrau(){
     this->grau ++;
 }
 
+void Vertices::adicionaAdjacenciaV(Vertices* v){
+    this->ListAdjV.push_back(v);
+}
+
 void Vertices::adicionaAdjacencia(int id_alvo)
 {
     this->ListAdj.push_back(id_alvo);

@@ -496,7 +496,7 @@ bool Grafo::aciclico(int id, int alvo, Agm *agm){ // Para melhorar, alterar pra 
 }
 
 
-/* bool Grafo::verAciclico(int id, int alvo, Agm *agm){ //Função melhorada
+/*  bool Grafo::verAciclico(int id, int alvo, Agm *agm){ //Função melhorada
     agm->arrumaVisitado();
     Vertices *vId = agm->retornaVertice(id);
     bool ver = aciclico(vId, alvo, agm);
@@ -504,7 +504,7 @@ bool Grafo::aciclico(int id, int alvo, Agm *agm){ // Para melhorar, alterar pra 
 }
 
 bool Grafo::aciclico(Vertices *v, int alvo, Agm *agm){
-    for (auto i = v->ListAdj.begin(); i != v->ListAdj.end(); i++){ 
+    for (auto i = v->ListAdjV.begin(); i != v->ListAdjV.end(); i++){ 
         Vertices* vAdj = *i;
         if(vAdj->getId() == alvo)
             return false;
@@ -515,4 +515,4 @@ bool Grafo::aciclico(Vertices *v, int alvo, Agm *agm){
         }
     }
     return true;//volta a lista no final
-} */
+}  */

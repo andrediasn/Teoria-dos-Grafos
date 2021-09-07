@@ -1,4 +1,4 @@
-Instancia;MST;Lower Bound;Tempo
+Instancia;Literatura;GulosoGrupo10;Tempo
 pr124.tsp;50535;50535;1.145s
 pr136.tsp;88964;88964;1.461s
 pr144.tsp;49446;49466;2.869s
