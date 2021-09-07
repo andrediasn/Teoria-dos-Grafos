@@ -38,44 +38,36 @@ int Grafo::calculaDist(int id, int id_alvo){
 
 void Grafo::insereAresta(int id, int id_alvo,bool direcionado){// Inseri aresta passando id do vertice de origem, vertice alvo, e o peso
     if(!nosGrafo.empty()){//se o grafo nao for vazio
-        if(!existeVertice(id)){//se nao existir o no no grafo
-            cout << "O vertice de origem nao existe no grafo.\n";//printa que nao tem vertice
-            return;//e volta
-        }else if(!existeVertice(id_alvo)){//se nao existir o vertice alvo
-            cout << id_alvo <<"  vertice de destino nao existe no grafo.\n";//printa que nao existe
-            return;//e volta
+        Arestas* auxAresta;//cria uma aresta auxiliar
+        int peso = calculaDist(id, id_alvo);
+        if(direcionado == false){//se ela nao for direcionada
+            Vertices* no1 = procurarNo(id);//cria um vertice auxiliar para alterarmos os dados dos vertices
+            Vertices* no2 = procurarNo(id_alvo);//cria um auxiliar para o vertice alvo igual ao primeiro
+            auxAresta = new Arestas(id, id_alvo, peso);//declara uma nova aresta
+            no1->adicionaAdjacencia(id_alvo);//insere aresta no grafo passando o vertice inicial, final e peso
+            no1->adicionarGrauSaida();//adiciona 1 ao grau de saida
+            no1->adicionarGrauEntrada();//adiciona grau de entrada, ja que nao é direcionado
+            //como nao é um grafo direcionado temos que fazer o mesmo para o vertice 2 tambem para adicionarmos a adjacencia
+            //Obs: nao é necessario adicionar uma nova aresta se nao teriamos uma multiaresta
+            no2->adicionaAdjacencia(id);//adiciona adjacencia do vertice1 no vertice2
+            no2->adicionarGrauEntrada();//adiciona o grau de entrada
+            no2->adicionarGrauSaida();//adiciona o grau de saida
+            arestasGrafo.push_back(auxAresta);//poe ela na lista de arestas do grafo
+                           
         }
-        else{//caso tenha os 2
-            Arestas* auxAresta;//cria uma aresta auxiliar
-            int peso = calculaDist(id, id_alvo);
-            if(direcionado == false){//se ela nao for direcionada
-                Vertices* no1 = procurarNo(id);//cria um vertice auxiliar para alterarmos os dados dos vertices
-                Vertices* no2 = procurarNo(id_alvo);//cria um auxiliar para o vertice alvo igual ao primeiro
-                auxAresta = new Arestas(id, id_alvo, peso);//declara uma nova aresta
-                no1->adicionaAdjacencia(id_alvo);//insere aresta no grafo passando o vertice inicial, final e peso
-                no1->adicionarGrauSaida();//adiciona 1 ao grau de saida
-                no1->adicionarGrauEntrada();//adiciona grau de entrada, ja que nao é direcionado
-                //como nao é um grafo direcionado temos que fazer o mesmo para o vertice 2 tambem para adicionarmos a adjacencia
-                //Obs: nao é necessario adicionar uma nova aresta se nao teriamos uma multiaresta
-                no2->adicionaAdjacencia(id);//adiciona adjacencia do vertice1 no vertice2
-                no2->adicionarGrauEntrada();//adiciona o grau de entrada
-                no2->adicionarGrauSaida();//adiciona o grau de saida
-                arestasGrafo.push_back(auxAresta);//poe ela na lista de arestas do grafo
-                               
-            }
-            /* else if(direcionado == true){//se for direcionada
-                Vertices* no1 = procurarNo(id);//cria um vertice auxiliar para alterarmos os dados dos vertices
-                Vertices* no2 = procurarNo(id_alvo);//cria um auxiliar para o vertice alvo igual ao primeiro
-                //adicionando peso nos vertices
-                auxAresta = no1->insereAresta(id, id_alvo, pesoArestas);//insere aresta no grafo passando o vertice inicial, final e peso
-                no1->adicionarGrauSaida();//adiciona 1 ao grau de saida
-                no2->adicionarGrauEntrada();//adiciona o grau de entrada
-                arestasGrafo.push_back(auxAresta);//poe ela na lista de arestas do grafo
-                no2->adicionaAntecessor(no1->getId());
-            } */
-        }
+        /* else if(direcionado == true){//se for direcionada
+            Vertices* no1 = procurarNo(id);//cria um vertice auxiliar para alterarmos os dados dos vertices
+            Vertices* no2 = procurarNo(id_alvo);//cria um auxiliar para o vertice alvo igual ao primeiro
+            //adicionando peso nos vertices
+            auxAresta = no1->insereAresta(id, id_alvo, pesoArestas);//insere aresta no grafo passando o vertice inicial, final e peso
+            no1->adicionarGrauSaida();//adiciona 1 ao grau de saida
+            no2->adicionarGrauEntrada();//adiciona o grau de entrada
+            arestasGrafo.push_back(auxAresta);//poe ela na lista de arestas do grafo
+            no2->adicionaAntecessor(no1->getId());
+        } */
     }
 }
+
 
 void Grafo::removeNode(int id){ //remove vertice
     if(existeVertice(id)){//se o vertice nao existe no grafo entra no if
