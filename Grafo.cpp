@@ -186,7 +186,7 @@ void Grafo::Guloso(string instancia){
 } 
 
 
-/* void Grafo::Guloso_v2(string instancia){
+void Grafo::Guloso_v2(string instancia){
     clock_t start, mid, end;
     start = clock();
     vector<Arestas*> arestas;
@@ -207,8 +207,8 @@ void Grafo::Guloso(string instancia){
     Agm* solucao = new Agm;
     for(auto i= arestas.begin(); i != arestas.end(); i++){
         Arestas* aux = *i;
-        Vertices* v1 = procurarNo(aux->getId());
-        Vertices* v2 = procurarNo(aux->getId_alvo());
+        Vertices* v1 = aux->getV1();
+        Vertices* v2 = aux->getV2();
         if(v1->getGrau() < 3 && v2->getGrau() < 3){
             if(!v1->getVisitado() || !v2->getVisitado()){
                 int nv = 0;
@@ -238,13 +238,17 @@ void Grafo::Guloso(string instancia){
 
     solucao->saidaAgmDot();
     solucao->saidaResult(instancia, ((float)(end-start))/1000);
-}  */
+} 
 
 
 /*
 
-randomizo nesse range(peso da primeira * alfa)
+randomizo nesse range(peso da segunda * alfa)
+
+
 remove ou seta visitado
+
+10 * 5 = 50
 
 calular media tempo 
 desvio padrao 
@@ -258,11 +262,18 @@ system("./main instacia")
 
 reativo:
 
-vetor de alfas
 
 reativo chama guloso rand com o alfa (retorna melhor custo)
 
-depois de bloco 50 ele recalcula prob de alfa (media de melhores custo daquele alfa salvo no vetor)
+50
+
+5 = bloco com 1 vez cada alfa
+
+0.3 0.175
+
+bloco de 20
+
+depois de bloco 20 ele recalcula prob de alfa (media de melhores custo daquele alfa salvo no vetor)
 
 
 
