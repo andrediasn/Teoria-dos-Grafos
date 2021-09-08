@@ -102,3 +102,24 @@ void Agm::saidaAgmDot(){
     arq << "}" << endl;
     arq.close();
 }
+bool Agm::ehVazia()
+{
+    if(nosAgm.size() == 0)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+int Agm::calculaPesoTotal()
+{
+    int lb = 0;
+    for(auto i = arestasAgm.begin(); i != arestasAgm.end(); i++){
+    Arestas* auxiliar = *i;
+    lb += auxiliar->getPeso(); 
+    }
+    return lb;
+}

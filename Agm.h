@@ -23,5 +23,7 @@ class Agm{
         void saidaResult(string instancia, float time);
         void saidaAgmDot();
         void arrumaVisitado();
+        int calculaPesoTotal();
+        bool ehVazia();
 };
 #endif //AGM_H_INCLUDED
