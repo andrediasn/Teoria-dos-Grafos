@@ -48,20 +48,20 @@ void selecionar(int selecao, Grafo* graph, string instancia ){
 
             // alfas 0.05 0.1 0.15 0.3 0.5
             //melhor resultado 0.05 
+            cout << "-> Executando alfa 0.05" << endl;
             alfa1 = graph->gulosoRandomizado(0.05, 10, tempo);
             //melhor resultado 0.10
-            cout << "alfa0.05" << endl;
+            cout << "-> Executando alfa 0.1" << endl;
             alfa2 = graph->gulosoRandomizado(0.1, 10, tempo);
             //melhor resultado 0.15 
-            cout << "alfa0.1" << endl;
+            cout << "-> Executando alfa 0.15" << endl;
             alfa3 = graph->gulosoRandomizado(0.15, 10, tempo);
             //melhor resultado 0.30 
-            cout << "alfa0.15" << endl;
+            cout << "-> Executando alfa 0.3" << endl;
             alfa4 = graph->gulosoRandomizado(0.30, 10, tempo);
             //melhor resultado 0.50
-            cout << "alfa0.3" << endl;
+            cout << "-> Executando alfa 0.5" << endl;
             alfa5 = graph->gulosoRandomizado(0.50, 10, tempo);
-            cout << "alfa0.5" << endl;
 
             ofstream arq("Resultado/resultGulosoRand.txt", ios::app);
             arq << instancia << ";"<< alfa1 << ";" << tempo[0] << ";"; 
