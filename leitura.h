@@ -43,33 +43,39 @@ void selecionar(int selecao, Grafo* graph, string instancia ){
         }
          //Algoritmo Guloso Randomizado;
         case 2:{
-            int alfa1,alfa2,alfa3,alfa4,alfa5;
-            float *tempo = new float[5];
+            for(int i=0; i<10; i++) { // apagar isso antes q o stenio viado veja
+                cout << " => Execucao: " << i+1 << endl;
+                int alfa1,alfa2,alfa3,alfa4,alfa5;
+                float *tempo = new float[5];
+                int max = 500;
+                int seed = i+10;
+                //cout << "jogue aqui a sua semente: ";
+                //cin >> seed;
+                // alfas 0.05 0.1 0.15 0.3 0.5
+                //melhor resultado 0.05 
+                cout << "Executando alfa 0.05" << endl;
+                alfa1 = graph->gulosoRandomizado(0.05, max, tempo, seed+1);
+                //melhor resultado 0.10
+                cout << "Executando alfa 0.1" << endl;
+                alfa2 = graph->gulosoRandomizado(0.1, max, tempo, seed+2);
+                //melhor resultado 0.15 
+                cout << "Executando alfa 0.15" << endl;
+                alfa3 = graph->gulosoRandomizado(0.15, max, tempo, seed+3);
+                //melhor resultado 0.30 
+                cout << "Executando alfa 0.3" << endl;
+                alfa4 = graph->gulosoRandomizado(0.30, max, tempo, seed+4);
+                //melhor resultado 0.50
+                cout << "Executando alfa 0.5" << endl;
+                alfa5 = graph->gulosoRandomizado(0.50, max, tempo, seed-5);
 
-            // alfas 0.05 0.1 0.15 0.3 0.5
-            //melhor resultado 0.05 
-            cout << "-> Executando alfa 0.05" << endl;
-            alfa1 = graph->gulosoRandomizado(0.05, 10, tempo);
-            //melhor resultado 0.10
-            cout << "-> Executando alfa 0.1" << endl;
-            alfa2 = graph->gulosoRandomizado(0.1, 10, tempo);
-            //melhor resultado 0.15 
-            cout << "-> Executando alfa 0.15" << endl;
-            alfa3 = graph->gulosoRandomizado(0.15, 10, tempo);
-            //melhor resultado 0.30 
-            cout << "-> Executando alfa 0.3" << endl;
-            alfa4 = graph->gulosoRandomizado(0.30, 10, tempo);
-            //melhor resultado 0.50
-            cout << "-> Executando alfa 0.5" << endl;
-            alfa5 = graph->gulosoRandomizado(0.50, 10, tempo);
-
-            ofstream arq("Resultado/resultGulosoRand.txt", ios::app);
-            arq << instancia << ";"<< alfa1 << ";" << tempo[0] << ";"; 
-            arq << alfa2 << ";" << tempo[1] << ";"; 
-            arq << alfa3 << ";" << tempo[2] << ";"; 
-            arq << alfa4 << ";" << tempo[3] << ";";
-            arq << alfa5 << ";" << tempo[4] << ";" << endl;
-            arq.close();
+                ofstream arq("Resultado/resultGulosoRand.txt", ios::app);
+                arq << instancia << ";"<< alfa1 << ";" << tempo[0] << ";"; 
+                arq << alfa2 << ";" << tempo[1] << ";"; 
+                arq << alfa3 << ";" << tempo[2] << ";"; 
+                arq << alfa4 << ";" << tempo[3] << ";";
+                arq << alfa5 << ";" << tempo[4] << endl;
+                arq.close();
+            }
             break;
         }
          //Algoritmo Guloso Randomizado Reativo;

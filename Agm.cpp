@@ -61,7 +61,7 @@ void Agm::saidaResult(string instancia, float time){
     else if(instancia == "pr136.tsp")
         lit = 88964;
     else if(instancia == "pr144.tsp")
-        lit = 49446;
+        lit = 49466;
     else if(instancia == "d493.tsp")
         lit = 29272;
     else if(instancia == "u574.tsp")
