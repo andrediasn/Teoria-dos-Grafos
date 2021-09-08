@@ -118,8 +118,8 @@ int Agm::calculaPesoTotal()
 {
     int lb = 0;
     for(auto i = arestasAgm.begin(); i != arestasAgm.end(); i++){
-    Arestas* auxiliar = *i;
-    lb += auxiliar->getPeso(); 
+        Arestas* auxiliar = *i;
+        lb += auxiliar->getPeso(); 
     }
     return lb;
 }

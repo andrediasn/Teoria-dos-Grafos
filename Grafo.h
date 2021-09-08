@@ -55,7 +55,7 @@ class Grafo{
     //bool verAciclico(int id, int alvo, Agm *agm);
     //bool aciclico(Vertices *v, int alvo, Agm *agm);
 
-    void gulosoRandomizado(float alfa, int numInter);
+    int gulosoRandomizado(float alfa, int numInter, float tempo[]);
 
 };
 
