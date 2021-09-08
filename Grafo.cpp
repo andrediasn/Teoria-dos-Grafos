@@ -324,7 +324,7 @@ int Grafo::gulosoRandomizado(float alfa, int numInter, float tempo[]){
         solucao = new Agm();
         while(cont < this->ordem && arestas.size() > 0){ 
             //cout << "Cont: " << cont << " Range: "<< range;
-            //srand(it);
+            srand(it);
             k=rand()%(range+1);
             //cout << " Rand: " << k << " Peso: " << arestas[k]->getPeso() << " Faixa: " << faixa << endl;
             Arestas* aux = arestas[k];
@@ -396,21 +396,20 @@ int Grafo::gulosoRandomizado(float alfa, int numInter, float tempo[]){
         int pesoSol = solucao->calculaPesoTotal();
         if(it == 0)
         {   
-            cout << "Resultado: " << pesoSol << " Arestas: " << cont-1 << endl;
             melhorSolucao = solucao;
             solucao->saidaAgmDot();
         }
         else if(solucao->calculaPesoTotal() < melhorSolucao->calculaPesoTotal()){
-            cout << "Resultado: " << pesoSol << " Arestas: " << cont-1 << endl;
             melhorSolucao = solucao;
             solucao->saidaAgmDot();
         }
+        cout << "Resultado: " << pesoSol << " Arestas: " << cont-1 << endl;
         arrumaGrau();
         it++;
     }
     end=clock();
 
-    cout << endl << "Tempo de execucao para alfa " << alfa <<": "<<((float)(end-start))/1000 << "s\n" << endl;   
+    cout << endl << "Tempo de execucao: " << alfa <<": "<<((float)(end-start))/1000 << "s\n" << endl;   
    
     if(alfa == 0.05)
         tempo[0] = ((float)(end-start))/1000;
