@@ -35,6 +35,7 @@ public: // declaraçoes publicas
     int getGrauEntrada();//retorna o grau de entrada do vertice (direcionado)
     int getGrauSaida();//retorna o grau de saida do vertice (direcionado)
     int getGrau();
+    void setGrau(int x);
     float getPeso();//retorna o peso do vertice se houver
     // Setters (declaracao do sets)
     void setPeso(float peso);//insere o peso no vertice

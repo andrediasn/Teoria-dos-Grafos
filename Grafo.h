@@ -47,6 +47,7 @@ class Grafo{
     int getOrdem(); //retorna ordem do grafo
     bool conexo(); // verifica se grafo eh conexo
     void arrumaVisitado(); // seta todos vertices.visitado como false 
+    void arrumaGrau();
     
     void Guloso(string instancia);
     list<Arestas*> ordenaArestas(list<Arestas*> lista);

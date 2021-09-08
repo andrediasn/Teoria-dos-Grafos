@@ -83,6 +83,10 @@ int Vertices::getGrau(){
     return this->grau;
 }
 
+void Vertices::setGrau(int x){
+    this->grau = x;
+}
+
 float Vertices::getX(){
     return this->x;
 }
