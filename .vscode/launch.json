@@ -11,8 +11,7 @@
             "request": "launch",
             "program": "${workspaceFolder}/main.exe",
             "args": [
-                "Instancia/Pequena/pr124.tsp",
-                "Saida.txt"
+                "Instancia/Pequena/pr124.tsp"
             ],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",

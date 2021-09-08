@@ -117,8 +117,8 @@ Grafo* leitura(int argc, char * argv[]){
 
     if(opc_Peso_Nos == 0 && opc_Peso_Aresta == 1 && opc_Direc == 0)// se o grafo nao é direcionado mas tem peso somente nas arestas
     {
-        for (int i=1;i<=ordem;i++){
-            for(int j=i+1;j<=ordem;j++){
+        for (int i=0;i<ordem;i++){
+            for(int j=i+1;j<ordem;j++){
                 grafo->insereAresta(i,j,false);
             }
         }

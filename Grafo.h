@@ -49,12 +49,13 @@ class Grafo{
     void arrumaVisitado(); // seta todos vertices.visitado como false 
     
     void Guloso(string instancia);
-    void Guloso_v2(string instancia);
     list<Arestas*> ordenaArestas(list<Arestas*> lista);
     void quickSort(vector<Arestas*> *copia, int inicio, int fim); // ordenacao pelo metodo de quicksort
     int partQuick(vector<Arestas*> *copia, int inicio, int fim); // aux do quicksort
-    bool verAciclico(int id, int alvo, Agm *agm);
-    bool aciclico(Vertices *v, int alvo, Agm *agm);
+    //bool verAciclico(int id, int alvo, Agm *agm);
+    //bool aciclico(Vertices *v, int alvo, Agm *agm);
+
+    void gulosoRandomizado(float alfa, int numInter);
 
 };
 
