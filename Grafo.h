@@ -41,6 +41,7 @@ class Grafo{
     bool existeVertice(int id); // Procura vertice no grafo
     Vertices* procurarNo(int id); //retorna vertice se existir
     
+    vector<Arestas*> arestasOrdenadas; // lista de arestas ordenadas
     list<Arestas*> arestasGrafo; // lista com arestas do grafo       
     list<Vertices*> nosGrafo; //lista com nos do grafo            
     
@@ -48,16 +49,19 @@ class Grafo{
     bool conexo(); // verifica se grafo eh conexo
     void arrumaVisitado(); // seta todos vertices.visitado como false 
     void arrumaGrau();
+    void ordenaArestas();
     
     void Guloso(string instancia);
     list<Arestas*> ordenaArestas(list<Arestas*> lista);
     void quickSort(vector<Arestas*> *copia, int inicio, int fim); // ordenacao pelo metodo de quicksort
     int partQuick(vector<Arestas*> *copia, int inicio, int fim); // aux do quicksort
-    //bool verAciclico(int id, int alvo, Agm *agm);
-    //bool aciclico(Vertices *v, int alvo, Agm *agm);
 
     int gulosoRandomizado(float alfa, int numInter, float* tempo, int seed);
 
+    int gulosoRandomizadoReativo(int numInter,float tempo[], int bloco, int seed);
+    float escolheAlfa(int probAlfa[], int seed);
+    void atualizaProb(int *probAlfa,int **resultBloco);
+    void resetBloco(int **resultBloco, int bloco);
 };
 
 #endif //GRAFO_H_INCLUDED

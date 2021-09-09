@@ -106,6 +106,14 @@ bool Grafo::conexo(){
     return true;
 }
 
+void Grafo::ordenaArestas()
+{
+    for (auto i = this->arestasGrafo.begin(); i != this->arestasGrafo.end();i++)//copia lista de vertices
+        this->arestasOrdenadas.push_back(*i);//faz a copia das arestas do grafo
+    quickSort(&arestasOrdenadas, 0, (((ordem*(ordem-1))/2)-1));
+}
+
+
 void Grafo::Guloso(string instancia){
 
     clock_t start, mid, end;
@@ -178,16 +186,9 @@ void Grafo::Guloso(string instancia){
 int Grafo::gulosoRandomizado(float alfa, int numInter, float* tempo, int seed){
     clock_t start, end;//criacao de variaveis de tempo
     start = clock();//salva o tempo inicial
-    vector<Arestas*> arestasOrdenadas;//cria vetor de arestas para ordenar
-    arestasOrdenadas.reserve((ordem*(ordem-1))/2);//reserva o espaço de memoria para o vetor
-
-    for (auto i = this->arestasGrafo.begin(); i != this->arestasGrafo.end();i++)//copia lista de vertices
-        arestasOrdenadas.push_back(*i);//faz a copia das arestas do grafo
-    quickSort(&arestasOrdenadas, 0, (((ordem*(ordem-1))/2)-1)); //ordena pelo quicksort
 
     Agm* solucao = new Agm();//declara a agm soluçao
     Agm* melhorSolucao = new Agm();//declara a agm soluçao
-
 
     int k,it = 0;//contador de indice
     int pesoMelhorSol = 0;
@@ -202,7 +203,7 @@ int Grafo::gulosoRandomizado(float alfa, int numInter, float* tempo, int seed){
         vector<Arestas*> arestas;
         //arestas.reserve((ordem*(ordem-1))/2);
 
-        for (auto i = arestasOrdenadas.begin(); i != arestasOrdenadas.end();i++)//copia lista de vertices
+        for (auto i = this->arestasOrdenadas.begin(); i != this->arestasOrdenadas.end();i++)//copia lista de vertices
             arestas.push_back(*i);
 
         int faixa = arestas[0]->getPeso()*(1+alfa);//obtendo o valor final possivel pra ser escolhido
@@ -312,7 +313,7 @@ int Grafo::gulosoRandomizado(float alfa, int numInter, float* tempo, int seed){
     cout << "Melhor solucao: " << melhorSolucao->calculaPesoTotal() << endl;
     cout << "Tempo de execucao: " <<((float)(end-start))/1000 << "s\n" << endl;   
    
-    if(alfa < 0.06f)
+    if(alfa < 0.06)
         tempo[0] = ((float)(end-start))/1000;
     else if(alfa < 0.11)
         tempo[1] = ((float)(end-start))/1000;
@@ -354,151 +355,279 @@ int Grafo::partQuick(vector<Arestas*> *copia, int esq, int dir){
     }
     return i; // Retorna indice para o pivo
 }
+void Grafo::atualizaProb(int probAlfa[],int **resultBloco)
+{
+    float media[5];
+    int cont[5];
+    float soma = 0;
+    for (int i = 0; i < 5; i++)
+    {
+        cout<<" probAntes: "<<probAlfa[i] << " ";
+    }
+    cout<<endl;
 
-/* 
-int Grafo::gulosoRandomizado(float alfa, int numInter, float* tempo, int seed){
-    clock_t start, end;//criacao de variaveis de tempo
-    start = clock();//salva o tempo inicial
-    vector<Arestas*> arestasOrdenadas;//cria vetor de arestas para ordenar
-    arestasOrdenadas.reserve((ordem*(ordem-1))/2);//reserva o espaço de memoria para o vetor
-
-    for (auto i = this->arestasGrafo.begin(); i != this->arestasGrafo.end();i++)//copia lista de vertices
-        arestasOrdenadas.push_back(*i);//faz a copia das arestas do grafo
-    quickSort(&arestasOrdenadas, 0, (((ordem*(ordem-1))/2)-1)); //ordena pelo quicksort
-
-    Agm* solucao = new Agm();//declara a agm soluçao
-    Agm* melhorSolucao = new Agm();//declara a agm soluçao
-
-
-    int k,it = 0;//contador de indice
-    while (it<numInter) {   
-        //cout << "Iteracao: " << it+1 << endl;
-        int conexo[ordem];
-        for (int i = 0; i < ordem; i++) {// ao contrario
-            conexo[i] = -1;
+    for(int i = 0; i < 5; i++){
+        int j = 0;
+        cont[i] = 0;
+        media[i] = 0;
+        while(resultBloco[i][j] > 0){
+            media[i] += resultBloco[i][j];
+            cont[i] ++;
+            j++;
         }
-        int cont = 1;
+        media[i] = media[i]/cont[i];
+        media[i] = pow(media[i],2);
+        media[i] = 1/media[i];
+        soma += media[i];
+    }
+    for(int i = 0; i < 5; i++)
+    {
+        probAlfa[i] = media[i]/soma*100;
+    }
+}
 
-        vector<Arestas*> arestas;
-        //arestas.reserve((ordem*(ordem-1))/2);
+float Grafo::escolheAlfa(int probAlfa[], int seed)
+{
+    srand(seed);
+    int k = rand()%100;
+    if(k < probAlfa[0])
+        return 0.05;
+    else if(k < probAlfa[0] + probAlfa[1])
+        return 0.1;
+    else if(k < probAlfa[0] + probAlfa[1] + probAlfa[2])
+        return 0.15;
+    else if(k < probAlfa[0] + probAlfa[1] + probAlfa[2] + probAlfa[3])
+        return 0.3;
+    else
+        return 0.5;
+}
 
-        //for (auto i = arestasOrdenadas.begin(); i != arestasOrdenadas.end();i++)//copia lista de vertices
-        //    arestas.push_back(*i);
+void Grafo::resetBloco(int **resultBloco, int bloco){
+    for(int i=0;i<5;i++)
+        for(int j=0;j<bloco;j++)
+            resultBloco[i][j] = -1;
+}
 
-        int faixa = arestas[0]->getPeso()*(1+alfa);//obtendo o valor final possivel pra ser escolhido
-        faixa ++;
+int Grafo::gulosoRandomizadoReativo(int numInter,float tempo[], int bloco, int seed)
+{
+    Agm* melhorSolucao;
+    Agm* solucao;
+    int k,it=0;
+    vector<Arestas*> copia;
+    
+    int **resultBloco;
+    resultBloco = new int*[5];
+    for(int i=0;i<5;i++)
+        resultBloco[i] = new int[bloco];
+    resetBloco(resultBloco, bloco);
+   
+    int probAlfa[5];
+    for (int i = 0; i < 5; i++)
+    {
+        probAlfa[i] = 20;
+    }
+    
+    int pesoMelhorSol = 0;
+    cout << "bloco " << bloco << endl;
+    while(it<numInter)
+    {
+        for(int x=0; x<bloco;x++){
+            cout << "Iteracao: " << it+1 << endl;
+            int conexo[ordem];
+            for (int i = 0; i < ordem; i++) 
+            {// ao contrario
+                conexo[i] = -1;
+            }
+            int cont = 1;
+            copia.clear();
+            for (auto i = this->arestasOrdenadas.begin(); i != this->arestasOrdenadas.end(); i++)
+            {
+                copia.push_back(*i);
+            }
+            if(it%bloco == 0 && it>5)
+            {
+                cout<<" Bloco encerrado"<<endl;
+                atualizaProb(probAlfa,resultBloco);
+                resetBloco(resultBloco, bloco);
+            }
 
-        int range = 0;
-        for (int i = range; i < arestasOrdenadas.size(); i++){
-            if(arestas[i]->getPeso()<=faixa){
-                range = i;
-                arestas.push_back(arestasOrdenadas[i]);
+            float alfa;
+            if(x == 0)
+            {
+                alfa = 0.05;
+            }
+            else if(x == 1)
+            {
+                alfa = 0.1;
+            }
+            else if(x == 2)
+            {
+                alfa = 0.15;
+            }
+            else if(x == 3)
+            {
+                alfa = 0.3;
+            }
+            else if(x == 4)
+            {
+                alfa = 0.5;
             }
             else
-                break;
-        }
-        
-        solucao = new Agm();
-        while(cont < this->ordem && arestas.size() > 0){ 
-            //cout << "Cont: " << cont << " Range: "<< range;
-            srand(it*seed);
-            k=rand()%(arestas.size());
-            //cout << " Rand: " << k << " Peso: " << arestas[k]->getPeso() << " Faixa: " << faixa << endl;
-            Arestas* aux = arestas[k];
-            Vertices* v1 = aux->getV1();
-            Vertices* v2 = aux->getV2();
-            if(v1->getGrau() < 3 && v2->getGrau() < 3){   
-                //cout << "if";
-                if(conexo[v1->getId()] == -1 && conexo[v2->getId()] == -1 ){
-                    //cout << "1";
-                    solucao->insereAresta(v1->getId(), v2->getId(), 0, aux);
-                    v1->addGrau();
-                    v2->addGrau();
-                    conexo[v1->getId()] = cont;
-                    conexo[v2->getId()] = cont;
-                    cont ++;
-                }
-                else if(conexo[v1->getId()] == -1){
-                    //cout << "2";
-                    solucao->insereAresta(v1->getId(), v2->getId(), 2, aux);
-                    v1->addGrau();
-                    v2->addGrau();
-                    conexo[v1->getId()] = conexo[v2->getId()];
-                    cont ++;
-                }
-                else if(conexo[v2->getId()] == -1){
-                    //cout << "3";
-                    solucao->insereAresta(v1->getId(), v2->getId(), 1, aux);
-                    v1->addGrau();
-                    v2->addGrau();
-                    conexo[v2->getId()] = conexo[v1->getId()];
-                    cont ++;
-                }
-                else if(conexo[v1->getId()] != conexo[v2->getId()]){
-                    //cout << "4";
-                    solucao->insereAresta(v1->getId(), v2->getId(), 3, aux);
-                    v1->addGrau();
-                    v2->addGrau();
-                    int pesoAux = conexo[v2->getId()];
-                    for(int i = 0; i < ordem; i++){
-                        if(conexo[i] == pesoAux)
-                            conexo[i] = conexo[v1->getId()];
-                    }
-                    cont ++;
-                }
-                //cout << "out" << endl;
+            {
+                alfa = escolheAlfa(probAlfa, seed);
             }
-            //cout << "size: " << arestas.size() << endl;
-            auto removedor = arestas.begin() + k;
-            arestas.erase(removedor);
-            //cout << "removeu" << endl;
+            int faixa = copia[0]->getPeso()*(1+alfa);//obtendo o valor final possivel pra ser escolhido
+            faixa ++;
+            int range = 0;
+            for (int i = 0; i < copia.size(); i++){
+                if(copia[i]->getPeso()<=faixa)
+                    range = i;
+                else
+                    break;
+            }
 
-            int auxF = arestas[0]->getPeso()*(1+alfa);
-            auxF ++;
-            if(faixa < auxF) {
-                //cout << "faixa: " << faixa << "auxF: " << auxF << endl;
-                faixa = auxF;
-                for (int i = range; i < arestasOrdenadas.size(); i++){
-                    if(arestas[i]->getPeso()<=faixa){
-                        range = i;
-                        arestas.push_back(arestasOrdenadas[i]);
+            it++;
+            arrumaGrau();
+            solucao = new Agm();
+    
+            while (cont < this->ordem && copia.size() > 0)
+            {
+                k=rand()%(range+1);
+                Arestas* aux = copia.at(k);
+                Vertices* v1 = aux->getV1();
+                Vertices* v2 = aux->getV2();
+                if(v1->getGrau() < 3 && v2->getGrau() < 3)
+                {   
+                    //cout << "if";
+                    if(conexo[v1->getId()] == -1 && conexo[v2->getId()] == -1 )
+                    {
+                        //cout << "1";
+                        solucao->insereAresta(v1->getId(), v2->getId(), 0, aux);
+                        v1->addGrau();
+                        v2->addGrau();
+                        conexo[v1->getId()] = cont;
+                        conexo[v2->getId()] = cont;
+                        cont ++;
                     }
-                    else
-                        break;
+                    else if(conexo[v1->getId()] == -1)
+                    {
+                        //cout << "2";
+                        solucao->insereAresta(v1->getId(), v2->getId(), 2, aux);
+                        v1->addGrau();
+                        v2->addGrau();
+                        conexo[v1->getId()] = conexo[v2->getId()];
+                        cont ++;
+                    }
+                    else if(conexo[v2->getId()] == -1)
+                    {
+                        //cout << "3";
+                        solucao->insereAresta(v1->getId(), v2->getId(), 1, aux);
+                        v1->addGrau();
+                        v2->addGrau();
+                        conexo[v2->getId()] = conexo[v1->getId()];
+                        cont ++;
+                    }
+                    else if(conexo[v1->getId()] != conexo[v2->getId()])
+                    {
+                        //cout << "4";
+                        solucao->insereAresta(v1->getId(), v2->getId(), 3, aux);
+                        v1->addGrau();
+                        v2->addGrau();
+                        int pesoAux = conexo[v2->getId()];
+                        for(int i = 0; i < ordem; i++)
+                        {
+                            if(conexo[i] == pesoAux)
+                                conexo[i] = conexo[v1->getId()];
+                        }
+                        cont ++;
+                    }
+                }
+                auto removedor = copia.begin() + k;
+                copia.erase(removedor);
+                range --;
+                //cout << "removeu" << endl;
+                int auxF = copia[0]->getPeso()*(1+alfa);
+                auxF ++;
+                if(faixa < auxF) {
+                    //cout << "faixa: " << faixa << "auxF: " << auxF << endl;
+                    faixa = auxF;
+                    for (int i = 0; i < copia.size(); i++){
+                        if(copia[i]->getPeso()<=faixa){
+                            range = i;
+                            if(range >= copia.size())
+                                range = copia.size()-1;
+                        }
+                        else
+                            break;
+                    }
+                }
+            }
+            int pesoSol = solucao->calculaPesoTotal();
+            cout<<"Sol: "<< pesoSol << endl;
+            
+            if(it == 1)
+            {   
+                melhorSolucao = solucao;
+                pesoMelhorSol = pesoSol;
+                cout <<"1 "<< "MelhorPeso: "<< pesoMelhorSol << endl;
+
+            }
+            else if(pesoSol < pesoMelhorSol){
+                melhorSolucao = solucao; // agm
+                pesoMelhorSol = pesoSol; // pesos
+                cout <<it<<" " << "MelhorPeso: "<< pesoMelhorSol << endl;
+            }
+            int limB = (numInter*0.75)+1;
+            if(it < limB){
+                if(alfa < 0.06){
+                    cout<<"escolhi alfa 0.05"<<endl;
+                    for(int i=0; i<bloco; i++){
+                        if(resultBloco[0][i] < 0){
+                            resultBloco[0][i] = pesoSol;
+                            break;
+                        }
+                    }
+                }
+                else if(alfa < 0.11){
+                    cout<<"escolhi alfa 0.10"<<endl;
+                    for(int i=0; i<bloco; i++){
+                        if(resultBloco[1][i] < 0){
+                            resultBloco[1][i] = pesoSol;
+                            break;
+                        }
+                    }
+                }
+                else if(alfa < 0.16){
+                    cout<<"escolhi alfa 0.15"<<endl;
+                    for(int i=0; i<bloco; i++){
+                        if(resultBloco[2][i] < 0){
+                            resultBloco[2][i] = pesoSol;
+                            break;
+                        }
+                    }
+                }
+                else if(alfa < 0.31){
+                    cout<<"escolhi alfa 0.30"<<endl;
+                    for(int i=0; i<bloco; i++){
+                        if(resultBloco[3][i] < 0){
+                            resultBloco[3][i] = pesoSol;
+                            break;
+                        }
+                    }
+                }
+                else if(alfa < 0.51){
+                    cout<<"escolhi alfa 0.50"<<endl;
+                    for(int i=0; i<bloco; i++){
+                        if(resultBloco[4][i] < 0){
+                            resultBloco[4][i] = pesoSol;
+                            break;
+                        }
+                    }
                 }
             }
         }
-        int pesoSol = solucao->calculaPesoTotal();
-        if(it == 0)
-        {   
-            melhorSolucao = solucao;
-            //solucao->saidaAgmDot();
-        }
-        else if(pesoSol < melhorSolucao->calculaPesoTotal()){
-            melhorSolucao = solucao;
-            //solucao->saidaAgmDot();
-        }
-        //cout << "Resultado: " << pesoSol << " Arestas: " << cont-1 << endl;
-        arrumaGrau();
-        it++;
     }
-    end=clock();
-
-    cout << "Melhor solucao: " << melhorSolucao->calculaPesoTotal() << endl;
-    cout << "Tempo de execucao: " <<((float)(end-start))/1000 << "s\n" << endl;   
-   
-    if(alfa < 0.06f)
-        tempo[0] = ((float)(end-start))/1000;
-    else if(alfa < 0.11)
-        tempo[1] = ((float)(end-start))/1000;
-    else if(alfa < 0.16)
-        tempo[2] = ((float)(end-start))/1000;
-    else if(alfa < 0.31)
-        tempo[3] = ((float)(end-start))/1000;
-    else if(alfa < 0.51)
-        tempo[4] = ((float)(end-start))/1000;
-
-    melhorSolucao->saidaAgmDot();
-    return melhorSolucao->calculaPesoTotal();
+    //melhorSolucao->saidaAgmDot();
+    cout<<"vou retornar a soluçao: "<< pesoMelhorSol << endl;
+    return pesoMelhorSol;
 }
- */

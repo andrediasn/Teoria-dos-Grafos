@@ -80,6 +80,20 @@ void selecionar(int selecao, Grafo* graph, string instancia ){
         }
          //Algoritmo Guloso Randomizado Reativo;
         case 3:{
+            int numInteracoes,resultado;
+            cout<< "Digite o numero de interacoes (multiplo de 10): ";
+            cin >> numInteracoes;
+            float *tempo = new float[5];
+            int bloco = (numInteracoes/5);
+            if(bloco<5 && numInteracoes>=5)
+            {
+                bloco = 5;
+            }
+            int seed;
+            cout<< "digite um valor para seed: ";
+            cin >> seed;
+            resultado = graph->gulosoRandomizadoReativo(numInteracoes,tempo,bloco,seed);
+            cout<< "peso total da melhor soluçao igual a : " << resultado <<endl;
             break;
         }
         //caso 0 sai do programa
@@ -155,6 +169,7 @@ Grafo* leitura(int argc, char * argv[]){
                 grafo->insereAresta(i,j,false);
             }
         }
+        grafo->ordenaArestas();
     }
     
     char instancia[arqEntrada.length()-14];
