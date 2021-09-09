@@ -416,7 +416,7 @@ void Grafo::resetBloco(int **resultBloco, int bloco){
 
 int Grafo::gulosoRandomizadoReativo(int numInter,float tempo[], int bloco, int seed)
 {
-    clock_t start, end;//criacao de variaveis de tempo
+    clock_t start, mid, end;//criacao de variaveis de tempo
     start = clock();//salva o tempo inicial
 
     Agm* melhorSolucao;
@@ -441,6 +441,7 @@ int Grafo::gulosoRandomizadoReativo(int numInter,float tempo[], int bloco, int s
     {
         for(int x=0; x<bloco;x++){
             cout << "Iteracao: " << it+1 << endl;
+            mid = clock();
             int conexo[ordem];
             for (int i = 0; i < ordem; i++) 
             {// ao contrario
@@ -571,7 +572,7 @@ int Grafo::gulosoRandomizadoReativo(int numInter,float tempo[], int bloco, int s
                 }
             }
             int pesoSol = solucao->calculaPesoTotal();
-            //cout<<"Sol: "<< pesoSol << endl;
+            cout<<"Sol: "<< pesoSol;
             
             if(it == 1)
             {   
@@ -582,8 +583,8 @@ int Grafo::gulosoRandomizadoReativo(int numInter,float tempo[], int bloco, int s
                 melhorSolucao = solucao; // agm
                 pesoMelhorSol = pesoSol; // pesos
             }
-            cout<<"Best: "<< pesoMelhorSol << endl;
-            int limB = (numInter*0.75)+1;
+            cout<<" Best: "<< pesoMelhorSol << endl;
+            int limB = numInter - bloco + 1;
             if(it < limB){
                 if(alfa < 0.06){
                     //cout<<"escolhi alfa 0.05"<<endl;
@@ -631,11 +632,12 @@ int Grafo::gulosoRandomizadoReativo(int numInter,float tempo[], int bloco, int s
                     }
                 }
             }
+            end=clock();
+            cout << "Tempo de execucao: " <<((float)(end-mid))/1000 << "s\n" << endl;  
         }
     }
 
     end=clock();
-
     cout << "Tempo de execucao: " <<((float)(end-start))/1000 << "s\n" << endl;   
    
        //melhorSolucao->saidaAgmDot();
