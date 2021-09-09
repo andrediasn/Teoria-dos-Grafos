@@ -190,6 +190,7 @@ int Grafo::gulosoRandomizado(float alfa, int numInter, float* tempo, int seed){
 
 
     int k,it = 0;//contador de indice
+    int pesoMelhorSol = 0;
     while (it<numInter) {   
         //cout << "Iteracao: " << it+1 << endl;
         int conexo[ordem];
@@ -215,6 +216,7 @@ int Grafo::gulosoRandomizado(float alfa, int numInter, float* tempo, int seed){
         }
         
         solucao = new Agm();
+        
         while(cont < this->ordem && arestas.size() > 0){ 
             //cout << "Cont: " << cont << " Range: "<< range;
             srand(it*seed);
@@ -290,15 +292,20 @@ int Grafo::gulosoRandomizado(float alfa, int numInter, float* tempo, int seed){
         if(it == 0)
         {   
             melhorSolucao = solucao;
+            pesoMelhorSol = pesoSol;
             //solucao->saidaAgmDot();
         }
-        else if(pesoSol < melhorSolucao->calculaPesoTotal()){
+        else if(pesoSol < pesoMelhorSol){
             melhorSolucao = solucao;
+            pesoMelhorSol = pesoSol;
             //solucao->saidaAgmDot();
         }
         //cout << "Resultado: " << pesoSol << " Arestas: " << cont-1 << endl;
         arrumaGrau();
         it++;
+        end=clock();
+        cout << "It: " << it << " Temp: " <<((float)(end-start))/1000 << "s" << endl;
+        cout << "Sol= " << pesoSol << " MSol: " << pesoMelhorSol << endl << endl;  
     }
     end=clock();
 
@@ -347,3 +354,151 @@ int Grafo::partQuick(vector<Arestas*> *copia, int esq, int dir){
     }
     return i; // Retorna indice para o pivo
 }
+
+/* 
+int Grafo::gulosoRandomizado(float alfa, int numInter, float* tempo, int seed){
+    clock_t start, end;//criacao de variaveis de tempo
+    start = clock();//salva o tempo inicial
+    vector<Arestas*> arestasOrdenadas;//cria vetor de arestas para ordenar
+    arestasOrdenadas.reserve((ordem*(ordem-1))/2);//reserva o espaço de memoria para o vetor
+
+    for (auto i = this->arestasGrafo.begin(); i != this->arestasGrafo.end();i++)//copia lista de vertices
+        arestasOrdenadas.push_back(*i);//faz a copia das arestas do grafo
+    quickSort(&arestasOrdenadas, 0, (((ordem*(ordem-1))/2)-1)); //ordena pelo quicksort
+
+    Agm* solucao = new Agm();//declara a agm soluçao
+    Agm* melhorSolucao = new Agm();//declara a agm soluçao
+
+
+    int k,it = 0;//contador de indice
+    while (it<numInter) {   
+        //cout << "Iteracao: " << it+1 << endl;
+        int conexo[ordem];
+        for (int i = 0; i < ordem; i++) {// ao contrario
+            conexo[i] = -1;
+        }
+        int cont = 1;
+
+        vector<Arestas*> arestas;
+        //arestas.reserve((ordem*(ordem-1))/2);
+
+        //for (auto i = arestasOrdenadas.begin(); i != arestasOrdenadas.end();i++)//copia lista de vertices
+        //    arestas.push_back(*i);
+
+        int faixa = arestas[0]->getPeso()*(1+alfa);//obtendo o valor final possivel pra ser escolhido
+        faixa ++;
+
+        int range = 0;
+        for (int i = range; i < arestasOrdenadas.size(); i++){
+            if(arestas[i]->getPeso()<=faixa){
+                range = i;
+                arestas.push_back(arestasOrdenadas[i]);
+            }
+            else
+                break;
+        }
+        
+        solucao = new Agm();
+        while(cont < this->ordem && arestas.size() > 0){ 
+            //cout << "Cont: " << cont << " Range: "<< range;
+            srand(it*seed);
+            k=rand()%(arestas.size());
+            //cout << " Rand: " << k << " Peso: " << arestas[k]->getPeso() << " Faixa: " << faixa << endl;
+            Arestas* aux = arestas[k];
+            Vertices* v1 = aux->getV1();
+            Vertices* v2 = aux->getV2();
+            if(v1->getGrau() < 3 && v2->getGrau() < 3){   
+                //cout << "if";
+                if(conexo[v1->getId()] == -1 && conexo[v2->getId()] == -1 ){
+                    //cout << "1";
+                    solucao->insereAresta(v1->getId(), v2->getId(), 0, aux);
+                    v1->addGrau();
+                    v2->addGrau();
+                    conexo[v1->getId()] = cont;
+                    conexo[v2->getId()] = cont;
+                    cont ++;
+                }
+                else if(conexo[v1->getId()] == -1){
+                    //cout << "2";
+                    solucao->insereAresta(v1->getId(), v2->getId(), 2, aux);
+                    v1->addGrau();
+                    v2->addGrau();
+                    conexo[v1->getId()] = conexo[v2->getId()];
+                    cont ++;
+                }
+                else if(conexo[v2->getId()] == -1){
+                    //cout << "3";
+                    solucao->insereAresta(v1->getId(), v2->getId(), 1, aux);
+                    v1->addGrau();
+                    v2->addGrau();
+                    conexo[v2->getId()] = conexo[v1->getId()];
+                    cont ++;
+                }
+                else if(conexo[v1->getId()] != conexo[v2->getId()]){
+                    //cout << "4";
+                    solucao->insereAresta(v1->getId(), v2->getId(), 3, aux);
+                    v1->addGrau();
+                    v2->addGrau();
+                    int pesoAux = conexo[v2->getId()];
+                    for(int i = 0; i < ordem; i++){
+                        if(conexo[i] == pesoAux)
+                            conexo[i] = conexo[v1->getId()];
+                    }
+                    cont ++;
+                }
+                //cout << "out" << endl;
+            }
+            //cout << "size: " << arestas.size() << endl;
+            auto removedor = arestas.begin() + k;
+            arestas.erase(removedor);
+            //cout << "removeu" << endl;
+
+            int auxF = arestas[0]->getPeso()*(1+alfa);
+            auxF ++;
+            if(faixa < auxF) {
+                //cout << "faixa: " << faixa << "auxF: " << auxF << endl;
+                faixa = auxF;
+                for (int i = range; i < arestasOrdenadas.size(); i++){
+                    if(arestas[i]->getPeso()<=faixa){
+                        range = i;
+                        arestas.push_back(arestasOrdenadas[i]);
+                    }
+                    else
+                        break;
+                }
+            }
+        }
+        int pesoSol = solucao->calculaPesoTotal();
+        if(it == 0)
+        {   
+            melhorSolucao = solucao;
+            //solucao->saidaAgmDot();
+        }
+        else if(pesoSol < melhorSolucao->calculaPesoTotal()){
+            melhorSolucao = solucao;
+            //solucao->saidaAgmDot();
+        }
+        //cout << "Resultado: " << pesoSol << " Arestas: " << cont-1 << endl;
+        arrumaGrau();
+        it++;
+    }
+    end=clock();
+
+    cout << "Melhor solucao: " << melhorSolucao->calculaPesoTotal() << endl;
+    cout << "Tempo de execucao: " <<((float)(end-start))/1000 << "s\n" << endl;   
+   
+    if(alfa < 0.06f)
+        tempo[0] = ((float)(end-start))/1000;
+    else if(alfa < 0.11)
+        tempo[1] = ((float)(end-start))/1000;
+    else if(alfa < 0.16)
+        tempo[2] = ((float)(end-start))/1000;
+    else if(alfa < 0.31)
+        tempo[3] = ((float)(end-start))/1000;
+    else if(alfa < 0.51)
+        tempo[4] = ((float)(end-start))/1000;
+
+    melhorSolucao->saidaAgmDot();
+    return melhorSolucao->calculaPesoTotal();
+}
+ */
