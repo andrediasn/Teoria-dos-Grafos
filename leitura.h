@@ -84,11 +84,9 @@ void selecionar(int selecao, Grafo* graph, string instancia ){
             cout<< "Digite o numero de interacoes (multiplo de 10): ";
             cin >> numInteracoes;
             float *tempo = new float[5];
-            int bloco = (numInteracoes/5);
-            if(bloco<5 && numInteracoes>=5)
-            {
-                bloco = 5;
-            }
+            int bloco;
+            cout<< "digite o numero de quadros no bloco(minimo 5): ";
+            cin >> bloco;
             int seed;
             cout<< "digite um valor para seed: ";
             cin >> seed;

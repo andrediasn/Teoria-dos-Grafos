@@ -357,12 +357,12 @@ int Grafo::partQuick(vector<Arestas*> *copia, int esq, int dir){
 }
 void Grafo::atualizaProb(int probAlfa[],int **resultBloco)
 {
-    float media[5];
+    double media[5];
     int cont[5];
-    float soma = 0;
+    double soma = 0;
     for (int i = 0; i < 5; i++)
     {
-        cout<<" probAntes: "<<probAlfa[i] << " ";
+        cout<<" p: "<<probAlfa[i];
     }
     cout<<endl;
 
@@ -376,13 +376,18 @@ void Grafo::atualizaProb(int probAlfa[],int **resultBloco)
             j++;
         }
         media[i] = media[i]/cont[i];
-        media[i] = pow(media[i],2);
+        media[i] = pow(media[i],5);
         media[i] = 1/media[i];
         soma += media[i];
     }
     for(int i = 0; i < 5; i++)
     {
-        probAlfa[i] = media[i]/soma*100;
+        double aux = media[i]/soma*100;
+        int vali = (int)aux;
+        float var = fabs(aux - vali);
+        if(var >= 0.5)
+            vali++;
+        probAlfa[i] = vali;
     }
 }
 
@@ -390,6 +395,7 @@ float Grafo::escolheAlfa(int probAlfa[], int seed)
 {
     srand(seed);
     int k = rand()%100;
+    //cout << "rand: " << k << endl;
     if(k < probAlfa[0])
         return 0.05;
     else if(k < probAlfa[0] + probAlfa[1])
@@ -410,6 +416,9 @@ void Grafo::resetBloco(int **resultBloco, int bloco){
 
 int Grafo::gulosoRandomizadoReativo(int numInter,float tempo[], int bloco, int seed)
 {
+    clock_t start, end;//criacao de variaveis de tempo
+    start = clock();//salva o tempo inicial
+
     Agm* melhorSolucao;
     Agm* solucao;
     int k,it=0;
@@ -428,7 +437,6 @@ int Grafo::gulosoRandomizadoReativo(int numInter,float tempo[], int bloco, int s
     }
     
     int pesoMelhorSol = 0;
-    cout << "bloco " << bloco << endl;
     while(it<numInter)
     {
         for(int x=0; x<bloco;x++){
@@ -446,7 +454,6 @@ int Grafo::gulosoRandomizadoReativo(int numInter,float tempo[], int bloco, int s
             }
             if(it%bloco == 0 && it>5)
             {
-                cout<<" Bloco encerrado"<<endl;
                 atualizaProb(probAlfa,resultBloco);
                 resetBloco(resultBloco, bloco);
             }
@@ -472,9 +479,9 @@ int Grafo::gulosoRandomizadoReativo(int numInter,float tempo[], int bloco, int s
             {
                 alfa = 0.5;
             }
-            else
+            else if(x > 4)
             {
-                alfa = escolheAlfa(probAlfa, seed);
+                alfa = escolheAlfa(probAlfa, seed+it+x);
             }
             int faixa = copia[0]->getPeso()*(1+alfa);//obtendo o valor final possivel pra ser escolhido
             faixa ++;
@@ -492,6 +499,7 @@ int Grafo::gulosoRandomizadoReativo(int numInter,float tempo[], int bloco, int s
     
             while (cont < this->ordem && copia.size() > 0)
             {
+                srand(seed*it);
                 k=rand()%(range+1);
                 Arestas* aux = copia.at(k);
                 Vertices* v1 = aux->getV1();
@@ -563,24 +571,22 @@ int Grafo::gulosoRandomizadoReativo(int numInter,float tempo[], int bloco, int s
                 }
             }
             int pesoSol = solucao->calculaPesoTotal();
-            cout<<"Sol: "<< pesoSol << endl;
+            //cout<<"Sol: "<< pesoSol << endl;
             
             if(it == 1)
             {   
                 melhorSolucao = solucao;
                 pesoMelhorSol = pesoSol;
-                cout <<"1 "<< "MelhorPeso: "<< pesoMelhorSol << endl;
-
             }
             else if(pesoSol < pesoMelhorSol){
                 melhorSolucao = solucao; // agm
                 pesoMelhorSol = pesoSol; // pesos
-                cout <<it<<" " << "MelhorPeso: "<< pesoMelhorSol << endl;
             }
+            cout<<"Best: "<< pesoMelhorSol << endl;
             int limB = (numInter*0.75)+1;
             if(it < limB){
                 if(alfa < 0.06){
-                    cout<<"escolhi alfa 0.05"<<endl;
+                    //cout<<"escolhi alfa 0.05"<<endl;
                     for(int i=0; i<bloco; i++){
                         if(resultBloco[0][i] < 0){
                             resultBloco[0][i] = pesoSol;
@@ -589,7 +595,7 @@ int Grafo::gulosoRandomizadoReativo(int numInter,float tempo[], int bloco, int s
                     }
                 }
                 else if(alfa < 0.11){
-                    cout<<"escolhi alfa 0.10"<<endl;
+                    //cout<<"escolhi alfa 0.10"<<endl;
                     for(int i=0; i<bloco; i++){
                         if(resultBloco[1][i] < 0){
                             resultBloco[1][i] = pesoSol;
@@ -598,7 +604,7 @@ int Grafo::gulosoRandomizadoReativo(int numInter,float tempo[], int bloco, int s
                     }
                 }
                 else if(alfa < 0.16){
-                    cout<<"escolhi alfa 0.15"<<endl;
+                    //cout<<"escolhi alfa 0.15"<<endl;
                     for(int i=0; i<bloco; i++){
                         if(resultBloco[2][i] < 0){
                             resultBloco[2][i] = pesoSol;
@@ -607,7 +613,7 @@ int Grafo::gulosoRandomizadoReativo(int numInter,float tempo[], int bloco, int s
                     }
                 }
                 else if(alfa < 0.31){
-                    cout<<"escolhi alfa 0.30"<<endl;
+                    //cout<<"escolhi alfa 0.30"<<endl;
                     for(int i=0; i<bloco; i++){
                         if(resultBloco[3][i] < 0){
                             resultBloco[3][i] = pesoSol;
@@ -616,7 +622,7 @@ int Grafo::gulosoRandomizadoReativo(int numInter,float tempo[], int bloco, int s
                     }
                 }
                 else if(alfa < 0.51){
-                    cout<<"escolhi alfa 0.50"<<endl;
+                    //cout<<"escolhi alfa 0.50"<<endl;
                     for(int i=0; i<bloco; i++){
                         if(resultBloco[4][i] < 0){
                             resultBloco[4][i] = pesoSol;
@@ -627,7 +633,11 @@ int Grafo::gulosoRandomizadoReativo(int numInter,float tempo[], int bloco, int s
             }
         }
     }
-    //melhorSolucao->saidaAgmDot();
-    cout<<"vou retornar a soluçao: "<< pesoMelhorSol << endl;
+
+    end=clock();
+
+    cout << "Tempo de execucao: " <<((float)(end-start))/1000 << "s\n" << endl;   
+   
+       //melhorSolucao->saidaAgmDot();
     return pesoMelhorSol;
 }
