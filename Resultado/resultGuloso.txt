@@ -1,6 +1,0 @@
-Instancia;Literatura;GulosoGrupo10;Tempo
-
-pr124.tsp;50535;50535;0.001s
-pr124.tsp;50535;50535;0.005s
-d1291.tsp;46931;46936;0.964s
-d1291.tsp;46931;46939;0.214s

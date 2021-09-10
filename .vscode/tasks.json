@@ -16,7 +16,7 @@
                 "-O3"
             ],
             "options": {
-                "cwd": "${workspaceFolder}"
+                "cwd": "${workspaceFolder}/src/Trab2"
             },
             "problemMatcher": [
                 "$gcc"

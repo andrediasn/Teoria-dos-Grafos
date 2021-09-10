@@ -30,12 +30,13 @@
 *.exe
 *.out
 *.app
+main
 
 # Aquivos
 *.csv
 *.bin
 *.dat
-agm.txt
+*.txt
 
 # VScode Settings
 *.json

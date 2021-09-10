@@ -9,12 +9,12 @@
             "name": "gdb",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/main.exe",
+            "program": "${workspaceFolder}/src/Trab2/main.exe",
             "args": [
-                "Instancia/Pequena/pr124.tsp"
+                "Instancia/pr124.tsp"
             ],
             "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
+            "cwd": "${workspaceFolder}/src/Trab2",
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
