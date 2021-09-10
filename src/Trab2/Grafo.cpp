@@ -212,7 +212,7 @@ void Grafo::Guloso(string instancia){
     solucao->saidaResultGuloso(instancia, ((float)(end-start))/CLOCKS_PER_SEC);
 } 
 
-int Grafo::gulosoRandomizado(float alfa, int numInter, float* tempo, int seed){
+int Grafo::gulosoRandomizado(float alfa, int numInter, double tempo[], int seed){
     clock_t start, end;//criacao de variaveis de tempo
     //clock_t mid;
     Agm* solucao = new Agm();//declara a agm soluçao
@@ -230,7 +230,7 @@ int Grafo::gulosoRandomizado(float alfa, int numInter, float* tempo, int seed){
     int maxAm = 2000;
     int minAm = 200;
      if(arestasOrdenadas.size() > 800000){
-        maxAm = 50000;
+        maxAm = 30000;
         minAm = 2000;
     } 
     start = clock();//salva o tempo inicial

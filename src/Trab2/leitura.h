@@ -46,8 +46,8 @@ int bestSol(int sol[]){
     return best;
 }
 
-float tempoMedio(float tempo[]){
-    float soma;
+double tempoMedio(double tempo[]){
+    double soma;
     for(int i = 0; i < 5; i++){
         soma += tempo[i];
     }
@@ -64,7 +64,7 @@ void selecionar(int selecao, Grafo* graph, string instancia ){
          //Algoritmo Guloso Randomizado;
         case 2:{
                 int sol[5];
-                float *tempo = new float[5];
+                double *tempo = new double[5];
                 int max;
                 int seed;
                 cout<< "Digite o numero de iteracoes: ";
