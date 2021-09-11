@@ -27,8 +27,8 @@ class Agm{
         int calculaPesoTotal();
         bool ehVazia();
 
-        void saidaResultGuloso(string instancia, float time);
-        void saidaResultReativo(string instancia, int sol, float time, int max, int bloco);
+        void saidaResultGuloso(string instancia, double time);
+        void saidaResultReativo(string instancia, int sol, double time, int max, int bloco);
         bool vazio(ifstream& arq);
 };
 #endif //AGM_H_INCLUDED

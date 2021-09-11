@@ -46,8 +46,8 @@ int bestSol(int sol[]){
     return best;
 }
 
-float tempoMedio(float tempo[]){
-    float soma;
+double tempoMedio(double tempo[]){
+    double soma;
     for(int i = 0; i < 5; i++){
         soma += tempo[i];
     }
@@ -63,8 +63,9 @@ void selecionar(int selecao, Grafo* graph, string instancia ){
         }
          //Algoritmo Guloso Randomizado;
         case 2:{
+                
                 int sol[5];
-                float *tempo = new float[5];
+                double *tempo = new double[5];
                 int max;
                 int seed;
                 cout<< "Digite o numero de iteracoes: ";
@@ -77,16 +78,16 @@ void selecionar(int selecao, Grafo* graph, string instancia ){
                 sol[0] = graph->gulosoRandomizado(0.05, max, tempo, seed);
                 //melhor resultado 0.10
                 cout << "Executando alfa 0.1" << endl;
-                sol[1] = graph->gulosoRandomizado(0.1, max, tempo, seed+1);
+                sol[1] = graph->gulosoRandomizado(0.1, max, tempo, seed);
                 //melhor resultado 0.15 
                 cout << "Executando alfa 0.15" << endl;
-                sol[2] = graph->gulosoRandomizado(0.15, max, tempo, seed+2);
+                sol[2] = graph->gulosoRandomizado(0.15, max, tempo, seed);
                 //melhor resultado 0.30 
                 cout << "Executando alfa 0.3" << endl;
-                sol[3] = graph->gulosoRandomizado(0.30, max, tempo, seed+3);
+                sol[3] = graph->gulosoRandomizado(0.30, max, tempo, seed);
                 //melhor resultado 0.50
                 cout << "Executando alfa 0.5" << endl;
-                sol[4] = graph->gulosoRandomizado(0.50, max, tempo, seed+5);
+                sol[4] = graph->gulosoRandomizado(0.50, max, tempo, seed);
                 
 
                 cout << endl << " - Melhor solucao geral: " << bestSol(sol) << endl;
@@ -105,6 +106,7 @@ void selecionar(int selecao, Grafo* graph, string instancia ){
                 arq << sol[4] << ";" << tempo[4] << ";";
                 arq << max << endl;
                 arq.close();
+
             break;
         }
          //Algoritmo Guloso Randomizado Reativo;
@@ -112,7 +114,7 @@ void selecionar(int selecao, Grafo* graph, string instancia ){
             int numInteracoes,resultado;
             cout<< "Digite o numero de iteracoes(minimo 100): ";
             cin >> numInteracoes;
-            float *tempo = new float[5];
+            double *tempo = new double[5];
             int bloco;
             cout<< "Digite tamanho do bloco(minimo e recomendavel 20): ";
             cin >> bloco;

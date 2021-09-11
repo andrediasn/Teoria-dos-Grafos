@@ -55,7 +55,7 @@ Vertices* Agm::retornaVertice(int id){//pesquisa vertice no grafo e retorna ele
 }
 
 void Agm::saidaResultGuloso(string instancia, double time){
-    string saida = "Resultado/Guloso/" + instancia + "guloso.txt";
+    string saida = "Resultado/Guloso/resultGuloso.txt";
 
     int lb = 0;
     for(auto i = arestasAgm.begin(); i != arestasAgm.end(); i++){
@@ -73,7 +73,7 @@ void Agm::saidaResultGuloso(string instancia, double time){
 }
 
 void Agm::saidaResultReativo(string instancia, int sol, double time, int max, int bloco){
-    string saida = "Resultado/Reativo/" + instancia + "reativo.txt";
+    string saida = "Resultado/Reativo/" + instancia + "reativo2.txt";
 
     ofstream arq(saida, ios::app);
     ifstream v(saida);

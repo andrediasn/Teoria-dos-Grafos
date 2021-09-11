@@ -63,6 +63,7 @@ void selecionar(int selecao, Grafo* graph, string instancia ){
         }
          //Algoritmo Guloso Randomizado;
         case 2:{
+                
                 int sol[5];
                 double *tempo = new double[5];
                 int max;
@@ -71,40 +72,43 @@ void selecionar(int selecao, Grafo* graph, string instancia ){
                 cin >> max;
                 cout<< "Digite um valor inteiro para seed: ";
                 cin >> seed;
-                // alfas 0.05 0.1 0.15 0.3 0.5
-                //melhor resultado 0.05 
-                cout << endl << "Executando alfa 0.05" << endl;
-                sol[0] = graph->gulosoRandomizado(0.05, max, tempo, seed);
-                //melhor resultado 0.10
-                cout << "Executando alfa 0.1" << endl;
-                sol[1] = graph->gulosoRandomizado(0.1, max, tempo, seed+1);
-                //melhor resultado 0.15 
-                cout << "Executando alfa 0.15" << endl;
-                sol[2] = graph->gulosoRandomizado(0.15, max, tempo, seed+2);
-                //melhor resultado 0.30 
-                cout << "Executando alfa 0.3" << endl;
-                sol[3] = graph->gulosoRandomizado(0.30, max, tempo, seed-1);
-                //melhor resultado 0.50
-                cout << "Executando alfa 0.5" << endl;
-                sol[4] = graph->gulosoRandomizado(0.50, max, tempo, seed-2);
-                
+                for(int i=1; i<11; i++)
+                {
+                    // alfas 0.05 0.1 0.15 0.3 0.5
+                    //melhor resultado 0.05 
+                    cout << endl << "Executando alfa 0.05" << endl;
+                    sol[0] = graph->gulosoRandomizado(0.05, max, tempo, seed*i);
+                    //melhor resultado 0.10
+                    cout << "Executando alfa 0.1" << endl;
+                    sol[1] = graph->gulosoRandomizado(0.1, max, tempo, seed*i);
+                    //melhor resultado 0.15 
+                    cout << "Executando alfa 0.15" << endl;
+                    sol[2] = graph->gulosoRandomizado(0.15, max, tempo, seed*i);
+                    //melhor resultado 0.30 
+                    cout << "Executando alfa 0.3" << endl;
+                    sol[3] = graph->gulosoRandomizado(0.30, max, tempo, seed*i);
+                    //melhor resultado 0.50
+                    cout << "Executando alfa 0.5" << endl;
+                    sol[4] = graph->gulosoRandomizado(0.50, max, tempo, seed*i);
+                    
 
-                cout << endl << " - Melhor solucao geral: " << bestSol(sol) << endl;
-                cout << " - Tempo medio: " << tempoMedio(tempo) << endl;
+                    cout << endl << " - Melhor solucao geral: " << bestSol(sol) << endl;
+                    cout << " - Tempo medio: " << tempoMedio(tempo) << endl;
 
-                string saida = "Resultado/Randomizado/" + instancia + "rand.txt";
-                ofstream arq(saida, ios::app);
-                ifstream v(saida);
-                if(vazio(v))
-                    arq << "Alfa 0,05;Tempo;Alfa 0,1;Tempo;Alfa 0,15;Tempo;Alfa 0,3;Tempo;Alfa 0,5;Tempo;Iteracoes" << endl;
-                v.close();
-                arq << instancia << ";"<< sol[0] << ";" << tempo[0] << ";"; 
-                arq << sol[1] << ";" << tempo[1] << ";"; 
-                arq << sol[2] << ";" << tempo[2] << ";"; 
-                arq << sol[3] << ";" << tempo[3] << ";";
-                arq << sol[4] << ";" << tempo[4] << ";";
-                arq << max << endl;
-                arq.close();
+                    string saida = "Resultado/Randomizado/" + instancia + "rand2.txt";
+                    ofstream arq(saida, ios::app);
+                    ifstream v(saida);
+                    if(vazio(v))
+                        arq << "Alfa 0,05;Tempo;Alfa 0,1;Tempo;Alfa 0,15;Tempo;Alfa 0,3;Tempo;Alfa 0,5;Tempo;Iteracoes" << endl;
+                    v.close();
+                    arq << instancia << ";"<< sol[0] << ";" << tempo[0] << ";"; 
+                    arq << sol[1] << ";" << tempo[1] << ";"; 
+                    arq << sol[2] << ";" << tempo[2] << ";"; 
+                    arq << sol[3] << ";" << tempo[3] << ";";
+                    arq << sol[4] << ";" << tempo[4] << ";";
+                    arq << max << endl;
+                    arq.close();
+                }
             break;
         }
          //Algoritmo Guloso Randomizado Reativo;
@@ -119,7 +123,8 @@ void selecionar(int selecao, Grafo* graph, string instancia ){
             int seed;
             cout<< "Digite um valor para seed: ";
             cin >> seed;
-            graph->gulosoRandomizadoReativo(numInteracoes, tempo, bloco, seed, instancia);
+            for(int i=1; i<11; i++)
+                graph->gulosoRandomizadoReativo(numInteracoes, tempo, bloco, seed, instancia);
             break;
         }
         //caso 0 sai do programa

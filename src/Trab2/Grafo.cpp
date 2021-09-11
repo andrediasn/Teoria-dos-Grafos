@@ -147,7 +147,7 @@ int Grafo::partQuick(vector<Arestas*> *copia, int esq, int dir){
 void Grafo::Guloso(string instancia){
 
     clock_t start, end;
-    start = clock();
+    
     vector<Arestas*> arestas;
     arestas.reserve((ordem*(ordem-1))/2);
     
@@ -161,6 +161,7 @@ void Grafo::Guloso(string instancia){
     int cont = 1;
 
     Agm* solucao = new Agm;
+    start = clock();
     for(auto i= arestas.begin(); i != arestas.end(); i++){
         if(cont == this->ordem)
             break;
@@ -206,16 +207,16 @@ void Grafo::Guloso(string instancia){
     }
     end=clock();
     cout << "Solucao: " << solucao->calculaPesoTotal() << endl;
-    cout << "Tempo de execucao Total: " << ((float)(end-start))/CLOCKS_PER_SEC << "s\n";
+    cout << "Tempo de execucao Total: " << ((double)(end-start))/CLOCKS_PER_SEC << "s\n";
 
     solucao->saidaAgmDot2(instancia);
-    solucao->saidaResultGuloso(instancia, ((float)(end-start))/CLOCKS_PER_SEC);
+    solucao->saidaResultGuloso(instancia, ((double)(end-start))/CLOCKS_PER_SEC);
 } 
 
 int Grafo::gulosoRandomizado(float alfa, int numInter, double tempo[], int seed){
     clock_t start, end; //criacao de variaveis de tempo
     //clock_t mid;  // para testes
-
+    
     Agm* solucao = new Agm();//declara a agm soluçao
     Agm* melhorSolucao = new Agm();//declara a agm soluçao
 
@@ -228,12 +229,13 @@ int Grafo::gulosoRandomizado(float alfa, int numInter, double tempo[], int seed)
     int maxAm = 2000; // limite amostra
     int minAm = 200;  // minimo amostra
     if(arestasOrdenadas.size() > 800000){ // instancias grandes
-        maxAm = 50000;
-        minAm = 5000;
+        maxAm = 5000;
+        minAm = 500;
     } 
     int k,it = 0;//contador de indice
     int pesoMelhorSol = 0;
 
+    srand(seed);
     start = clock();//salva o tempo inicial
     while (it<numInter) {  
         //mid = clock(); 
@@ -286,7 +288,6 @@ int Grafo::gulosoRandomizado(float alfa, int numInter, double tempo[], int seed)
             }
 
             //cout << "Cont: " << cont << " Range: "<< range;
-            srand(it*seed);
             k=rand()%(range+1);
             //cout << " Rand: " << k << " Peso: " << arestas[k]->getPeso() << " Faixa: " << faixa << endl;
 
@@ -426,8 +427,8 @@ void Grafo::gulosoRandomizadoReativo(int numInter, double tempo[], int bloco, in
     int maxAm = 2000; // limite amostra
     int minAm = 200; // minimo amostra
     if(arestasOrdenadas.size() > 800000){ // instancias grandes
-        maxAm = 30000;
-        minAm = 2000;
+        maxAm = 5000;
+        minAm = 500;
     } 
     int pesoMelhorSol = 0;
     int k,it=0;
