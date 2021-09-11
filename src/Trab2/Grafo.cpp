@@ -213,43 +213,43 @@ void Grafo::Guloso(string instancia){
 } 
 
 int Grafo::gulosoRandomizado(float alfa, int numInter, double tempo[], int seed){
-    clock_t start, end;//criacao de variaveis de tempo
-    //clock_t mid;
+    clock_t start, end; //criacao de variaveis de tempo
+    //clock_t mid;  // para testes
+
     Agm* solucao = new Agm();//declara a agm soluçao
     Agm* melhorSolucao = new Agm();//declara a agm soluçao
 
     vector<Arestas*> copia;
     //copia.reserve((ordem*(ordem-1))/2);
 
+    int qtPro; // para testes
+    int mPro = 0; // para testes
+    
+    int maxAm = 2000; // limite amostra
+    int minAm = 200;  // minimo amostra
+    if(arestasOrdenadas.size() > 800000){ // instancias grandes
+        maxAm = 50000;
+        minAm = 5000;
+    } 
     int k,it = 0;//contador de indice
     int pesoMelhorSol = 0;
-    int qtPro;
-    int mPro = 0;
 
-    
-    int maxAm = 2000;
-    int minAm = 200;
-     if(arestasOrdenadas.size() > 800000){
-        maxAm = 30000;
-        minAm = 2000;
-    } 
     start = clock();//salva o tempo inicial
     while (it<numInter) {  
         //mid = clock(); 
         //cout << "Iteracao: " << it+1 << endl;
         qtPro = 0;
 
-        copia.clear();
-        solucao = new Agm();
-
+        solucao = new Agm();//limpa lixo
+        copia.clear();//limpa lixo
         auto amostraIni = this->arestasOrdenadas.begin() + maxAm;
         int amCont = maxAm;
         for (auto i = this->arestasOrdenadas.begin(); i != amostraIni; i++)
                 copia.push_back(*i);
         
-        int faixa = copia[0]->getPeso()*(1+alfa);//obtendo o valor final possivel pra ser escolhido
+        int faixa = copia[0]->getPeso()*(1+alfa);//calcula faixa de selecao
         faixa ++;
-        int range = 0;
+        int range = 0; //indice das arestas que se encaixam na faixa
         for (int i = 0; i < copia.size(); i++){
             if(copia[i]->getPeso()<=faixa)
                 range = i;
@@ -257,16 +257,16 @@ int Grafo::gulosoRandomizado(float alfa, int numInter, double tempo[], int seed)
                 break;
         }
 
-        int conexo[ordem];
-        for (int i = 0; i < ordem; i++) {// ao contrario
-            conexo[i] = -1;
-        }
-        int cont = 1;
-        
         it++;
+
+        int conexo[ordem]; //armazena a qual subgrafo aresta faz parte para verificar ciclo
+        for (int i = 0; i < ordem; i++) //inicializa
+            conexo[i] = -1;
         
+        int cont = 1; //contador de arestas inseridas na agm 
         while(cont < this->ordem && copia.size() > 0){ 
-            if(copia.size() < minAm){
+
+            if(copia.size() < minAm){ //Estende Amostra
                 qtPro ++;
                 amCont += maxAm;
                 auto amostraFim = this->arestasOrdenadas.end();
@@ -336,7 +336,7 @@ int Grafo::gulosoRandomizado(float alfa, int numInter, double tempo[], int seed)
                 //cout << "out" << endl;
             }
             //cout << "size: " << copia.size() << endl;
-            auto removedor = copia.begin() + k;
+            auto removedor = copia.begin() + k; // remove aresta selecionado
             copia.erase(removedor);
             range --;
             //cout << "removed: " << copia.size() << endl;
@@ -357,6 +357,7 @@ int Grafo::gulosoRandomizado(float alfa, int numInter, double tempo[], int seed)
                 }
             }
         }
+        arrumaGrau(); //encerrou entao resata grau das arestas do grafo
 
         int pesoSol = solucao->calculaPesoTotal();
         if(it == 1)
@@ -370,7 +371,7 @@ int Grafo::gulosoRandomizado(float alfa, int numInter, double tempo[], int seed)
             pesoMelhorSol = pesoSol;
             //solucao->saidaAgmDot();
         }
-        arrumaGrau();
+        
         //end=clock();
         //cout << "Sol: " << pesoSol << " Best: " << pesoMelhorSol << endl << endl;  
         //cout << "Tempo de execucao: " <<((float)(mid-start))/CLOCKS_PER_SEC << "s" << endl;
@@ -378,7 +379,7 @@ int Grafo::gulosoRandomizado(float alfa, int numInter, double tempo[], int seed)
             mPro = qtPro;
     }
     end=clock();
-    float time = ((float)(end-start))/CLOCKS_PER_SEC;
+    double time = ((double)(end-start))/CLOCKS_PER_SEC;
     cout << "Melhor solucao: " << pesoMelhorSol << endl;
     cout << "Tempo Total: " << time << "s" << endl; 
     cout << "QtCopias: " << mPro << " tamT: " << arestasOrdenadas.size() << " tamF: " << copia.size() << endl << endl;  
@@ -398,92 +399,78 @@ int Grafo::gulosoRandomizado(float alfa, int numInter, double tempo[], int seed)
     return pesoMelhorSol;
 }
 
-void Grafo::gulosoRandomizadoReativo(int numInter, float tempo[], int bloco, int seed, string instancia)
+void Grafo::gulosoRandomizadoReativo(int numInter, double tempo[], int bloco, int seed, string instancia)
 {
-    clock_t start, mid, mid2, end;//criacao de variaveis de tempo
-    start = clock();//salva o tempo inicial
+    clock_t start, end; //criacao de variaveis de tempo
+    //clock_t mid; para testes
 
-    Agm* melhorSolucao;
-    Agm* solucao;
-    int k,it=0;
-    vector<Arestas*> copia;
+    Agm* solucao = new Agm();
+    Agm* melhorSolucao = new Agm();
     
-    int **resultBloco;
+    vector<Arestas*> copia;
+    //copia.reserve((ordem*(ordem-1))/2);
+    
+    int **resultBloco; // Armazena quantas vezes alfa foi usado e seus resultados
     resultBloco = new int*[5];
     for(int i=0;i<5;i++)
         resultBloco[i] = new int[bloco];
-    resetBloco(resultBloco, bloco);
+    resetBloco(resultBloco, bloco); // inicializa com -1
    
-    int probAlfa[5];
+    int probAlfa[5]; // Probabilidade dos alfas
     for (int i = 0; i < 5; i++)
-    {
         probAlfa[i] = 20;
-    }
-    //float tempoC = 0;
+
+    //float tempoC = 0; // para testes
+    int qtPro, mPro = 0; // para testes
+
+    int maxAm = 2000; // limite amostra
+    int minAm = 200; // minimo amostra
+    if(arestasOrdenadas.size() > 800000){ // instancias grandes
+        maxAm = 30000;
+        minAm = 2000;
+    } 
     int pesoMelhorSol = 0;
-    int qtRem = 0;
-    int MqtRem = 0;
-    int qtPro = 0;
+    int k,it=0;
+
+    start = clock();
     while(it<numInter)
-    {
-        int cont = 1;
+    {  
         for(int x=0; x<bloco;x++){
-            if(cont == this->ordem)
+            if(it >= numInter)
                 break;
             //cout << "Iteracao: " << it+1 << endl;
             //mid = clock();
-            if(qtRem > MqtRem)
-                MqtRem = qtRem;
-            qtRem = 0;
-            int conexo[ordem];
-            for (int i = 0; i < ordem; i++) 
-            {// ao contrario
-                conexo[i] = -1;
-            }
-            cont = 1;
-            copia.clear();
-            auto amostraIni = this->arestasOrdenadas.begin() + 2000;
-            int amCont = 2000;
-            for (auto i = this->arestasOrdenadas.begin(); i != amostraIni; i++)
-            {
-                copia.push_back(*i);
-            }
-            //mid2 = clock();
-            //tempoC += ((float)(mid2-mid))/CLOCKS_PER_SEC;
-            if(it%bloco == 0 && it>5)
+
+            if(x == 0 && it>5)
             {
                 atualizaProb(probAlfa,resultBloco);
                 resetBloco(resultBloco, bloco);
             }
 
             float alfa;
-            if(x == 0)
-            {
+            if(x == 0) // Condiciono para que cada alfa seja selecionado pelo menos uma vez por bloco
                 alfa = 0.05;
-            }
             else if(x == 1)
-            {
                 alfa = 0.1;
-            }
             else if(x == 2)
-            {
                 alfa = 0.15;
-            }
             else if(x == 3)
-            {
                 alfa = 0.3;
-            }
             else if(x == 4)
-            {
                 alfa = 0.5;
-            }
             else if(x > 4)
-            {
                 alfa = escolheAlfa(probAlfa, seed+it+x);
-            }
-            int faixa = copia[0]->getPeso()*(1+alfa);//obtendo o valor final possivel pra ser escolhido
+
+            solucao = new Agm(); //limpa lixo
+            copia.clear(); //limpa lixo
+            auto amostraIni = this->arestasOrdenadas.begin() + maxAm; //amostra inicial
+            int amCont = maxAm;
+            for (auto i = this->arestasOrdenadas.begin(); i != amostraIni; i++)
+                copia.push_back(*i);
+
+            int faixa = copia[0]->getPeso()*(1+alfa); //calcula faixa de selecao
             faixa ++;
-            int range = 0;
+            int range = 0; //indice das arestas que se encaixam na faixa
             for (int i = 0; i < copia.size(); i++){
                 if(copia[i]->getPeso()<=faixa)
                     range = i;
@@ -492,30 +479,41 @@ void Grafo::gulosoRandomizadoReativo(int numInter, float tempo[], int bloco, int
             }
 
             it++;
-            arrumaGrau();
-            solucao = new Agm();
 
-            if(copia.size() < 500){
-                    qtPro ++;
-                    amCont += 2000;
-                    auto amostraFim = this->arestasOrdenadas.begin() + amCont;
-                    for (auto i = amostraIni; i != amostraFim; i++)
-                    {
-                        copia.push_back(*i);
-                    }
-                    amostraIni = amostraFim;
-            }
+            int conexo[ordem]; //armazena a qual subgrafo aresta faz parte para verificar ciclo
+            for (int i = 0; i < ordem; i++) //inicializa
+                conexo[i] = -1;
 
+
+            int cont = 1; //contador de arestas inseridas na agm 
             while (cont < this->ordem && copia.size() > 0)
             {
-                
-                
+                if(copia.size() < minAm){ //Estende Amostra
+                    qtPro ++;
+                    amCont += maxAm;
+                    auto amostraFim = this->arestasOrdenadas.end();
+                    if(amCont < arestasOrdenadas.size())
+                        amostraFim = this->arestasOrdenadas.begin() + amCont;
+                    for (auto i = amostraIni; i != amostraFim; i++)
+                        copia.push_back(*i);
+                    amostraIni = amostraFim;
+
+                    faixa = copia[0]->getPeso()*(1+alfa);
+                    for (int i = 0; i < copia.size(); i++){ // recalculando range
+                        if(copia[i]->getPeso()<=faixa)
+                            range = i;
+                        else
+                            break;
+                    }
+                }
 
                 srand(seed*it);
                 k=rand()%(range+1);
+
                 Arestas* aux = copia.at(k);
                 Vertices* v1 = aux->getV1();
                 Vertices* v2 = aux->getV2();
+
                 if(v1->getGrau() < 3 && v2->getGrau() < 3)
                 {   
                     //cout << "if";
@@ -562,11 +560,11 @@ void Grafo::gulosoRandomizadoReativo(int numInter, float tempo[], int bloco, int
                         cont ++;
                     }
                 }
-                auto removedor = copia.begin() + k;
+                auto removedor = copia.begin() + k; // remove aresta selecionado
                 copia.erase(removedor);
-                qtRem ++;
                 range --;
                 //cout << "removeu" << endl;
+
                 int auxF = copia[0]->getPeso()*(1+alfa);
                 auxF ++;
                 if(faixa < auxF) {
@@ -583,9 +581,14 @@ void Grafo::gulosoRandomizadoReativo(int numInter, float tempo[], int bloco, int
                     }
                 }
             }
+            if(qtPro>mPro) // para testes
+                mPro = qtPro;
+            qtPro = 0;
+
+            arrumaGrau(); //encerrou entao resata grau das arestas do grafo
+            
             int pesoSol = solucao->calculaPesoTotal();
             //cout<<"Sol: "<< pesoSol;
-            
             if(it == 1)
             {   
                 melhorSolucao = solucao;
@@ -596,51 +599,48 @@ void Grafo::gulosoRandomizadoReativo(int numInter, float tempo[], int bloco, int
                 pesoMelhorSol = pesoSol; // pesos
             }
             //cout<<" Best: "<< pesoMelhorSol;
-            int limB = numInter - bloco + 1;
-            if(it < limB){
-                if(alfa < 0.06){
-                    //cout<<" Alfa: 0.05"<<endl;
-                    for(int i=0; i<bloco; i++){
-                        if(resultBloco[0][i] < 0){
-                            resultBloco[0][i] = pesoSol;
-                            break;
-                        }
+            if(alfa < 0.06){
+                //cout<<" Alfa: 0.05"<<endl;
+                for(int i=0; i<bloco; i++){
+                    if(resultBloco[0][i] < 0){
+                        resultBloco[0][i] = pesoSol;
+                        break;
                     }
                 }
-                else if(alfa < 0.11){
-                    //cout<<" Alfa: 0.10"<<endl;
-                    for(int i=0; i<bloco; i++){
-                        if(resultBloco[1][i] < 0){
-                            resultBloco[1][i] = pesoSol;
-                            break;
-                        }
+            }
+            else if(alfa < 0.11){
+                //cout<<" Alfa: 0.10"<<endl;
+                for(int i=0; i<bloco; i++){
+                    if(resultBloco[1][i] < 0){
+                        resultBloco[1][i] = pesoSol;
+                        break;
                     }
                 }
-                else if(alfa < 0.16){
-                    //cout<<" Alfa: 0.15"<<endl;
-                    for(int i=0; i<bloco; i++){
-                        if(resultBloco[2][i] < 0){
-                            resultBloco[2][i] = pesoSol;
-                            break;
-                        }
+            }
+            else if(alfa < 0.16){
+                //cout<<" Alfa: 0.15"<<endl;
+                for(int i=0; i<bloco; i++){
+                    if(resultBloco[2][i] < 0){
+                        resultBloco[2][i] = pesoSol;
+                        break;
                     }
                 }
-                else if(alfa < 0.31){
-                    //cout<<" Alfa: 0.30"<<endl;
-                    for(int i=0; i<bloco; i++){
-                        if(resultBloco[3][i] < 0){
-                            resultBloco[3][i] = pesoSol;
-                            break;
-                        }
+            }
+            else if(alfa < 0.31){
+                //cout<<" Alfa: 0.30"<<endl;
+                for(int i=0; i<bloco; i++){
+                    if(resultBloco[3][i] < 0){
+                        resultBloco[3][i] = pesoSol;
+                        break;
                     }
                 }
-                else if(alfa < 0.51){
-                    //cout<<" Alfa: 0.50"<<endl;
-                    for(int i=0; i<bloco; i++){
-                        if(resultBloco[4][i] < 0){
-                            resultBloco[4][i] = pesoSol;
-                            break;
-                        }
+            }
+            else if(alfa < 0.51){
+                //cout<<" Alfa: 0.50"<<endl;
+                for(int i=0; i<bloco; i++){
+                    if(resultBloco[4][i] < 0){
+                        resultBloco[4][i] = pesoSol;
+                        break;
                     }
                 }
             }
@@ -650,11 +650,13 @@ void Grafo::gulosoRandomizadoReativo(int numInter, float tempo[], int bloco, int
     }
 
     end=clock();
-    cout << endl << "Best: " << pesoMelhorSol << " Tempo Total: " <<((float)(end-start))/CLOCKS_PER_SEC << endl; 
-    cout << "QtCopias: " << qtPro << " QtRemoves: " << MqtRem << " tamT: " << arestasOrdenadas.size() << " tamF: " << copia.size() << endl;
+
+    cout << "Melhor solucao: " << pesoMelhorSol << endl;
+    cout << "Tempo Total: " << ((double)(end-start))/CLOCKS_PER_SEC << "s" << endl; 
+    cout << "QtCopias: " << mPro << " tamT: " << arestasOrdenadas.size() << " tamF: " << copia.size() << endl;
    
     //melhorSolucao->saidaAgmDot();
-    melhorSolucao->saidaResultReativo(instancia, pesoMelhorSol, ((float)(end-start))/CLOCKS_PER_SEC, numInter, bloco);
+    melhorSolucao->saidaResultReativo(instancia, pesoMelhorSol, ((double)(end-start))/CLOCKS_PER_SEC, numInter, bloco);
 }
 
 void Grafo::atualizaProb(int probAlfa[],int **resultBloco)

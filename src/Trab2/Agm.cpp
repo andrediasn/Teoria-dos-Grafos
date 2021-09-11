@@ -54,7 +54,7 @@ Vertices* Agm::retornaVertice(int id){//pesquisa vertice no grafo e retorna ele
     return nullptr;//se nao, retorna null
 }
 
-void Agm::saidaResultGuloso(string instancia, float time){
+void Agm::saidaResultGuloso(string instancia, double time){
     string saida = "Resultado/Guloso/" + instancia + "guloso.txt";
 
     int lb = 0;
@@ -72,7 +72,7 @@ void Agm::saidaResultGuloso(string instancia, float time){
     arq.close();
 }
 
-void Agm::saidaResultReativo(string instancia, int sol, float time, int max, int bloco){
+void Agm::saidaResultReativo(string instancia, int sol, double time, int max, int bloco){
     string saida = "Resultado/Reativo/" + instancia + "reativo.txt";
 
     ofstream arq(saida, ios::app);

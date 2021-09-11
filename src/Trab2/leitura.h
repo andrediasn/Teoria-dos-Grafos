@@ -112,7 +112,7 @@ void selecionar(int selecao, Grafo* graph, string instancia ){
             int numInteracoes,resultado;
             cout<< "Digite o numero de iteracoes(minimo 100): ";
             cin >> numInteracoes;
-            float *tempo = new float[5];
+            double *tempo = new double[5];
             int bloco;
             cout<< "Digite tamanho do bloco(minimo e recomendavel 20): ";
             cin >> bloco;
