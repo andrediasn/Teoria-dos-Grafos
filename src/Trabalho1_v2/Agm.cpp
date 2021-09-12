@@ -16,3 +16,15 @@ void Agm::insereVertice(Vertices* v) { // Insere vertice passando id
 void Agm::insereAresta(Arestas* a) { // Insere aresta passando id do vertice de origem, vertice alvo, e o peso
     this->arestasAgm.push_back(a);
 }
+string Agm::ProcuraVertice(int id)
+{
+    for(auto i = nosAgm.begin(); i != nosAgm.end(); i++)
+    {
+        Vertices* comparativo = *i;
+        if(comparativo->getId() == id)
+        {
+            return comparativo->getNome();
+        }
+    }
+    return {};
+}

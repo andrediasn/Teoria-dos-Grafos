@@ -6,15 +6,15 @@
 
 class Dijkstra {
 private:
-    list<int> caminho;
+    list<string> caminho;
     list<Vertices*> abertos;
     Vertices* menorDist(int dist[]); // busca vertice aberto com menor custo salvo
-    void criaCaminho(int no, int ant[], int noI); // Busca nos predecessores para fazer o caminho
+    void criaCaminho(Grafo* grafo, int no, int ant[], int noI); // Busca nos predecessores para fazer o caminho
     
 public:
     Dijkstra();
     ~Dijkstra();
-    list<int> caminhoMinimo(Grafo *grafo, int noI, int noAlvo); //base do algoritimo
+    list<string> caminhoMinimo(Grafo *grafo, int noI, int noAlvo); //base do algoritimo
     
 };
   

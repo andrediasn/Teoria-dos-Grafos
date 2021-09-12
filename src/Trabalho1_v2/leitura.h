@@ -34,7 +34,7 @@ int menu(){
     return selecao;
 }
 
-void saidaListDot(list<int> lista, string tipoMetodo){
+void saidaListDot(list<string> lista, string tipoMetodo){
     std::ofstream arq(arqSaida, ios::app);
     arq << "//Grafo do caminho minimo do vertice " << *lista.begin() << " ate o vertice " << lista.back(); 
     arq << " gerado pelo algoritimo de " << tipoMetodo << ":" << endl << endl;
@@ -51,38 +51,43 @@ void saidaListDot(list<int> lista, string tipoMetodo){
     int *vert = new int[lista.size()];
     int j = 0;
     for(auto i = lista.begin(); i != lista.end(); i++){
-        vert[j] = *i;
+        Vertices* copia = grafo->procurarNome(*i);
+        vert[j] = copia->getId();
         j++;
     }
 
     arq << tipoGrafo << tipoMetodo << "{" << endl;  // Exemplo: "digraph Floyd{"
     for(int i = 0; i < (lista.size()-1); i++){
         Arestas* aux = grafo->existeAresta(vert[i],vert[i+1]);
-        arq << "    " << vert[i] << seta << vert[i+1] << " [label= " << aux->getPeso() << "];"<< endl;
+        Vertices* inicial = grafo->procurarNo(vert[i]);
+        Vertices* final = grafo->procurarNo(vert[i+1]);
+        arq << "    " << inicial->getNome() << seta << final->getNome() << " [label= " << aux->getPeso() << "];"<< endl;
     }
     arq << "}"<< endl << endl << endl;
     delete vert;
 }
 
-void saidaAgmDot(Agm* agm, string caminho, int id){
+void saidaAgmDot(Agm* agm, string caminho, string nome){
     ofstream arq(arqSaida, ios::app);
-    if(id > -1)
-        arq << "//Arvore Geradora Minima gerado pelo algoritimo de " << caminho << " com indice " << id << ":" << endl << endl;
+    if(nome != "-1")
+        arq << "//Arvore Geradora Minima gerado pelo algoritimo de " << caminho << " com indice " << nome << ":" << endl << endl;
     else
         arq << "//Arvore Geradora Minima gerado pelo algoritimo de " << caminho << ":" << endl <<endl;
     
     if(opc_Direc == true){
         arq << "digraph "<< caminho << "{" <<endl;
-
+        
         for (auto i = agm->arestasAgm.begin(); i != agm->arestasAgm.end(); i++){
             Arestas* aux = *i;
+            string Inicio = agm->ProcuraVertice(aux->getId());
+            string Final =  agm->ProcuraVertice(aux->getId_alvo());
             // Direcionado e com peso nas arestas
             if(opc_Peso_Aresta == true){
-                arq << "    " << aux->getId() << " -> " << aux->getId_alvo() << " [label = " << aux->getPeso() << "]" <<endl;
+                arq << "    " << Inicio << " -> " << Final << " [label = " << aux->getPeso() << "]" <<endl;
             }
             // Direcionado e sem peso nas arestas
             if(opc_Peso_Aresta == false){
-                arq << "    " << aux->getId() << " -> " << aux->getId_alvo() << endl;
+                arq << "    " << Inicio << " -> " << Final << endl;
             }
         }
     }else{
@@ -90,13 +95,15 @@ void saidaAgmDot(Agm* agm, string caminho, int id){
 
         for (auto i = agm->arestasAgm.begin(); i != agm->arestasAgm.end(); i++){
             Arestas* aux = *i;
+            string Inicio = agm->ProcuraVertice(aux->getId());
+            string Final =  agm->ProcuraVertice(aux->getId_alvo());
             // Ndirecionado e com peso nas arestas
             if(opc_Peso_Aresta == true){
-                arq << "    " << aux->getId() << " -- " << aux->getId_alvo() << " [label = " << aux->getPeso() << "]" <<endl;
+                arq << "    " << Inicio  << " -- " << Final << " [label = " << aux->getPeso() << "]" <<endl;
             }
             // Ndirecionado e sem peso nas arestas
             if(opc_Peso_Aresta == false){
-                arq << "    " << aux->getId() << " -- " << aux->getId_alvo() << endl;
+                arq << "    " << Inicio << " -- " << Final << endl;
             }
         }
             
@@ -134,13 +141,15 @@ void selecionar(int selecao, Grafo* graph, string saida ){
         //Caminho mínimo entre dois vértices usando Dijkstra (3)
         case 3:{
             if(opc_Peso_Aresta){
-                int no1, no2;
+                string no1, no2;
                 cout << endl << "Informe o id do Vertice inicial: ";
                 cin >> no1;
                 cout << "Informe o id do Vertice alvo: ";
                 cin >> no2;
-                if(graph->existeVertice(no1) && graph->existeVertice(no2)){
-                    list<int> apenasImpressao = graph->caminhoMinimoDijkstra(no1, no2);
+                if(graph->existeNome(no1) && graph->existeNome(no2)){
+                    Vertices* NoInicial = grafo->procurarNome(no1);
+                    Vertices* NoAlvo = grafo->procurarNome(no2);
+                    list<string> apenasImpressao = graph->caminhoMinimoDijkstra(NoInicial->getNome(), NoAlvo->getNome());
                     if(apenasImpressao.size() > 0){
                         saidaListDot(apenasImpressao, "Dijkstra");
                         cout << "Grafo gerado." << endl;
@@ -155,13 +164,18 @@ void selecionar(int selecao, Grafo* graph, string saida ){
         //Caminho mínimo entre dois vértices usando Floyd (4)
         case 4:{
             if(opc_Peso_Aresta){
-                int no1, no2;
+                string no1;
+                string no2;
                 cout << "Informe o id do Vertice inicial: ";
                 cin >> no1;
                 cout << "Informe o id do Vertice alvo: ";
                 cin >> no2;
-                if(graph->existeVertice(no1) && graph->existeVertice(no2))
-                    graph->caminhoMinimoFloyd(no1, no2);
+                if(graph->existeNome(no1) && graph->existeNome(no2))
+                {
+                    Vertices* floydI = grafo->procurarNome(no1);
+                    Vertices* floydF = grafo->procurarNome(no2);
+                    graph->caminhoMinimoFloyd(floydI->getId(), floydF->getId());
+                }
                 else
                     cout << "Id do vertice não encontrado." << endl;
             } else
@@ -172,11 +186,12 @@ void selecionar(int selecao, Grafo* graph, string saida ){
         //AGM - Prim; (5)
         case 5:{
             if(!opc_Direc && graph->conexo()){
-                int resposta;
+                string resposta;
                 cout << endl << "Informe o id do Vertice inicial da AGM Prim: ";
                 cin >> resposta;
-                if(graph->existeVertice(resposta)){
+                if(graph->existeVerticeNome(resposta)){
                     Agm* agm = graph->arvoreGeradoraMinimaPrim(resposta);
+                    Vertices* envioSaida = graph->procurarNome(resposta);
                     saidaAgmDot(agm,"Prim", resposta);
                     cout << endl << "Grafo gerado." << endl;
                 } else
@@ -191,7 +206,7 @@ void selecionar(int selecao, Grafo* graph, string saida ){
         case 6:{
             if(!opc_Direc && opc_Peso_Aresta && graph->conexo()){
                 Agm* agm = graph->arvoreGeradoraMinimaKruskal();
-                saidaAgmDot(agm,"Kruskal", -1);
+                saidaAgmDot(agm,"Kruskal", "-1");
                 cout << endl << "Grafo gerado." << endl;
             } else if(opc_Direc)
                 cout << "O grafo esta direcionado. Nao eh possivel executar o algoritimo." << endl;
@@ -204,11 +219,12 @@ void selecionar(int selecao, Grafo* graph, string saida ){
 
         //Busca em Profundidade; (7)
         case 7:{
-            int idNoBusca;
+            string idNoBusca;
             cout << endl << "Informe o id do Vertice para a Busca em Profundidade: ";
             cin >> idNoBusca;
-            if(graph->existeVertice(idNoBusca)){
-                Agm* agm = graph->caminhoEmProfundidade(idNoBusca);
+            if(graph->existeNome(idNoBusca)){
+                Vertices* Inicio = graph->procurarNome(idNoBusca);
+                Agm* agm = graph->caminhoEmProfundidade(Inicio->getId());
                 saidaAgmDot(agm,"BuscaProfundidade", idNoBusca);
                 cout << "Grafo gerado." << endl;
             }
@@ -266,6 +282,8 @@ Grafo* leitura(int argc, char * argv[]){
     {
         while(arquivo>>nomeNo>>nomeNoAlvo)//le ate a ultima linha do arquivo
         {
+            grafo->insereVertice(nomeNo);
+            grafo->insereVertice(nomeNoAlvo);
             grafo->insereAresta(nomeNo,nomeNoAlvo);//insere aresta com nomes dos vertices
         }
     }
@@ -273,6 +291,8 @@ Grafo* leitura(int argc, char * argv[]){
     {   
         while(arquivo>>nomeNo>>nomeNoAlvo) //enquanto tiver linha pra ler
         {
+            grafo->insereVertice(nomeNo);
+            grafo->insereVertice(nomeNoAlvo);
             grafo->insereAresta(nomeNo,nomeNoAlvo,true);//insere aresta direcionada
         }
     }
@@ -280,7 +300,8 @@ Grafo* leitura(int argc, char * argv[]){
     {
         while(arquivo>>nomeNo>>nomeNoAlvo>>Peso)//enquanto tiver linha pra ler
         {
-            
+            grafo->insereVertice(nomeNo);
+            grafo->insereVertice(nomeNoAlvo);
             grafo->insereAresta(nomeNo,nomeNoAlvo,false,Peso);//insere aresta com id e peso nas arestas
         }
     }
@@ -288,20 +309,24 @@ Grafo* leitura(int argc, char * argv[]){
     {
         while (arquivo>>nomeNo>>nomeNoAlvo>>Peso)//enquanto tiver linha pra ler
         {
+            grafo->insereVertice(nomeNo);
+            grafo->insereVertice(nomeNoAlvo);
             grafo->insereAresta(nomeNo,nomeNoAlvo,true,Peso);//insere aresta direcionada com peso nas arestas
         }
         
     }
-/*     else if(opc_Peso_Nos == 1 && opc_Peso_Aresta == 0 && opc_Direc == 0)//o grafo nao é direcionado mas tem peso somente nos vertices
+    else if(opc_Peso_Nos == 1 && opc_Peso_Aresta == 0 && opc_Direc == 0)//o grafo nao é direcionado mas tem peso somente nos vertices
     {
         float PesoVertice1, PesoVerticeAlvo;
-        while (arquivo>>idNo>>PesoVertice1>>idNoAlvo>>PesoVerticeAlvo)
+        while (arquivo>>nomeNo>>PesoVertice1>>nomeNoAlvo>>PesoVerticeAlvo)
         {
-            Vertices* no1 = grafo->procurarNo(idNo);//cria um auxiliar para setar o peso dos vertices
-            Vertices* no2 = grafo->procurarNo(idNoAlvo);//cria um auxiliar para o vertice 2
+            grafo->insereVertice(nomeNo);
+            grafo->insereVertice(nomeNoAlvo);
+            Vertices* no1 = grafo->procurarNome(nomeNo);//cria um auxiliar para setar o peso dos vertices
+            Vertices* no2 = grafo->procurarNome(nomeNoAlvo);//cria um auxiliar para o vertice 2
             no1->setPeso(PesoVertice1);
             no2->setPeso(PesoVerticeAlvo);
-            grafo->insereAresta(idNo,idNoAlvo);
+            grafo->insereAresta(nomeNo,nomeNoAlvo);
         }
         
         
@@ -309,39 +334,46 @@ Grafo* leitura(int argc, char * argv[]){
     else if(opc_Peso_Nos == 1 && opc_Peso_Aresta == 0 && opc_Direc == 1)//o grafo é direcionado e com peso nos vertices
     {
          float PesoVertice1, PesoVerticeAlvo;
-        while (arquivo>>idNo>>PesoVertice1>>idNoAlvo>>PesoVerticeAlvo)
+        while (arquivo>>nomeNo>>PesoVertice1>>nomeNoAlvo>>PesoVerticeAlvo)
         {
-            Vertices* no1 = grafo->procurarNo(idNo);//cria um auxiliar para setar o peso dos vertices
-            Vertices* no2 = grafo->procurarNo(idNoAlvo);//cria um auxiliar para o vertice 2
+            grafo->insereVertice(nomeNo);
+            grafo->insereVertice(nomeNoAlvo);
+            Vertices* no1 = grafo->procurarNome(nomeNo);//cria um auxiliar para setar o peso dos vertices
+            Vertices* no2 = grafo->procurarNome(nomeNoAlvo);//cria um auxiliar para o vertice 2
             no1->setPeso(PesoVertice1);
             no2->setPeso(PesoVerticeAlvo);
-            grafo->insereAresta(idNo,idNoAlvo,true);
+            grafo->insereAresta(nomeNo,nomeNoAlvo,true);
         }
     }
     else if(opc_Peso_Nos == 1 && opc_Peso_Aresta == 1 && opc_Direc == 0)// o grafo nao é direcionado mas tem peso nos vertices e arestas
     {
          float PesoVertice1, PesoVerticeAlvo;
-        while (arquivo>>idNo>>PesoVertice1>>idNoAlvo>>PesoVerticeAlvo>>Peso)
+        while (arquivo>>nomeNo>>PesoVertice1>>nomeNoAlvo>>PesoVerticeAlvo>>Peso)
         {
-            Vertices* no1 = grafo->procurarNo(idNo);//cria um auxiliar para setar o peso dos vertices
-            Vertices* no2 = grafo->procurarNo(idNoAlvo);//cria um auxiliar para o vertice 2
+            grafo->insereVertice(nomeNo);
+            grafo->insereVertice(nomeNoAlvo);
+            Vertices* no1 = grafo->procurarNome(nomeNo);//cria um auxiliar para setar o peso dos vertices
+            Vertices* no2 = grafo->procurarNome(nomeNoAlvo);//cria um auxiliar para o vertice 2
             no1->setPeso(PesoVertice1);
             no2->setPeso(PesoVerticeAlvo);
-            grafo->insereAresta(idNo,idNoAlvo,Peso);
+            grafo->insereAresta(nomeNo,nomeNoAlvo,Peso);
         }
     }
     else if(opc_Peso_Nos == 1 && opc_Peso_Aresta == 1 && opc_Direc == 1)// o grafo é direcionado e com peso nas arestas e vertices
     {
+        
         float PesoVertice1, PesoVerticeAlvo;
-        while (arquivo>>idNo>>PesoVertice1>>idNoAlvo>>PesoVerticeAlvo>>Peso)
+        while (arquivo>>nomeNo>>PesoVertice1>>nomeNoAlvo>>PesoVerticeAlvo>>Peso)
         {
-            Vertices* no1 = grafo->procurarNo(idNo);//cria um auxiliar para setar o peso dos vertices
-            Vertices* no2 = grafo->procurarNo(idNoAlvo);//cria um auxiliar para o vertice 2
+            grafo->insereVertice(nomeNo);
+            grafo->insereVertice(nomeNoAlvo);
+            Vertices* no1 = grafo->procurarNome(nomeNo);//cria um auxiliar para setar o peso dos vertices
+            Vertices* no2 = grafo->procurarNome(nomeNoAlvo);//cria um auxiliar para o vertice 2
             no1->setPeso(PesoVertice1);
             no2->setPeso(PesoVerticeAlvo);
-            grafo->insereAresta(idNo,idNoAlvo,true,Peso);
+            grafo->insereAresta(nomeNo,nomeNoAlvo,true,Peso);
         }
-    } */
+    } 
 
     grafo->testaNomes();
 

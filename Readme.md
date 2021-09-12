@@ -13,6 +13,8 @@ Resolução de problemas que envolvem Árvore Geradora Minima com Restrição de
 
 ## Como compilar
 
+
+
 Comando para compilação:  
 
   g++ *.cpp *.h -o ExecGrupo10 -O3 

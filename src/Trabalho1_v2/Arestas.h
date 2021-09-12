@@ -17,6 +17,7 @@ class Arestas{ //classe aresta
       void setPeso(float peso);
       void setId(int id);
       void setId_alvo(int id_alvo);
+      
 };
 
 #endif // ARESTAS_H_INCLUDED

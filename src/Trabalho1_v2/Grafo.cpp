@@ -21,9 +21,6 @@ Grafo::Grafo(int ordem, bool direcionado, bool pesoArestas, bool pesoVertices){/
     this->pesoArestas = pesoArestas;//inicializa o grafo com peso nas arestas ou nao
     this->pesoVertice = pesoVertices;//inicializa o grafo com peso nos vertices ou nao
     this->cont = 0;
-    for(int i=0; i<this->ordem;i++) {//inicializa a lista de vertices do grafo com todos os vertices de 0 a n-1 sendo n a ordem do grafo
-        insereVertice(i);//insere cada vertice do grafo de uma vez (ja que sabemos o numero de nos pela "ordem")
-    }
 }
 Grafo::~Grafo(){}
 
@@ -31,12 +28,19 @@ int Grafo::getOrdem(){
     return this->ordem;
 }
 
-void Grafo::insereVertice(int id){// Insere vertice passando id
-    if(existeVertice(id))//pesquisa o id do vertice
-        cout << "O no jah existe no grafo.\n";//se ja existir printa que ja existe
-    else{
-    Vertices* no = new Vertices(id);//aloca um novo no dinamicamente
-    nosGrafo.push_back(no);//cria um novo no
+void Grafo::insereVertice(string nome){// Insere vertice passando id
+    if(!existeNome(nome)){//se nao existir o no no grafo
+        Vertices* no = new Vertices(this->cont);//aloca um novo no dinamicamente
+        nosGrafo.push_back(no);//cria um novo no
+        if(this->cont < this->ordem){
+            no = procurarNo(cont);
+            no->setNome(nome);
+            this->nomesGrafo.push_back(nome);
+            this->cont++;
+        }
+        else{
+            cout << "Numero de vertices ultrapassa a ordem do grafo." << endl;
+        }
     }
 }
 
@@ -52,30 +56,7 @@ void Grafo::insereAresta(string nome, string nome_alvo,bool direcionado, float p
     if(!nosGrafo.empty()){//se o grafo nao for vazio
         Vertices* no1;
         Vertices* no2;
-        if(!existeNome(nome)){//se nao existir o no no grafo
-            if(this->cont < this->ordem){
-                no1 = procurarNo(cont);
-                no1->setNome(nome);
-                this->nomesGrafo.push_back(nome);
-                this->cont++;
-            }
-            else{
-                cout << "Numero de vertices ultrapassa a ordem do grafo." << endl;
-                return;
-            }
-        }else if(!existeNome(nome_alvo)){//se nao existir o vertice alvo
-            if(this->cont < this->ordem){
-                no2 = procurarNo(cont);
-                no2->setNome(nome_alvo);
-                this->nomesGrafo.push_back(nome_alvo);
-                this->cont++;
-            }
-            else{
-                cout << "Numero de vertices ultrapassa a ordem do grafo." << endl;
-                return;
-            }
-        }
-        else{//caso tenha os 2
+        if(existeNome(nome) && existeNome(nome_alvo)){//caso tenha os 2 
             Arestas* auxAresta;//cria uma aresta auxiliar
             if(direcionado == false){//se ela nao for direcionada
                 no1 = procurarNome(nome);//cria um vertice auxiliar para alterarmos os dados dos vertices
@@ -104,12 +85,25 @@ void Grafo::insereAresta(string nome, string nome_alvo,bool direcionado, float p
                 no2->adicionaAntecessor(no1->getId());
             }
         }
+        else if(!existeNome(nome))
+        {
+            cout<< "o vertice "<<nome<< " nao foi encontrado";
+        }
+        else if(!existeNome(nome_alvo))
+        {
+            cout<< "o vertice "<<nome_alvo<< " nao foi encontrado";
+        }
+        else if(!existeNome(nome) && !existeNome(nome_alvo))
+        {
+            cout<< "ambos os vertices tanto "<<nome<<" quanto "<<nome_alvo<< " nao foram encontrados";
+        }
     }
 }
 
 bool Grafo::existeNome(string nome){//procura se existe aquele vertice
      for (auto i = nomesGrafo.begin();i!=nomesGrafo.end();i++){//percorre os vertices do grafo 
         string aux = *i;//cria um auxiliar para conferencia
+        //cout << "nome do id inicial: "<<nome << "nome do vertice alvo" << aux << endl;
         if (nome == aux)//se o id do vertice passado for igual
             return true;//retorna que existe o vertice
     }
@@ -153,6 +147,14 @@ bool Grafo::existeVertice(int id){//procura se existe aquele vertice
     return false;//se nao, retorna falso
 }
 
+bool Grafo::existeVerticeNome(string nome){//procura se existe aquele vertice
+     for (auto i = nosGrafo.begin();i!=nosGrafo.end();i++){//percorre os vertices do grafo 
+        Vertices* aux = *i;//cria um auxiliar para conferencia
+        if (aux->getNome() == nome)//se o id do vertice passado for igual
+            return true;//retorna que existe o vertice
+    }
+    return false;//se nao, retorna falso
+}
 Arestas* Grafo::existeAresta(int id ,int id_alvo){ // FUNCAO PARA ACHAR UMA ARESTA DADO DOIS VERTICES
     for (auto i = arestasGrafo.begin(); i != arestasGrafo.end(); i++){
         Arestas* verificador = *i;
@@ -181,40 +183,50 @@ bool Grafo::conexo(){
 }
 
 // FUNCAO PARA ACHAR A MENOR ARESTA DENTRE DOIS NOS 
-Agm* Grafo::arestaMaisBarata(Vertices* v,Agm* agm){
+Agm* Grafo::arestaMaisBarata(Vertices* v,Agm* agm, vector<Vertices*> abertos){
     int menor = INT_MAX/2; 
-    
-    v->setVisitado(true);
+    abertos.push_back(v);
     Arestas* ponteiro = NULL;
     // Percorrengo toda a lista de adj do vertice v
-    for(auto i = v->ListAdj.begin(); i != v->ListAdj.end(); i++){
-        int aux = *i; 
-        Vertices* proximo = procurarNo(*i);
-        if(proximo->getVisitado() == false){
-            Arestas* arestaAux = existeAresta(v->getId(),aux);
-            if(arestaAux != NULL){
-                if(arestaAux->getPeso() < menor){
-                    menor = arestaAux->getPeso();
-                    ponteiro = arestaAux;
+    for(auto j = abertos.begin(); j != abertos.end(); j++)
+    {
+        Vertices* aSerPercorrido = *j;
+        for(auto i = aSerPercorrido->ListAdj.begin(); i != aSerPercorrido->ListAdj.end(); i++){
+            int aux = *i; 
+            Vertices* proximo = procurarNo(aux);
+            if(proximo->getVisitado() == false){
+                Arestas* arestaAux = existeAresta(aSerPercorrido->getId(),aux);
+                if(arestaAux != NULL){
+                    if(arestaAux->getPeso() < menor){
+                        menor = arestaAux->getPeso();
+                        ponteiro = arestaAux;
+                    }
                 }
             }
         }
+
     }
     if(ponteiro != NULL){
         Vertices* verticeVisitado = procurarNo(ponteiro->getId_alvo());
-        verticeVisitado->setVisitado(true);
-        agm->insereVertice(v);
+        //verticeVisitado->setVisitado(true);
+        if(!v->getVisitado())
+        {
+            agm->insereVertice(v);
+            v->setVisitado(true);
+        }
         agm->insereVertice(verticeVisitado);
+        verticeVisitado->setVisitado(true);
         agm->insereAresta(ponteiro);
-        arestaMaisBarata(verticeVisitado,agm);
+        arestaMaisBarata(verticeVisitado,agm,abertos);
     }
     return agm;
 }
-Agm* Grafo::arvoreGeradoraMinimaPrim(int v){
-    Vertices* aux = procurarNo(v);
-
+Agm* Grafo::arvoreGeradoraMinimaPrim(string v){
+    Vertices* aux = procurarNome(v);
+    arrumaVisitado();
+    vector<Vertices*> abertos;
     Agm *agm = new Agm();             // Criando o conjunto solucao das arestas com menor peso 
-    agm = arestaMaisBarata(aux,agm);// Procurar dentre todos os vizinhos do vertice inicial qual tem aresta com menor peso 
+    agm = arestaMaisBarata(aux,agm,abertos);// Procurar dentre todos os vizinhos do vertice inicial qual tem aresta com menor peso 
      
     // Percorrendo a lista de adj ate achar o mais barato
     arrumaVisitado();
@@ -319,27 +331,37 @@ int Grafo::caminhoEmProfundidadeAux(Agm* solucao, int id, int ultimo){
     solucao->insereVertice(inicial);
     inicial->setVisitado(true);
     int aux;
+    cout<<"entrei no: "<<inicial->getNome()<<endl;
     for (auto i = inicial->ListAdj.begin(); i != inicial->ListAdj.end(); i++) {
         aux = *i;
+        Vertices* vVisitado = procurarNo(aux);
+        cout<< "vvisitado ta como: "<< vVisitado->getNome() <<endl;
+        if(!vVisitado->getVisitado()){
+            cout<<"entrei na recursao"<<endl;
+            ultimo = caminhoEmProfundidadeAux(solucao, aux, ultimo);
+        }
         if(i != inicial->ListAdj.begin() && ultimo != -1){
+            Vertices* verifica = procurarNo(ultimo);
+            cout<< "valor do ultimo: "<<verifica->getNome()<<endl;
+            cout<< "entrei aqui"<<endl;
             Arestas *peso = existeAresta(inicial->getId(), ultimo);
             Arestas* retorno = new Arestas(ultimo, inicial->getId(), peso->getPeso());
             solucao->insereAresta(retorno);
+            cout<<"inseri a aresta: (" << inicial->getNome() << ", "<< verifica->getNome()<<") "<<endl;
             ultimo = -1;
-        }
-        Vertices* vVisitado = procurarNo(aux);
-        if(!vVisitado->getVisitado()){
-            ultimo = caminhoEmProfundidadeAux(solucao, aux, ultimo);
         }
     }
     ultimo = inicial->getId();
+    cout<<"voltei"<<endl;
     return ultimo;
 }
 
 
-list<int> Grafo::caminhoMinimoDijkstra(int ID1, int ID2){
+list<string> Grafo::caminhoMinimoDijkstra(string nome1, string nome2){
     Dijkstra aux;
-    list<int> caminhoD = aux.caminhoMinimo(this, ID1, ID2);
+    Vertices* noI = procurarNome(nome1);
+    Vertices* no_alvo = procurarNome(nome2);
+    list<string> caminhoD = aux.caminhoMinimo(this, noI->getId(), no_alvo->getId());
     if(caminhoD.size()>0){
         cout << "Caminho minimo: ";
         for(auto i = caminhoD.begin(); i != caminhoD.end(); i++){
@@ -392,6 +414,8 @@ Agm* Grafo::arvoreGeradoraMinimaKruskal(){
 		if ( pai(j->getId(), ciclo) != pai(j->getId_alvo(), ciclo)){ 
 			unir(j->getId(), j->getId_alvo(), ciclo);
 
+            agm->insereVertice(procurarNo(j->getId()));
+            agm->insereVertice(procurarNo(j->getId_alvo()));
             agm->insereAresta(j);       // Insere aresta na arvore agm 
 		}
     
@@ -428,7 +452,7 @@ void Grafo::ordenacaoTopologica(){
 
     cout << "Vertices ordenados a partir do grau de saida: ";
     for(int i = 0; i < ordem; i++)
-        cout << copia[i]->getId() << " "; //imprime vertices ordenados
+        cout << copia[i]->getNome() << " "; //imprime vertices ordenados
     cout << endl;
 }
 

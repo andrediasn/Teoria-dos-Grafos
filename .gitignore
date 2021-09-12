@@ -37,6 +37,8 @@ main
 *.bin
 *.dat
 *.txt
+*.zip
+*.rar
 
 # VScode Settings
 *.json

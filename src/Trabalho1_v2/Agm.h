@@ -14,6 +14,7 @@ class Agm{
 
         void insereVertice(Vertices* v); // Insere vertice passando id    
         void insereAresta(Arestas* a); // Insere aresta passando id do vertice de origem, vertice alvo, e o peso
+        string ProcuraVertice(int id);
 
 };
 #endif //AGM_H_INCLUDED
