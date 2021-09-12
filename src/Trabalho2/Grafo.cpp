@@ -116,6 +116,17 @@ void Grafo::ordenaArestas()
     quickSort(&arestasOrdenadas, 0, (((ordem*(ordem-1))/2)-1));
 }
 
+void Grafo::verificaAgm(Agm* agm){
+    int x = 0;
+    for(auto i = agm->nosAgm.begin(); i != agm->nosAgm.end(); i++){
+        x ++;
+        Vertices* aux = *i;
+        if(aux->getGrau() > 3)
+            cout << "Achou grau maior que 3" << endl;
+    }
+    cout << "Vertices inseridos: " << x << endl;
+}
+
 void Grafo::quickSort(vector<Arestas*> *copia, int inicio, int fim){ 
     if(inicio < fim){ // Enquanto posicao de inicio nao ultrapassar final
         int p = partQuick(copia, inicio, fim); // Calcula posicao do pivo
@@ -383,7 +394,7 @@ int Grafo::gulosoRandomizado(float alfa, int numInter, double tempo[], int seed)
     double time = ((double)(end-start))/CLOCKS_PER_SEC;
     cout << "Melhor solucao: " << pesoMelhorSol << endl;
     cout << "Tempo Total: " << time << "s" << endl; 
-    cout << "QtCopias: " << mPro << " tamT: " << arestasOrdenadas.size() << " tamF: " << copia.size() << endl << endl;  
+    //cout << "QtCopias: " << mPro << " tamT: " << arestasOrdenadas.size() << " tamF: " << copia.size() << endl << endl;  
    
     if(alfa < 0.06)
         tempo[0] = time;
@@ -655,7 +666,7 @@ void Grafo::gulosoRandomizadoReativo(int numInter, double tempo[], int bloco, in
 
     cout << "Melhor solucao: " << pesoMelhorSol << endl;
     cout << "Tempo Total: " << ((double)(end-start))/CLOCKS_PER_SEC << "s" << endl; 
-    cout << "QtCopias: " << mPro << " tamT: " << arestasOrdenadas.size() << " tamF: " << copia.size() << endl;
+    //cout << "QtCopias: " << mPro << " tamT: " << arestasOrdenadas.size() << " tamF: " << copia.size() << endl;
    
     //melhorSolucao->saidaAgmDot();
     melhorSolucao->saidaResultReativo(instancia, caminho, pesoMelhorSol, ((double)(end-start))/CLOCKS_PER_SEC, numInter, bloco);

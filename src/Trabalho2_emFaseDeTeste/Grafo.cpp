@@ -239,7 +239,7 @@ int Grafo::gulosoRandomizado(float alfa, int numInter, double tempo[], int seed)
     start = clock();//salva o tempo inicial
     while (it<numInter) {  
         //mid = clock(); 
-        cout << "Iteracao: " << it+1 << endl;
+        //cout << "Iteracao: " << it+1 << endl;
         qtPro = 0;
 
         solucao = new Agm();//limpa lixo
@@ -389,7 +389,7 @@ int Grafo::gulosoRandomizado(float alfa, int numInter, double tempo[], int seed)
     double time = ((double)(end-start))/CLOCKS_PER_SEC;
     cout << "Melhor solucao: " << pesoMelhorSol << endl;
     cout << "Tempo Total: " << time << "s" << endl; 
-    cout << "QtCopias: " << mPro << " tamT: " << arestasOrdenadas.size() << " tamF: " << copia.size() << endl << endl;  
+    //cout << "QtCopias: " << mPro << " tamT: " << arestasOrdenadas.size() << " tamF: " << copia.size() << endl << endl;  
    
     if(alfa < 0.06)
         tempo[0] = time;
@@ -660,7 +660,7 @@ void Grafo::gulosoRandomizadoReativo(int numInter, double tempo[], int bloco, in
 
     cout << "Melhor solucao: " << pesoMelhorSol << endl;
     cout << "Tempo Total: " << ((double)(end-start))/CLOCKS_PER_SEC << "s" << endl; 
-    cout << "QtCopias: " << mPro << " tamT: " << arestasOrdenadas.size() << " tamF: " << copia.size() << endl;
+    //cout << "QtCopias: " << mPro << " tamT: " << arestasOrdenadas.size() << " tamF: " << copia.size() << endl;
    
     //melhorSolucao->saidaAgmDot();
     melhorSolucao->saidaResultReativo(instancia, pesoMelhorSol, ((double)(end-start))/CLOCKS_PER_SEC, numInter, bloco);

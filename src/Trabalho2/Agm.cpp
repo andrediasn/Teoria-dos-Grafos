@@ -14,14 +14,18 @@ void Agm::insereAresta(int id1, int id2,int nv, Arestas* a) { // Insere aresta p
         case 0: 
             Agmv1 = new Vertices(id1);
             Agmv2 = new Vertices(id2);
+            insereVertice(Agmv1);
+            insereVertice(Agmv2);
             break;
         case 1:
             Agmv1 = retornaVertice(id1);
             Agmv2 = new Vertices(id2);
+            insereVertice(Agmv2);
             break;
         case 2:
             Agmv1 = new Vertices(id1);
             Agmv2 = retornaVertice(id2);
+            insereVertice(Agmv1);
             break;
         default:
             Agmv1 = retornaVertice(id1);
@@ -32,8 +36,6 @@ void Agm::insereAresta(int id1, int id2,int nv, Arestas* a) { // Insere aresta p
     Agmv2->addGrau();
     Agmv1->adicionaAdjacenciaV(Agmv2);
     Agmv2->adicionaAdjacenciaV(Agmv1);
-    insereVertice(Agmv1);
-    insereVertice(Agmv2);
     Arestas* aux = new Arestas(Agmv1,Agmv2,a->getPeso());
     this->arestasAgm.push_back(aux);
 }
@@ -106,7 +108,7 @@ void Agm::saidaAgmDot(){
 
 void Agm::saidaAgmDot2(string instancia){
     string saida = "Resultado/Graph/" + instancia + ".txt";
-    ofstream arq("Resultado/agm.txt", ios::out);
+    ofstream arq(saida, ios::out);
     arq << "graph {" << endl;
 
     for (auto i = arestasAgm.begin(); i != arestasAgm.end(); i++){

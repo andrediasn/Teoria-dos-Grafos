@@ -48,6 +48,7 @@ class Grafo{
     bool conexo(); // verifica se grafo eh conexo
     void arrumaVisitado(); // seta todos vertices.visitado como false 
     void arrumaGrau();
+    void verificaAgm(Agm* agm);
 
     void ordenaArestas();
     void quickSort(vector<Arestas*> *copia, int inicio, int fim); // ordenacao pelo metodo de quicksort
@@ -59,6 +60,7 @@ class Grafo{
     float escolheAlfa(int probAlfa[], int seed);
     void atualizaProb(int *probAlfa,int **resultBloco);
     void resetBloco(int **resultBloco, int bloco);
+
 };
 
 #endif //GRAFO_H_INCLUDED
