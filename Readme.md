@@ -13,11 +13,13 @@ Resolução de problemas que envolvem Árvore Geradora Minima com Restrição de
 
 ## Como compilar
 
-
+Caso você tenha baixado o arquivo do trabalho enviado no classroom basta executar o comando abaixo no diretorio desta pasta "Trabalho_Grupo10".
 
 Comando para compilação:  
 
   g++ *.cpp *.h -o ExecGrupo10 -O3 
+
+Caso você tenha clonado o repositorio, a versao final para este trabalho se encontra dentro de "src/Trabalho2", entao é necessario executar o mesmo comando neste diretorio.
 
 ## Como Executar
 
