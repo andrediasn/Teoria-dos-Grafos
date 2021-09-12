@@ -53,9 +53,9 @@ class Grafo{
     void quickSort(vector<Arestas*> *copia, int inicio, int fim); // ordenacao pelo metodo de quicksort
     int partQuick(vector<Arestas*> *copia, int inicio, int fim); // aux do quicksort
     
-    void Guloso(string instancia);
+    void Guloso(string instancia, string caminho);
     int gulosoRandomizado(float alfa, int numInter, double tempo[], int seed);
-    void gulosoRandomizadoReativo(int numInter,double tempo[], int bloco, int seed, string instancia);
+    void gulosoRandomizadoReativo(int numInter,double tempo[], int bloco, int seed, string instancia, string caminho);
     float escolheAlfa(int probAlfa[], int seed);
     void atualizaProb(int *probAlfa,int **resultBloco);
     void resetBloco(int **resultBloco, int bloco);

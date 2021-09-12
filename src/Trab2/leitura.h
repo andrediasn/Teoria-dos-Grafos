@@ -54,11 +54,11 @@ double tempoMedio(double tempo[]){
     return soma/5;
 }
 
-void selecionar(int selecao, Grafo* graph, string instancia ){
+void selecionar(int selecao, Grafo* graph, string instancia, string caminho ){
     switch (selecao) {
          //Algoritmo Guloso;
         case 1:{
-            graph->Guloso(instancia);
+            graph->Guloso(instancia, caminho);
             break;
         }
          //Algoritmo Guloso Randomizado;
@@ -77,29 +77,29 @@ void selecionar(int selecao, Grafo* graph, string instancia ){
                     // alfas 0.05 0.1 0.15 0.3 0.5
                     //melhor resultado 0.05 
                     cout << endl << "Executando alfa 0.05" << endl;
-                    sol[0] = graph->gulosoRandomizado(0.05, max, tempo, seed*i);
+                    sol[0] = graph->gulosoRandomizado(0.05, max, tempo, seed+1);
                     //melhor resultado 0.10
                     cout << "Executando alfa 0.1" << endl;
-                    sol[1] = graph->gulosoRandomizado(0.1, max, tempo, seed*i);
+                    sol[1] = graph->gulosoRandomizado(0.1, max, tempo, seed+1);
                     //melhor resultado 0.15 
                     cout << "Executando alfa 0.15" << endl;
-                    sol[2] = graph->gulosoRandomizado(0.15, max, tempo, seed*i);
+                    sol[2] = graph->gulosoRandomizado(0.15, max, tempo, seed+1);
                     //melhor resultado 0.30 
                     cout << "Executando alfa 0.3" << endl;
-                    sol[3] = graph->gulosoRandomizado(0.30, max, tempo, seed*i);
+                    sol[3] = graph->gulosoRandomizado(0.30, max, tempo, seed+1);
                     //melhor resultado 0.50
                     cout << "Executando alfa 0.5" << endl;
-                    sol[4] = graph->gulosoRandomizado(0.50, max, tempo, seed*i);
+                    sol[4] = graph->gulosoRandomizado(0.50, max, tempo, seed+1);
                     
 
                     cout << endl << " - Melhor solucao geral: " << bestSol(sol) << endl;
                     cout << " - Tempo medio: " << tempoMedio(tempo) << endl;
 
-                    string saida = "Resultado/Randomizado/" + instancia + "rand2.txt";
+                    string saida = caminho + "/ResultadoRandomizado.txt";
                     ofstream arq(saida, ios::app);
                     ifstream v(saida);
                     if(vazio(v))
-                        arq << "Alfa 0,05;Tempo;Alfa 0,1;Tempo;Alfa 0,15;Tempo;Alfa 0,3;Tempo;Alfa 0,5;Tempo;Iteracoes" << endl;
+                        arq << "Instancia;Alfa 0,05;Tempo(s);Alfa 0,1;Tempo(s);Alfa 0,15;Tempo(s);Alfa 0,3;Tempo(s);Alfa 0,5;Tempo(s);Quantidade de Iteracoes" << endl;
                     v.close();
                     arq << instancia << ";"<< sol[0] << ";" << tempo[0] << ";"; 
                     arq << sol[1] << ";" << tempo[1] << ";"; 
@@ -124,7 +124,7 @@ void selecionar(int selecao, Grafo* graph, string instancia ){
             cout<< "Digite um valor para seed: ";
             cin >> seed;
             for(int i=1; i<11; i++)
-                graph->gulosoRandomizadoReativo(numInteracoes, tempo, bloco, seed, instancia);
+                graph->gulosoRandomizadoReativo(numInteracoes, tempo, bloco, seed, instancia, caminho);
             break;
         }
         //caso 0 sai do programa
@@ -190,6 +190,7 @@ string buscaInstancia(string T){
 Grafo* leitura(int argc, char * argv[]){
 
     arqEntrada = argv[1]; 
+    arqSaida = argv[2]; 
     opc_Direc=false; //transformando pra bool
     opc_Peso_Aresta=true; //transformando pra bool
     opc_Peso_Nos=false; //transformando pra bool
@@ -254,7 +255,7 @@ Grafo* leitura(int argc, char * argv[]){
        // system("clear");
         selecao = menu();
         
-        selecionar(selecao, grafo, instancia);
+        selecionar(selecao, grafo, instancia, arqSaida);
     }
     return grafo;
     

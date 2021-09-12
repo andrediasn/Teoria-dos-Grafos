@@ -144,7 +144,7 @@ int Grafo::partQuick(vector<Arestas*> *copia, int esq, int dir){
     return i; // Retorna indice para o pivo
 }
 
-void Grafo::Guloso(string instancia){
+void Grafo::Guloso(string instancia, string caminho){
 
     clock_t start, end;
     
@@ -209,8 +209,8 @@ void Grafo::Guloso(string instancia){
     cout << "Solucao: " << solucao->calculaPesoTotal() << endl;
     cout << "Tempo de execucao Total: " << ((double)(end-start))/CLOCKS_PER_SEC << "s\n";
 
-    solucao->saidaAgmDot2(instancia);
-    solucao->saidaResultGuloso(instancia, ((double)(end-start))/CLOCKS_PER_SEC);
+    //solucao->saidaAgmDot2(instancia);
+    solucao->saidaResultGuloso(instancia, caminho, ((double)(end-start))/CLOCKS_PER_SEC);
 } 
 
 int Grafo::gulosoRandomizado(float alfa, int numInter, double tempo[], int seed){
@@ -400,11 +400,11 @@ int Grafo::gulosoRandomizado(float alfa, int numInter, double tempo[], int seed)
     return pesoMelhorSol;
 }
 
-void Grafo::gulosoRandomizadoReativo(int numInter, double tempo[], int bloco, int seed, string instancia)
+void Grafo::gulosoRandomizadoReativo(int numInter, double tempo[], int bloco, int seed, string instancia, string caminho)
 {
     clock_t start, end; //criacao de variaveis de tempo
     //clock_t mid; para testes
-
+    
     Agm* solucao = new Agm();
     Agm* melhorSolucao = new Agm();
     
@@ -433,6 +433,7 @@ void Grafo::gulosoRandomizadoReativo(int numInter, double tempo[], int bloco, in
     int pesoMelhorSol = 0;
     int k,it=0;
 
+    srand(seed);
     start = clock();
     while(it<numInter)
     {  
@@ -508,7 +509,7 @@ void Grafo::gulosoRandomizadoReativo(int numInter, double tempo[], int bloco, in
                     }
                 }
 
-                srand(seed*it);
+                
                 k=rand()%(range+1);
 
                 Arestas* aux = copia.at(k);
@@ -657,7 +658,7 @@ void Grafo::gulosoRandomizadoReativo(int numInter, double tempo[], int bloco, in
     cout << "QtCopias: " << mPro << " tamT: " << arestasOrdenadas.size() << " tamF: " << copia.size() << endl;
    
     //melhorSolucao->saidaAgmDot();
-    melhorSolucao->saidaResultReativo(instancia, pesoMelhorSol, ((double)(end-start))/CLOCKS_PER_SEC, numInter, bloco);
+    melhorSolucao->saidaResultReativo(instancia, caminho, pesoMelhorSol, ((double)(end-start))/CLOCKS_PER_SEC, numInter, bloco);
 }
 
 void Grafo::atualizaProb(int probAlfa[],int **resultBloco)

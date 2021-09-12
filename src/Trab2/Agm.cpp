@@ -54,8 +54,8 @@ Vertices* Agm::retornaVertice(int id){//pesquisa vertice no grafo e retorna ele
     return nullptr;//se nao, retorna null
 }
 
-void Agm::saidaResultGuloso(string instancia, double time){
-    string saida = "Resultado/Guloso/resultGuloso.txt";
+void Agm::saidaResultGuloso(string instancia, string out, double time){
+    string saida = out + "/ResultadoGuloso.txt";
 
     int lb = 0;
     for(auto i = arestasAgm.begin(); i != arestasAgm.end(); i++){
@@ -72,15 +72,15 @@ void Agm::saidaResultGuloso(string instancia, double time){
     arq.close();
 }
 
-void Agm::saidaResultReativo(string instancia, int sol, double time, int max, int bloco){
-    string saida = "Resultado/Reativo/" + instancia + "reativo2.txt";
+void Agm::saidaResultReativo(string instancia, string out, int sol, double time, int max, int bloco){
+    string saida = out + "/ResultadoReativo.txt";
 
     ofstream arq(saida, ios::app);
     ifstream v(saida);
     if(vazio(v))
-       arq << "MelhorSolucao;Tempo(s);Iteracoes;TamanhoBloco" << endl;
+       arq << "Instancia;Solucao;Tempo(s);Quantidade de Iteracoes;Tamanho do Bloco" << endl;
     v.close();
-    arq << sol << ";" << time << ";" << max << ";" << bloco << endl;
+    arq << instancia << ";"<< sol << ";" << time << ";" << max << ";" << bloco << endl;
     arq.close();
 }
 
